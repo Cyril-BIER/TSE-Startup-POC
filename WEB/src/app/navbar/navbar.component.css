@@ -1,0 +1,38 @@
+h3 {
+  color: #fff;
+}
+
+mat-toolbar-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+mat-sidenav-container {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+a {
+  text-decoration: none;
+}
+
+.link {
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.5s;
+  display: flex;
+  align-items: center;
+  vertical-align: auto;
+}
+
+.routes {
+  display: flex;
+}
+
+.link h3 {
+  padding-left: 5px;
+}
+
+.link:hover,
+.link.active {
+  background-color: #522e92;
+}
