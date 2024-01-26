@@ -1,5 +1,6 @@
 package fr.tse.startupPOC.security;
 
+import fr.tse.startupPOC.security.jwt.AuthTokenFilter;
 import fr.tse.startupPOC.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
