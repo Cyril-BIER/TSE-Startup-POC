@@ -1,8 +1,10 @@
 package fr.tse.startupPOC.controller;
 
 import fr.tse.startupPOC.models.Profile;
+import fr.tse.startupPOC.payload.request.LoginRequest;
 import fr.tse.startupPOC.payload.request.SignupAdminRequest;
-import fr.tse.startupPOC.service.profile.AdminService;
+import fr.tse.startupPOC.payload.response.JwtResponse;
+import fr.tse.startupPOC.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,15 +16,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    AdminService adminService;
+    AuthService authService;
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request){
+        try {
+            JwtResponse jwtResponse = authService.authenticateProfile(request);
+            return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignupAdminRequest request){
         try {
-            Profile profile = adminService.createAdmin(request);
+            Profile profile = authService.createAdmin(request);
             return new ResponseEntity<>(profile, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }
