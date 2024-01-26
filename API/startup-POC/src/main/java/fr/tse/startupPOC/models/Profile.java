@@ -18,10 +18,10 @@ public abstract class Profile {
     @NotNull
     @Email
     @Column(unique = true)
-    private String email;
+    protected String email;
 
     @NotNull
     @Size(max = 120)
     @JsonIgnore
-    private String password;
+    protected String password;
 }
