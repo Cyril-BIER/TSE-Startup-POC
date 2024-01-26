@@ -31,11 +31,11 @@ public class UserDetailsImpl implements UserDetails {
         // FIXME : Pas sûr de ça
         String roleName;
         if(profile instanceof Admin){
-            roleName = "ADMIN";
+            roleName = "ROLE_ADMIN";
         } else if (profile instanceof Manager) {
-            roleName="MANAGER";
+            roleName="ROLE_MANAGER";
         }else{
-            roleName = "USER";
+            roleName = "ROLE_USER";
         }
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(roleName);
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();

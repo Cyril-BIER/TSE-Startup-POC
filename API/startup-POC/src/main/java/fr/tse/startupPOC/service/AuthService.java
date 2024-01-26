@@ -1,9 +1,11 @@
 package fr.tse.startupPOC.service;
 
 import fr.tse.startupPOC.models.Admin;
+import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Profile;
 import fr.tse.startupPOC.payload.request.LoginRequest;
 import fr.tse.startupPOC.payload.request.SignupAdminRequest;
+import fr.tse.startupPOC.payload.request.SignupManagerRequest;
 import fr.tse.startupPOC.payload.response.JwtResponse;
 import fr.tse.startupPOC.repository.ProfileRepository;
 import fr.tse.startupPOC.security.jwt.JwtUtils;
@@ -63,4 +65,17 @@ public class AuthService {
         );
         return profileRepository.save(admin);
     }
+
+    @Transactional
+    public Profile createManager(SignupManagerRequest request) throws AuthenticationException {
+        if(profileRepository.existsByEmail(request.getEmail())){
+            throw new AuthenticationException("Email already taken");
+        }
+        Manager manager = new Manager(
+                request.getEmail(),
+                encoder.encode(request.getPassword())
+        );
+        return profileRepository.save(manager);
+    }
+
 }
