@@ -1,18 +1,53 @@
 <main>
   <div class="container">
     <div class="buttons">
-      <button mat-raised-button color="primary" (click)="showUsers()">Voir la liste des utilisateurs</button>
-      <button mat-raised-button color="primary" (click)="hideUsers()">Créer un utilisateur</button>
+      <button mat-raised-button color="primary" (click)="showUsers(); hideCreation()">Voir la liste des utilisateurs
+      </button>
+      <button mat-raised-button color="primary" (click)="hideUsers(); showCreation()">Créer un utilisateur</button>
     </div>
+
     <div class="users" *ngIf="isUserListVisible">
-      <mat-selection-list #list [(ngModel)]="selectedRights" (ngModelChange)="onNgModelChange($event)">
-        <mat-list-option *ngFor="let user of users" [value]="user.name">
+      <div class="search-bar">
+        <input type="text" [(ngModel)]="searchText" placeholder="Rechercher un utilisateur">
+      </div>
+      <mat-selection-list [multiple]="false" #list [(ngModel)]="selectedUser"
+                          (ngModelChange)="onNgModelChange($event)">
+        <mat-list-option *ngFor="let user of filteredUsers" [value]="user.name">
           {{user.name}}
         </mat-list-option>
       </mat-selection-list>
+      <div class="bouton">
+        <button mat-raised-button color="primary">Afiicher l'utilisateur</button>
+        <button mat-raised-button color="primary" (click)="supprimerUtilisateur()" >Supprimer l'utilisateur</button>
+      </div>
     </div>
-    <div class="creationUser" *ngIf="isUserListVisible">
-
+    <div class="creationUser" *ngIf="isCreationFormVisible">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="pad">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom</mat-label>
+            <input formControlName="nom" matInput placeholder="">
+            <mat-icon matSuffix>face</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Prénom</mat-label>
+            <input formControlName="prenom" matInput placeholder="">
+            <mat-icon matSuffix>face</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Mot de passe temporaire</mat-label>
+            <input matInput formControlName="motDePasse" [type]="hide ? 'password' : 'text'">
+            <a mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+               [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </a>
+          </mat-form-field>
+        </div>
+        <button mat-raised-button type="submit" color="primary" (click)="onSubmit()"
+                style="width:50%; margin-left:25%; margin-top:3%;margin-bottom:7.5%; font-size:24px">
+          Ajouter
+        </button>
+      </form>
     </div>
   </div>
 </main>
