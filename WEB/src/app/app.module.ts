@@ -24,6 +24,7 @@ import { CompteRenduComponent } from './compte-rendu/compte-rendu.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatCheckboxModule,
     MatInputModule,
     MatPaginatorModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

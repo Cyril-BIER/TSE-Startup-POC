@@ -1,1 +1,18 @@
-<p>utilisateur works!</p>
+<main>
+  <div class="container">
+    <div class="buttons">
+      <button mat-raised-button color="primary" (click)="showUsers()">Voir la liste des utilisateurs</button>
+      <button mat-raised-button color="primary" (click)="hideUsers()">Créer un utilisateur</button>
+    </div>
+    <div class="users" *ngIf="isUserListVisible">
+      <mat-selection-list #list [(ngModel)]="selectedRights" (ngModelChange)="onNgModelChange($event)">
+        <mat-list-option *ngFor="let user of users" [value]="user.name">
+          {{user.name}}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+    <div class="creationUser" *ngIf="isUserListVisible">
+
+    </div>
+  </div>
+</main>
