@@ -4,6 +4,7 @@ import { Temps } from '../models/temps';
 import { Projet } from '../models/projet';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { TempsService } from '../services/temps.service';
 
 @Component({
   selector: 'app-temps-formulaire',
@@ -19,7 +20,8 @@ export class TempsFormulaireComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private tempsService: TempsService
   ) {
     const p1: Projet = {
       id: 1,
@@ -59,16 +61,22 @@ export class TempsFormulaireComponent implements OnInit {
     }
 
     const selectedDate = this.tempsForm.get('date')?.value;
-    const formattedDate = selectedDate.toISOString().split('T')[0];
+    const year = selectedDate.getFullYear();
+    const month = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + selectedDate.getDate()).slice(-2);
+
+    const formattedDate = `${year}-${month}-${day}`;
 
     const formData = {
-      userId: this.authService.whoAmI(),
       projectId: this.tempsForm.get('projet')?.value,
       duration: this.tempsForm.get('nbr_heures')?.value,
       date: formattedDate,
     };
 
     console.log(formData);
+    this.tempsService.postTemps(formData).subscribe((res) => {
+      console.log(res);
+    });
     alert('Temps enregistré');
     this.fermer();
   }
