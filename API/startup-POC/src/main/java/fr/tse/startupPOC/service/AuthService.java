@@ -112,5 +112,10 @@ public class AuthService {
         return projectRepository.save(project);
     }
 
+    @Transactional
+    public List<Project> getAllProjects(){
+        return projectRepository.findAll();
+    }
+
 
 }

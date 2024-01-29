@@ -68,4 +68,10 @@ public class AuthController {
 
     }
 
+    @GetMapping("/getAllProjects")
+    @PreAuthorize("hasRole('MANAGER')")
+    public List<Project> getAllProjects(){
+        return authService.getAllProjects();
+    }
+
 }
