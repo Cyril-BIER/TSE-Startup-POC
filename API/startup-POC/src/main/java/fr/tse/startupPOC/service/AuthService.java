@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,12 +89,14 @@ public class AuthService {
             throw new AuthenticationException("Email already taken");
         }
         Optional<Manager> manager = managerRepository.findById(request.getManagerID());
+        Optional<Project> project = projectRepository.findById((request.getProjectId()));
         if(manager.isPresent()){
             // TODO : Relation bidirectionnelle avec Manager?
             User user = new User(
                     request.getEmail(),
                     encoder.encode(request.getPassword()),
-                    manager.get()
+                    manager.get(),
+                    project.get()
             );
             return profileRepository.save(user);
         }else{
@@ -104,9 +107,14 @@ public class AuthService {
     @Transactional
     public Project createProjectService(createProjectRequest request) throws AuthenticationException {
 
+        List<User> projectUsers = request.getProjectUsers();
+        if (projectUsers == null) {
+            projectUsers = Collections.emptyList();
+        }
         Project project = new Project(
                 request.getProjectName(),
-                request.getResponsableName()
+                request.getResponsableName(),
+                projectUsers
         );
         //project.addProjectName(request.getProjectName());
         return projectRepository.save(project);

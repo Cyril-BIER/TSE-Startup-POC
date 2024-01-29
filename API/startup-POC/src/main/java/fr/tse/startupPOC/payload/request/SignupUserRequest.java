@@ -21,4 +21,7 @@ public class SignupUserRequest {
 
     @NotNull
     private long managerID;
+
+    @NotNull
+    private Long projectId;
 }
