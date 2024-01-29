@@ -17,5 +17,5 @@ public class ImputationRequest {
     private LocalDate date;
 
     @NotNull
-    private Long duration;
+    private float duration;
 }

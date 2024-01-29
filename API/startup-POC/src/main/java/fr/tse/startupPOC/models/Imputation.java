@@ -26,11 +26,11 @@ public class Imputation {
 
     private LocalDate date;
 
-    private Long duration;
+    private float duration;
 
     // TODO : Projet
 
-    public Imputation(User user, LocalDate date, Long duration){
+    public Imputation(User user, LocalDate date, float duration){
         this.user = user;
         this.date = date;
         this.duration = duration;
