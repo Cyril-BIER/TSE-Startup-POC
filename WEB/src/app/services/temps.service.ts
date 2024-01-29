@@ -14,7 +14,7 @@ export class TempsService {
   postTemps(data: any): Observable<any> {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
-      .set('Authorization', this.authService.getToken());
+      .set('Authorization', `Bearer ${this.authService.getToken()}`);
 
     const httpOptions = {
       headers: headers,

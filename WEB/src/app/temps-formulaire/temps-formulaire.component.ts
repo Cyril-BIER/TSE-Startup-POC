@@ -61,10 +61,13 @@ export class TempsFormulaireComponent implements OnInit {
     }
 
     const selectedDate = this.tempsForm.get('date')?.value;
-    const formattedDate = selectedDate.toISOString().split('T')[0];
+    const year = selectedDate.getFullYear();
+    const month = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + selectedDate.getDate()).slice(-2);
+
+    const formattedDate = `${year}-${month}-${day}`;
 
     const formData = {
-      userId: this.authService.whoAmI(),
       projectId: this.tempsForm.get('projet')?.value,
       duration: this.tempsForm.get('nbr_heures')?.value,
       date: formattedDate,
