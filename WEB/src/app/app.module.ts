@@ -12,6 +12,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatListModule} from "@angular/material/list";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
     ProjetComponent,
     CompteRenduComponent,
     ConnexionComponent,
+    TempsFormulaireComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +60,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     MatCheckboxModule,
     MatInputModule,
     MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatListModule,
     MatExpansionModule,
   ],

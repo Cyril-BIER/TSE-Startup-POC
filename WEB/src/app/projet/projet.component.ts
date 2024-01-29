@@ -16,11 +16,13 @@ export class ProjetComponent implements OnInit {
       nom: 'Startup poc',
       responsable_nom: 'EL GUERMAT',
       responsable_prenom: 'Mohamed',
+      id: 0,
     };
     const p2: Projet = {
       nom: 'Startup poc 2',
       responsable_nom: 'EL GUERMAT',
       responsable_prenom: 'Mohamed',
+      id: 0,
     };
     this.projets.data = [p1, p2];
   }
