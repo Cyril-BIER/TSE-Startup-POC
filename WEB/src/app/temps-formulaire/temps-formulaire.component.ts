@@ -69,6 +69,8 @@ export class TempsFormulaireComponent implements OnInit {
     };
 
     console.log(formData);
+    alert('Temps enregistré');
+    this.fermer();
   }
 
   fermer() {
