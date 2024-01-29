@@ -1,16 +1,11 @@
 package fr.tse.startupPOC.service;
 
-import fr.tse.startupPOC.models.Admin;
-import fr.tse.startupPOC.models.Manager;
-import fr.tse.startupPOC.models.Profile;
-import fr.tse.startupPOC.models.User;
-import fr.tse.startupPOC.payload.request.LoginRequest;
-import fr.tse.startupPOC.payload.request.SignupAdminRequest;
-import fr.tse.startupPOC.payload.request.SignupManagerRequest;
-import fr.tse.startupPOC.payload.request.SignupUserRequest;
+import fr.tse.startupPOC.models.*;
+import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
 import fr.tse.startupPOC.repository.ProfileRepository;
+import fr.tse.startupPOC.repository.ProjectRepository;
 import fr.tse.startupPOC.security.jwt.JwtUtils;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,6 +34,8 @@ public class AuthService {
     ManagerRepository managerRepository;
     @Autowired
     PasswordEncoder encoder;
+    @Autowired
+    ProjectRepository projectRepository;
 
 
     @Autowired
@@ -102,6 +99,15 @@ public class AuthService {
         }else{
             throw new EntityNotFoundException("Manager with the id "+request.getManagerID()+" not found");
         }
+    }
+
+    @Transactional
+    public Project createProjectService(createProjectRequest request) throws AuthenticationException {
+
+        Project project = new Project(
+                request.getProjectName()
+        );
+        return projectRepository.save(project);
     }
 
 }

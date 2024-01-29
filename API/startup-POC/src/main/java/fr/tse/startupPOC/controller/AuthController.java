@@ -1,10 +1,8 @@
 package fr.tse.startupPOC.controller;
 
 import fr.tse.startupPOC.models.Profile;
-import fr.tse.startupPOC.payload.request.LoginRequest;
-import fr.tse.startupPOC.payload.request.SignupAdminRequest;
-import fr.tse.startupPOC.payload.request.SignupManagerRequest;
-import fr.tse.startupPOC.payload.request.SignupUserRequest;
+import fr.tse.startupPOC.models.Project;
+import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
 import fr.tse.startupPOC.service.AuthService;
 import jakarta.validation.Valid;
@@ -49,6 +47,17 @@ public class AuthController {
         try {
             Profile profile = authService.createUser(request);
             return new ResponseEntity<>(profile, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/createProject")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<?> createProject(@Valid @RequestBody createProjectRequest request){
+        try {
+            Project project = authService.createProjectService(request);
+            return new ResponseEntity<>(project.getProjectName(), HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
