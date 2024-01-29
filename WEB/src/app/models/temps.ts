@@ -1,4 +1,4 @@
-export interface temps {
+export interface Temps {
   projectId: number;
   date: Date;
   duration: number;

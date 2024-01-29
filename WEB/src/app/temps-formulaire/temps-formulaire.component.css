@@ -1,0 +1,30 @@
+h1 {
+  text-align: center;
+  padding: 1.5%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  margin-right: 10px;
+}
+
+mat-form-field {
+  margin-bottom: 15px;
+  width: 50%;
+}
+
+input,
+mat-select {
+  margin-bottom: 15px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5%;
+  margin-bottom: 2.5%;
+}
