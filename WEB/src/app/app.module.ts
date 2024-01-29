@@ -12,6 +12,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +26,7 @@ import { CompteRenduComponent } from './compte-rendu/compte-rendu.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ProjetComponent,
     CompteRenduComponent,
     ConnexionComponent,
+    TempsFormulaireComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +58,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatCheckboxModule,
     MatInputModule,
     MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
