@@ -11,19 +11,16 @@
         <mat-form-field class="form-field">
           <mat-label>Rechercher un utilisateur</mat-label>
           <input matInput type="text" [(ngModel)]="searchText">
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="searchText=''">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
         <div class="button-container">
-
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-description>
-                <button mat-mini-fab color="primary" aria-label="menu icon">
-                  <mat-icon>menu</mat-icon>
-                </button>
-              </mat-panel-description>
+              <mat-panel-title>
+                Filter by selecting a project
+              </mat-panel-title>
             </mat-expansion-panel-header>
 
             <mat-form-field>
@@ -33,7 +30,6 @@
                 <mat-option *ngFor="let projet of projetsExistants" [value]="projet.nom">{{ projet.nom }}</mat-option>
               </mat-select>
             </mat-form-field>
-
           </mat-expansion-panel>
         </div>
       </div>
@@ -44,7 +40,7 @@
       </mat-selection-list>
       <div class="bouton">
         <button mat-raised-button color="primary">Afiicher l'utilisateur</button>
-        <button mat-raised-button color="primary" (click)="supprimerUtilisateur()">Supprimer l'utilisateur</button>
+        <button mat-raised-button color="warn" (click)="supprimerUtilisateur()">Supprimer l'utilisateur</button>
       </div>
     </div>
     <div class="creationUser" *ngIf="isCreationFormVisible">

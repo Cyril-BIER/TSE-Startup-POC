@@ -45,8 +45,8 @@ export class UtilisateurComponent {
       ]
     },
   ];
-  selectedUser: string
-  selectedProjet: string
+  selectedUser: string | null = null;
+  selectedProjet: string | null = null;
 
   projetsExistants: {
     nom: string;
@@ -63,8 +63,6 @@ export class UtilisateurComponent {
   ]
 
   constructor(private fb: FormBuilder) {
-    this.selectedUser = ''
-    this.selectedProjet = ''
   }
 
   ngOnInit(): void {
