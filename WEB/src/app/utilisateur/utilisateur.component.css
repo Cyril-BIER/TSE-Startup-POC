@@ -21,6 +21,12 @@ main {
   gap:15px
 }
 
+.displayUser {
+  margin-top: 35px;
+  width: 300px;
+  height: auto;
+}
+
 .buttons {
   display: flex;
   margin-top: 15px;

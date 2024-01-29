@@ -29,6 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatListModule} from "@angular/material/list";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.component';
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.co
     MatNativeDateModule,
     MatListModule,
     MatExpansionModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

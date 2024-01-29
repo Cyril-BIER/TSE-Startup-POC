@@ -10,6 +10,7 @@ import {MatMenuTrigger} from "@angular/material/menu";
 export class UtilisateurComponent {
   searchText: string = '';
   isUserListVisible: boolean = false;
+  isUserVisible: boolean = false;
   isCreationFormVisible: boolean = false;
   hide = true;
   value = 'Clear me';
@@ -89,17 +90,21 @@ export class UtilisateurComponent {
 
   showUsers() {
     this.isUserListVisible = true;
+    this.isUserVisible = false;
   }
 
   hideUsers() {
     this.isUserListVisible = false;
+    this.isUserVisible = false;
   }
 
   showCreation() {
     this.isCreationFormVisible = true;
+    this.isUserVisible = false;
   }
 
   hideCreation() {
+    this.isUserVisible = false;
     this.isCreationFormVisible = false;
   }
 
@@ -121,6 +126,19 @@ export class UtilisateurComponent {
         this.selectedUser = '';
       }
     }
+  }
+
+  findSelectedUser(): any {
+    if (this.selectedUser === null) {
+      return null; // Si aucun utilisateur n'est sélectionné, retourne null
+    }
+    // @ts-ignore // car on enlève le cas ou selectedUser== null
+    return this.users.find(user => user.nom === this.selectedUser.toString());
+  }
+
+  afficherUtilisateur() {
+    this.isUserListVisible = false
+    this.isUserVisible = true;
   }
 }
 
