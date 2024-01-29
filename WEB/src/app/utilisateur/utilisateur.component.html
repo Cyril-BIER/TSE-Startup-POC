@@ -7,33 +7,75 @@
     </div>
 
     <div class="users" *ngIf="isUserListVisible">
-      <div class="search-bar">
-        <input type="text" [(ngModel)]="searchText" placeholder="Rechercher un utilisateur">
+      <div class="search-user">
+        <mat-form-field class="form-field">
+          <mat-label>Rechercher un utilisateur</mat-label>
+          <input matInput type="text" [(ngModel)]="searchText">
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <div class="button-container">
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-description>
+                <button mat-mini-fab color="primary" aria-label="menu icon">
+                  <mat-icon>menu</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-form-field>
+              <mat-label>Projets</mat-label>
+              <mat-select [(ngModel)]="selectedProjet" (ngModelChange)="onNgModelChange($event)">
+                <mat-option [value]="null">-- Select projet --</mat-option>
+                <mat-option *ngFor="let projet of projetsExistants" [value]="projet.nom">{{ projet.nom }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </mat-expansion-panel>
+        </div>
       </div>
-      <mat-selection-list [multiple]="false" #list [(ngModel)]="selectedUser"
-                          (ngModelChange)="onNgModelChange($event)">
-        <mat-list-option *ngFor="let user of filteredUsers" [value]="user.name">
-          {{user.name}}
+      <mat-selection-list [multiple]="false" #list [(ngModel)]="selectedUser" (ngModelChange)="onNgModelChange($event)">
+        <mat-list-option *ngFor="let user of filteredUsers" [value]="user.nom">
+          {{ user.nom }}
         </mat-list-option>
       </mat-selection-list>
       <div class="bouton">
         <button mat-raised-button color="primary">Afiicher l'utilisateur</button>
-        <button mat-raised-button color="primary" (click)="supprimerUtilisateur()" >Supprimer l'utilisateur</button>
+        <button mat-raised-button color="primary" (click)="supprimerUtilisateur()">Supprimer l'utilisateur</button>
       </div>
     </div>
     <div class="creationUser" *ngIf="isCreationFormVisible">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="pad">
+
           <mat-form-field appearance="outline">
             <mat-label>Nom</mat-label>
             <input formControlName="nom" matInput placeholder="">
             <mat-icon matSuffix>face</mat-icon>
           </mat-form-field>
+
           <mat-form-field appearance="outline">
             <mat-label>Prénom</mat-label>
             <input formControlName="prenom" matInput placeholder="">
             <mat-icon matSuffix>face</mat-icon>
           </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <input formControlName="role" matInput placeholder="">
+            <mat-icon matSuffix>face</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Projets</mat-label>
+            <mat-select formControlName="projets" multiple>
+              <mat-option *ngFor="let projet of projetsExistants" [value]="projet.nom">{{ projet.nom }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <mat-form-field appearance="outline">
             <mat-label>Mot de passe temporaire</mat-label>
             <input matInput formControlName="motDePasse" [type]="hide ? 'password' : 'text'">

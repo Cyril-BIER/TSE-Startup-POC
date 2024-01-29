@@ -12,6 +12,15 @@ main {
   flex-direction: column;
 }
 
+.form-field {
+  width: 500px;
+}
+.search-user {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}
+
 .buttons {
   display: flex;
   justify-content: space-around;
@@ -21,11 +30,6 @@ main {
 .bouton {
   display: flex;
   justify-content: space-around;
-}
-
-.search-bar {
-  display: flex;
-  justify-content: center;
 }
 
 .users {
