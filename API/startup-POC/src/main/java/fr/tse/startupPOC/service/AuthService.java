@@ -88,7 +88,7 @@ public class AuthService {
         if(profileRepository.existsByEmail(request.getEmail())){
             throw new AuthenticationException("Email already taken");
         }
-        Optional<Manager> manager = managerRepository.findById(request.getManagerID());
+        Optional<Manager> manager = managerRepository.findById(request.getManagerId());
         Optional<Project> project = projectRepository.findById((request.getProjectId()));
         if(manager.isPresent()){
             // TODO : Relation bidirectionnelle avec Manager?
@@ -100,7 +100,7 @@ public class AuthService {
             );
             return profileRepository.save(user);
         }else{
-            throw new EntityNotFoundException("Manager with the id "+request.getManagerID()+" not found");
+            throw new EntityNotFoundException("Manager with the id "+request.getManagerId()+" not found");
         }
     }
 
