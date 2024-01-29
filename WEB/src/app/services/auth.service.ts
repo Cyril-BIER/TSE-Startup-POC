@@ -28,4 +28,8 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+
+  whatRole(): string {
+    return localStorage.getItem('role')!;
+  }
 }
