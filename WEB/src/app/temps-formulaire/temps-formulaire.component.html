@@ -1,0 +1,26 @@
+<h1>Saisit du temps de travail</h1>
+<form [formGroup]="tempsForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Projet :</mat-label>
+        <mat-select matNativeControl formControlName="projet" required>
+            <mat-option *ngFor="let projet of projets" [value]="projet.id">{{projet.nom}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Journée travaillée</mat-label>
+        <input matInput formControlName="date" [matDatepicker]="picker">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Heures travaillées :</mat-label>
+        <input matInput formControlName="nbr_heures" type="number" placeholder="2.5" />
+        <mat-hint *ngIf="!tempsForm.valid">L'heure doit être comprise entre 0 et 24</mat-hint>
+    </mat-form-field>
+    <div class="buttons">
+        <button color="primary" mat-raised-button type="submit" [disabled]="!tempsForm.valid">Enregistrer</button>
+        <button color="warn" *ngIf="this.formId" mat-raised-button type="button">Supprimer le
+            temps</button>
+        <button color="basic" mat-raised-button type="button" (click)="fermer()">Fermer sans enregistrer</button>
+    </div>
+</form>

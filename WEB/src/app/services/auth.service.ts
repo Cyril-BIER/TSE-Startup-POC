@@ -22,6 +22,7 @@ export class AuthService {
     return this.http.post<any>(`${ENV.apiUrl}/auth/signin`, credentials).pipe(
       map((response) => {
         localStorage.setItem('user', response.email);
+        localStorage.setItem('user_id', response.id);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.roles[0]);
         this.loggedIn.next(true);
@@ -46,7 +47,15 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+  getToken(): string {
+    return localStorage.getItem('token')!;
+  }
+
   whatRole(): string {
     return localStorage.getItem('role')!;
+  }
+
+  whoAmI(): number {
+    return parseInt(localStorage.getItem('user_id')!);
   }
 }
