@@ -105,9 +105,12 @@ public class AuthService {
     public Project createProjectService(createProjectRequest request) throws AuthenticationException {
 
         Project project = new Project(
-                request.getProjectName()
+                request.getProjectName(),
+                request.getResponsableName()
         );
+        //project.addProjectName(request.getProjectName());
         return projectRepository.save(project);
     }
+
 
 }
