@@ -14,7 +14,7 @@ public class ImputationRequest {
     private Long projectId;
 
     @NotNull
-   private LocalDate date;
+    private LocalDate date;
 
     @NotNull
     private Long duration;
