@@ -19,7 +19,7 @@ public class Project {
 
     private String responsableName;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @ManyToMany (mappedBy = "project", cascade = CascadeType.ALL)
     private List<User> projectUsers;
 
     public Project(String projectName, String responsableName, List<User> projectUsers){

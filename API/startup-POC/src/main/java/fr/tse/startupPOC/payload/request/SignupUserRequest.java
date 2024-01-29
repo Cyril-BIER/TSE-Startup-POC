@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -23,5 +25,5 @@ public class SignupUserRequest {
 
     @NotNull
     private long managerId;
-    private long projectId;
+    private List<Long> projectIds;
 }
