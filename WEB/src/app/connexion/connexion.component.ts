@@ -35,7 +35,12 @@ export class ConnexionComponent implements OnInit {
     const { identifiant, motDePasse } = this.form.value;
     this.authService.login(identifiant, motDePasse).subscribe((res) => {
       console.log(this.authService.isLoggedIn());
-      this.router.navigate(['/temps']);
+      if (this.authService.isLoggedIn()) {
+        console.log(this.authService.whatRole());
+        this.router.navigate(['/temps']);
+      } else {
+        alert('Identifiant ou mot de passe incorrect');
+      }
     });
   }
 }

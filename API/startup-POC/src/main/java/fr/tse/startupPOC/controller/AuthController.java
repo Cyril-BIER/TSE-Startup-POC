@@ -31,15 +31,6 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignupAdminRequest request){
-        try {
-            Profile profile = authService.createAdmin(request);
-            return new ResponseEntity<>(profile, HttpStatus.OK);
-        }catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @PostMapping("/registerManager")
     @PreAuthorize("hasRole('ADMIN')")
