@@ -7,15 +7,15 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field>
-        <mat-label>Heures travaillées :</mat-label>
-        <input matInput formControlName="nbr_heures" type="number" placeholder="2.5" />
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Choose a date</mat-label>
+        <mat-label>Journée travaillée</mat-label>
         <input matInput formControlName="date" [matDatepicker]="picker">
-        <mat-hint>Sélectionner la journée travaillée</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Heures travaillées :</mat-label>
+        <input matInput formControlName="nbr_heures" type="number" placeholder="2.5" />
+        <mat-hint *ngIf="!tempsForm.valid">L'heure doit être comprise entre 0 et 24</mat-hint>
     </mat-form-field>
     <div class="buttons">
         <button color="primary" mat-raised-button type="submit" [disabled]="!tempsForm.valid">Enregistrer</button>
