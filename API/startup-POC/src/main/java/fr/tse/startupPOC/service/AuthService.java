@@ -6,6 +6,7 @@ import fr.tse.startupPOC.payload.response.JwtResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
 import fr.tse.startupPOC.repository.ProfileRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
+import fr.tse.startupPOC.repository.UserRepository;
 import fr.tse.startupPOC.security.jwt.JwtUtils;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,6 +40,8 @@ public class AuthService {
     ProjectRepository projectRepository;
     @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    UserRepository userRepository;
 
     public JwtResponse authenticateProfile(LoginRequest request){
         Authentication authentication = authenticationManager.authenticate(
@@ -104,6 +107,11 @@ public class AuthService {
         }else{
             throw new Exception("User not created");
         }
+    }
+
+    @Transactional
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
     }
 
 

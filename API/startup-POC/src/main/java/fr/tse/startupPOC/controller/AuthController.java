@@ -2,6 +2,7 @@ package fr.tse.startupPOC.controller;
 
 import fr.tse.startupPOC.models.Profile;
 import fr.tse.startupPOC.models.Project;
+import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
 import fr.tse.startupPOC.service.AuthService;
@@ -54,6 +55,13 @@ public class AuthController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/getAllUsers")
+    @PreAuthorize("hasRole('MANAGER')")
+    public List<User> getAllUsers(){
+        return authService.getAllUsers();
+    }
+
 
 
 
