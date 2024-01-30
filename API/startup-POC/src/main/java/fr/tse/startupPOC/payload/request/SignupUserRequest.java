@@ -15,10 +15,12 @@ public class SignupUserRequest {
     @Email
     private String email;
 
+    private String firstName;
+
+    private String lastName;
+
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
 
-    @NotNull
-    private long managerID;
 }
