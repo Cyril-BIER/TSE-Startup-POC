@@ -97,8 +97,7 @@ public class AuthService {
                     request.getFirstName(),
                     request.getLastName(),
                     encoder.encode(request.getPassword()),
-                    manager.get(),
-                    projects
+                    manager.get()
             );
 
             return profileRepository.save(user);
