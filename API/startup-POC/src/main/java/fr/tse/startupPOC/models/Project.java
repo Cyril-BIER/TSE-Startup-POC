@@ -21,14 +21,13 @@ public class Project {
     @ManyToOne
     private Manager manager;
 
-//    Utile?
-//    @ManyToMany (mappedBy = "project", cascade = CascadeType.ALL)
-//    private List<User> projectUsers;
+    @ManyToMany (mappedBy = "project", cascade = CascadeType.ALL)
+    private List<User> projectUsers;
 
-    public Project(String projectName, Manager manager){
+    public Project(String projectName, Manager manager,List<User> projectUsers){
         this.projectName = projectName;
         this.manager = manager;
-        //this.projectUsers = projectUsers;
+        this.projectUsers = projectUsers;
     }
 
 }

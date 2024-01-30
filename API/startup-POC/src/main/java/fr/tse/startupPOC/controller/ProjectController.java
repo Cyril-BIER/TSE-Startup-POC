@@ -18,8 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class ProjectController {
-
-
     @Autowired
     ProjectService projectService;
 

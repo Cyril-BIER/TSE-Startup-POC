@@ -16,4 +16,5 @@ public class createProjectRequest {
     @NotBlank
     private String projectName;
 
+    private List<Long> projectUsers;
 }
