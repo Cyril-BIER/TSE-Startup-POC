@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MatMenuTrigger} from "@angular/material/menu";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'app-utilisateur',
@@ -66,8 +66,10 @@ export class UtilisateurComponent {
       nom: "réseau"
     }
   ]
+  rolesExistants: string [] = ["manager", "Utilisateur"];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
+
   }
 
   ngOnInit(): void {
@@ -75,10 +77,12 @@ export class UtilisateurComponent {
     this.form = this.fb.group({
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
+      email: ['', Validators.required],
       role: ['', Validators.required],
       projets: [[], Validators.required],
       motDePasse: ['', Validators.required]
     });
+    this.userService
   }
 
   get filteredUsers(): any[] {
@@ -113,14 +117,18 @@ export class UtilisateurComponent {
   }
 
   onSubmit(): void {
-    const {nom, prenom, role, projets, motDePasse} = this.form.value;
-    // Il faudra le stocker quelque part
-    console.log("projeeets", projets)
-    // à la place du string renseigné en dur, mettre le nom du manager connecté?? ou un manager
-    // peut créer un utilisateur d'un autre manager
-    this.users.push({nom: nom, prenom: prenom, role: role, projets: projets, manager:"test"})
-    this.isCreationFormVisible = false;
-    this.form.reset();
+    const {nom, prenom, email, role, motDePasse} = this.form.value;
+    this.userService.createUser(email, nom, prenom, motDePasse).subscribe((res) => {
+      console.log('User created:', res);
+      if (res) {
+        // Projet vide à implementer plus tard
+        this.users.push({nom: nom, prenom: prenom, role: role, projets: [], manager: 'test'});
+        this.isCreationFormVisible = false;
+        this.form.reset(); // Réinitialiser le formulaire ici
+      } else {
+        alert("Il y a eu un problème pour enregistrer l'utilisateur");
+      }
+    });
   }
 
   supprimerUtilisateur(): void {

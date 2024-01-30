@@ -60,16 +60,18 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Role</mat-label>
-            <input formControlName="role" matInput placeholder="">
-            <mat-icon matSuffix>face</mat-icon>
+            <mat-label>E-mail</mat-label>
+            <input formControlName="email" matInput placeholder="">
+            <mat-icon matSuffix>alternate_email</mat-icon>
           </mat-form-field>
 
+          <!-- pour le moment j'ai ça pour admin -->
           <mat-form-field appearance="outline">
-            <mat-label>Projets</mat-label>
-            <mat-select formControlName="projets" multiple>
-              <mat-option *ngFor="let projet of projetsExistants" [value]="projet.nom">{{ projet.nom }}</mat-option>
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role" multiple="false">
+              <mat-option *ngFor="let role of rolesExistants" [value]="role">{{ role }}</mat-option>
             </mat-select>
+            <mat-icon matSuffix>face</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -81,7 +83,7 @@
             </a>
           </mat-form-field>
         </div>
-        <button mat-raised-button type="submit" color="primary" (click)="onSubmit()"
+        <button mat-raised-button type="submit" color="primary"
                 style="width:50%; margin-left:25%; margin-top:3%;margin-bottom:7.5%; font-size:24px">
           Ajouter
         </button>
@@ -109,7 +111,8 @@
         </mat-card-content>
         <mat-card-actions>
           <button mat-button (click)="selectedUser = null;(isUserVisible=!isUserVisible);
-          (isUserListVisible=!isUserListVisible)">Retour</button>
+          (isUserListVisible=!isUserListVisible)">Retour
+          </button>
           <!-- Ajoutez d'autres actions si nécessaire -->
         </mat-card-actions>
       </mat-card>
