@@ -17,6 +17,6 @@ public class createProjectRequest {
     @NotBlank
     private String projectName;
     @NotBlank
-    private String responsableName;
+    private String managerName;
     private List<User> projectUsers;
 }

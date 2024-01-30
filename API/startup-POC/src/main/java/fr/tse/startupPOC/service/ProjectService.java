@@ -28,7 +28,7 @@ public class ProjectService {
         }
         Project project = new Project(
                 request.getProjectName(),
-                request.getResponsableName(),
+                request.getManagerName(),
                 projectUsers
         );
         return projectRepository.save(project);

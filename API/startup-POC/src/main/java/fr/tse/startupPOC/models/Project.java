@@ -17,14 +17,14 @@ public class Project {
     @Column(name = "project_name")
     private String projectName;
 
-    private String responsableName;
+    private String managerName;
 
     @ManyToMany (mappedBy = "project", cascade = CascadeType.ALL)
     private List<User> projectUsers;
 
-    public Project(String projectName, String responsableName, List<User> projectUsers){
+    public Project(String projectName, String managerName, List<User> projectUsers){
         this.projectName = projectName;
-        this.responsableName = responsableName;
+        this.managerName = managerName;
         this.projectUsers = projectUsers;
     }
 
