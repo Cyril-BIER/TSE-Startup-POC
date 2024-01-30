@@ -3,10 +3,17 @@
     <h2 *ngIf="user">{{user.nom}} {{user.prenom}}</h2>
     <mat-form-field>
         <mat-label>Rôle :</mat-label>
-        <mat-select matNativeControl formControlName="role" required>
+        <mat-select matNativeControl formControlName="statut" required>
             <mat-option [value]="status.admin.nom_db">{{status.admin.nom}}</mat-option>
             <mat-option [value]="status.manager.nom_db">{{status.manager.nom}}</mat-option>
             <mat-option [value]="status.utilisateur.nom_db">{{status.utilisateur.nom}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="user.statut==='ROLE_USER' || userForm.get('statut')?.value==='ROLE_USER'">
+        <mat-label>Manager :</mat-label>
+        <mat-select matNativeControl formControlName="id" required>
+            <mat-option *ngFor="let manager of managers" [value]="manager.id">{{manager.nom}}
+                {{manager.prenom}}</mat-option>
         </mat-select>
     </mat-form-field>
     <div class="buttons">

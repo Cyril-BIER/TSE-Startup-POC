@@ -14,6 +14,7 @@ export class AdminFormComponent implements OnInit {
   formId!: string;
   status = STATUS;
   user!: User;
+  managers!: User[];
 
   constructor(
     private fb: FormBuilder,
@@ -34,6 +35,13 @@ export class AdminFormComponent implements OnInit {
         prenom: 'Mohamed',
         statut: 'ROLE_MANAGER',
       };
+      const u2: User = {
+        id: 2,
+        nom: 'BIER',
+        prenom: 'Cyril',
+        statut: 'ROLE_USER',
+      };
+      this.managers = [u2];
       this.user = u1;
       this.user.id = parseInt(this.formId);
       this.userForm.patchValue({});
@@ -44,12 +52,22 @@ export class AdminFormComponent implements OnInit {
 
   private initializeForm(): void {
     this.userForm = this.fb.group({
-      role: ['', Validators.required],
+      statut: ['', Validators.required],
+      id: [''],
     });
   }
 
   onSubmit(): void {
-    console.log(this.user);
+    this.user.statut = this.userForm.get('statut')?.value;
+    if (this.userForm.get('id')?.value != '') {
+      const res = {
+        user: this.user,
+        managerId: this.userForm.get('id')?.value,
+      };
+      console.log(res);
+    } else {
+      console.log(this.user);
+    }
     alert('User mis à jour');
     this.fermer();
   }
