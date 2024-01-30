@@ -56,29 +56,27 @@ export class TempsFormulaireComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.tempsForm.invalid) {
-      return;
+    if (this.tempsForm.valid) {
+      const selectedDate = this.tempsForm.get('date')?.value;
+      const year = selectedDate.getFullYear();
+      const month = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
+      const day = ('0' + selectedDate.getDate()).slice(-2);
+
+      const formattedDate = `${year}-${month}-${day}`;
+
+      const formData = {
+        projectId: this.tempsForm.get('projet')?.value,
+        duration: this.tempsForm.get('nbr_heures')?.value,
+        date: formattedDate,
+      };
+
+      console.log(formData);
+      this.tempsService.postTemps(formData).subscribe((res) => {
+        console.log(res);
+      });
+      alert('Temps enregistré');
+      this.fermer();
     }
-
-    const selectedDate = this.tempsForm.get('date')?.value;
-    const year = selectedDate.getFullYear();
-    const month = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
-    const day = ('0' + selectedDate.getDate()).slice(-2);
-
-    const formattedDate = `${year}-${month}-${day}`;
-
-    const formData = {
-      projectId: this.tempsForm.get('projet')?.value,
-      duration: this.tempsForm.get('nbr_heures')?.value,
-      date: formattedDate,
-    };
-
-    console.log(formData);
-    this.tempsService.postTemps(formData).subscribe((res) => {
-      console.log(res);
-    });
-    alert('Temps enregistré');
-    this.fermer();
   }
 
   fermer() {
