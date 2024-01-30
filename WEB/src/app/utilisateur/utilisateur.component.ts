@@ -20,6 +20,7 @@ export class UtilisateurComponent {
     prenom: string,
     role: string,
     projets: string[],
+    manager: string,
   }[] = [
     {
       nom: 'User 1 nom',
@@ -27,7 +28,8 @@ export class UtilisateurComponent {
       role: "Utilisateur",
       projets: [
         "info"
-      ]
+      ],
+      manager: ""
     },
     {
       nom: 'User 2 nom',
@@ -35,7 +37,8 @@ export class UtilisateurComponent {
       role: "Utilisateur",
       projets: [
         "réseau"
-      ]
+      ],
+      manager: ""
     },
     {
       nom: 'User 3 nom',
@@ -43,7 +46,8 @@ export class UtilisateurComponent {
       role: "Utilisateur",
       projets: [
         "vision"
-      ]
+      ],
+      manager: ""
     },
   ];
   selectedUser: string | null = null;
@@ -112,7 +116,9 @@ export class UtilisateurComponent {
     const {nom, prenom, role, projets, motDePasse} = this.form.value;
     // Il faudra le stocker quelque part
     console.log("projeeets", projets)
-    this.users.push({nom: nom, prenom: prenom, role: role, projets: projets})
+    // à la place du string renseigné en dur, mettre le nom du manager connecté?? ou un manager
+    // peut créer un utilisateur d'un autre manager
+    this.users.push({nom: nom, prenom: prenom, role: role, projets: projets, manager:"test"})
     this.isCreationFormVisible = false;
     this.form.reset();
   }

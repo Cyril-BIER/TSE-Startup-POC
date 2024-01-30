@@ -99,9 +99,11 @@
           <p>Nom: {{ findSelectedUser()?.nom }}</p>
           <p>Prénom: {{ findSelectedUser()?.prenom }}</p>
           <p>Role: {{ findSelectedUser()?.role }}</p>
+          <p>Manager responsible: {{ findSelectedUser()?.manager }}</p>
           <p>Projets:
             <span *ngFor="let projet of findSelectedUser()?.projets">
         {{ projet }}
+
       </span>
           </p>
         </mat-card-content>
