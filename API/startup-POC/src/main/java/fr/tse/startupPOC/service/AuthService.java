@@ -37,8 +37,6 @@ public class AuthService {
     PasswordEncoder encoder;
     @Autowired
     ProjectRepository projectRepository;
-
-
     @Autowired
     JwtUtils jwtUtils;
 
@@ -105,27 +103,6 @@ public class AuthService {
         } else {
             throw new EntityNotFoundException("Manager with the id " + request.getManagerId() + " not found");
         }
-    }
-
-    @Transactional
-    public Project createProjectService(createProjectRequest request) throws AuthenticationException {
-
-        List<User> projectUsers = request.getProjectUsers();
-        if (projectUsers == null) {
-            projectUsers = Collections.emptyList();
-        }
-        Project project = new Project(
-                request.getProjectName(),
-                request.getResponsableName(),
-                projectUsers
-        );
-        //project.addProjectName(request.getProjectName());
-        return projectRepository.save(project);
-    }
-
-    @Transactional
-    public List<Project> getAllProjects(){
-        return projectRepository.findAll();
     }
 
 

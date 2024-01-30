@@ -22,7 +22,6 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request){
         try {
@@ -56,22 +55,6 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/createProject")
-    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<?> createProject(@Valid @RequestBody createProjectRequest request){
-        try {
-            Project project = authService.createProjectService(request);
-            return new ResponseEntity<>(project, HttpStatus.OK);
-        }catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
 
-    }
-
-    @GetMapping("/getAllProjects")
-    @PreAuthorize("hasRole('MANAGER')")
-    public List<Project> getAllProjects(){
-        return authService.getAllProjects();
-    }
 
 }

@@ -2,6 +2,7 @@ package fr.tse.startupPOC;
 
 import fr.tse.startupPOC.payload.request.SignupAdminRequest;
 import fr.tse.startupPOC.service.AuthService;
+import fr.tse.startupPOC.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
