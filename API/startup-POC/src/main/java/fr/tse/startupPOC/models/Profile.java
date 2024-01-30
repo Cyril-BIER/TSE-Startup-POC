@@ -15,6 +15,10 @@ public abstract class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    protected String firstName;
+
+    protected String lastName;
+
     @NotNull
     @Email
     @Column(unique = true)
