@@ -35,8 +35,9 @@ export class ConnexionComponent implements OnInit {
   onSubmit(): void {
     const { identifiant, motDePasse } = this.form.value;
     this.authService.login(identifiant, motDePasse).subscribe((res) => {
-      console.log(this.authService.isLoggedIn());
-      if (this.authService.isLoggedIn()) {
+      console.log(res);
+      if (res) {
+        console.log(this.authService.whoAmI());
         console.log(this.authService.whatRole());
         this.router.navigate(['/temps']);
       } else {

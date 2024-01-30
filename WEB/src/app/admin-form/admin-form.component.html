@@ -1,0 +1,16 @@
+<h1>Mise à jour d'un User</h1>
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <h2 *ngIf="user">{{user.nom}} {{user.prenom}}</h2>
+    <mat-form-field>
+        <mat-label>Rôle :</mat-label>
+        <mat-select matNativeControl formControlName="role" required>
+            <mat-option [value]="status.admin.nom_db">{{status.admin.nom}}</mat-option>
+            <mat-option [value]="status.manager.nom_db">{{status.manager.nom}}</mat-option>
+            <mat-option [value]="status.utilisateur.nom_db">{{status.utilisateur.nom}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="buttons">
+        <button color="primary" mat-raised-button type="submit" [disabled]="!userForm.valid">Enregistrer</button>
+        <button color="basic" mat-raised-button type="button" (click)="fermer()">Fermer sans enregistrer</button>
+    </div>
+</form>

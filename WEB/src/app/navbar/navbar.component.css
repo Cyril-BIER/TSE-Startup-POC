@@ -11,6 +11,12 @@ mat-sidenav-container {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
 }
 
+.logo {
+  width: 2.5%;
+  margin: 0;
+  padding: 0;
+}
+
 a {
   text-decoration: none;
 }

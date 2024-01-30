@@ -27,6 +27,8 @@ import { ConnexionComponent } from './connexion/connexion.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminFormComponent } from './admin-form/admin-form.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.co
     CompteRenduComponent,
     ConnexionComponent,
     TempsFormulaireComponent,
+    AdminComponent,
+    AdminFormComponent,
   ],
   imports: [
     BrowserModule,
