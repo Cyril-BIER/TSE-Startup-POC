@@ -82,26 +82,28 @@ public class AuthService {
     }
 
     @Transactional
-    public Profile createUser(SignupUserRequest request) throws AuthenticationException {
-        if (profileRepository.existsByEmail(request.getEmail())) {
+
+    public Profile createUser(SignupUserRequest request) throws Exception {
+        if(profileRepository.existsByEmail(request.getEmail())){
             throw new AuthenticationException("Email already taken");
         }
-
-        Optional<Manager> manager = managerRepository.findById(request.getManagerId());
-
-        if (manager.isPresent()) {
-            List<Project> projects = projectRepository.findAllById(request.getProjectIds());
-
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Manager> manager = managerRepository.findById(userDetails.getId());
+        if(manager.isPresent()){
+            // TODO : Relation bidirectionnelle avec Manager?
             User user = new User(
                     request.getEmail(),
+                    request.getFirstName(),
+                    request.getLastName(),
                     encoder.encode(request.getPassword()),
                     manager.get(),
                     projects
             );
 
             return profileRepository.save(user);
-        } else {
-            throw new EntityNotFoundException("Manager with the id " + request.getManagerId() + " not found");
+        }else{
+            throw new Exception("User not created");
         }
     }
 

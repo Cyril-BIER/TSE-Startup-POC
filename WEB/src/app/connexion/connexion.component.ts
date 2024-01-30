@@ -21,6 +21,7 @@ export class ConnexionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService.logout();
     this.initializeForm();
   }
 

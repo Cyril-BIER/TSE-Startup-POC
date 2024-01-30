@@ -19,11 +19,13 @@ public class User extends Profile{
     @ManyToOne
     private Manager manager;
 
-    public User(String email, String password, Manager manager, List<Project> project){
+    public User(String email, String firstName, String lastName,String password, Manager manager){
         this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
         this.manager = manager;
-        this.project = project;
+        
     }
 
     @ManyToMany
