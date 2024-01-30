@@ -264,4 +264,7 @@ replay_pid*
 .history
 .ionide
 
+### Ignore pg_data
+pg_data
+
 # End of https://www.toptal.com/developers/gitignore/api/angular,java,visualstudiocode,intellij,eclipse
