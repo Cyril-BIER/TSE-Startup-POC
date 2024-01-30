@@ -3,6 +3,7 @@ package fr.tse.startupPOC.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import fr.tse.startupPOC.models.Manager;
 
 import java.util.List;
 
@@ -17,15 +18,17 @@ public class Project {
     @Column(name = "project_name")
     private String projectName;
 
-    private String managerName;
+    @ManyToOne
+    private Manager manager;
 
-    @ManyToMany (mappedBy = "project", cascade = CascadeType.ALL)
-    private List<User> projectUsers;
+//    Utile?
+//    @ManyToMany (mappedBy = "project", cascade = CascadeType.ALL)
+//    private List<User> projectUsers;
 
-    public Project(String projectName, String managerName, List<User> projectUsers){
+    public Project(String projectName, Manager manager){
         this.projectName = projectName;
-        this.managerName = managerName;
-        this.projectUsers = projectUsers;
+        this.manager = manager;
+        //this.projectUsers = projectUsers;
     }
 
 }
