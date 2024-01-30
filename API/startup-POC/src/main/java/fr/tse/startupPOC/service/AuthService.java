@@ -1,16 +1,11 @@
 package fr.tse.startupPOC.service;
 
-import fr.tse.startupPOC.models.Admin;
-import fr.tse.startupPOC.models.Manager;
-import fr.tse.startupPOC.models.Profile;
-import fr.tse.startupPOC.models.User;
-import fr.tse.startupPOC.payload.request.LoginRequest;
-import fr.tse.startupPOC.payload.request.SignupAdminRequest;
-import fr.tse.startupPOC.payload.request.SignupManagerRequest;
-import fr.tse.startupPOC.payload.request.SignupUserRequest;
+import fr.tse.startupPOC.models.*;
+import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
 import fr.tse.startupPOC.repository.ProfileRepository;
+import fr.tse.startupPOC.repository.ProjectRepository;
 import fr.tse.startupPOC.security.jwt.JwtUtils;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,8 +35,8 @@ public class AuthService {
     ManagerRepository managerRepository;
     @Autowired
     PasswordEncoder encoder;
-
-
+    @Autowired
+    ProjectRepository projectRepository;
     @Autowired
     JwtUtils jwtUtils;
 
@@ -86,6 +82,7 @@ public class AuthService {
     }
 
     @Transactional
+
     public Profile createUser(SignupUserRequest request) throws Exception {
         if(profileRepository.existsByEmail(request.getEmail())){
             throw new AuthenticationException("Email already taken");
@@ -102,10 +99,12 @@ public class AuthService {
                     encoder.encode(request.getPassword()),
                     manager.get()
             );
+
             return profileRepository.save(user);
         }else{
             throw new Exception("User not created");
         }
     }
+
 
 }
