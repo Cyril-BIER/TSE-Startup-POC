@@ -1,6 +1,8 @@
 package fr.tse.startupPOC.controller;
 
 import fr.tse.startupPOC.payload.request.SignupUserRequest;
+import fr.tse.startupPOC.payload.request.createProjectRequest;
+import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.service.ManagerService;
 import jakarta.validation.Valid;
@@ -36,5 +38,17 @@ public class managerController {
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/createProject")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<?> createProject(@Valid @RequestBody createProjectRequest request){
+        try {
+            ProjectResponse project = managerService.createProject(request);
+            return new ResponseEntity<>(project, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

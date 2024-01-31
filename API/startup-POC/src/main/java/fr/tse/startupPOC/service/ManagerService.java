@@ -1,11 +1,15 @@
 package fr.tse.startupPOC.service;
 
 import fr.tse.startupPOC.models.Manager;
+import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.SignupUserRequest;
+import fr.tse.startupPOC.payload.request.createProjectRequest;
+import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
 import fr.tse.startupPOC.repository.ProfileRepository;
+import fr.tse.startupPOC.repository.ProjectRepository;
 import fr.tse.startupPOC.repository.UserRepository;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,9 @@ public class ManagerService {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    ProjectRepository projectRepository;
 
     public List<UserResponse> getAttachedUsers(){
         List<UserResponse> response = new ArrayList<>();
@@ -70,5 +77,34 @@ public class ManagerService {
         }else{
             throw new Exception("User not created");
         }
+    }
+
+    @Transactional
+    public ProjectResponse createProject(createProjectRequest request) {
+
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<User> userList = new ArrayList<>();
+        if(!request.getProjectUsers().isEmpty()){
+            userList = userRepository.findByIdIn(request.getProjectUsers());
+        }
+        Manager manager = managerRepository.findById(userDetails.getId()).get();
+        Project project = new Project(
+                request.getProjectName(),
+                manager,
+                userList
+        );
+        project = projectRepository.save(project);
+
+        manager.addProject(project);
+        managerRepository.save(manager);
+
+        for(User user : userList){
+            user.addProject(project);
+        }
+        userRepository.saveAll(userList);
+
+        return new ProjectResponse(project);
     }
 }
