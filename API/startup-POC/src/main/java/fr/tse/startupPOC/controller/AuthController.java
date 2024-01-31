@@ -5,6 +5,7 @@ import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
+import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -58,7 +59,7 @@ public class AuthController {
 
     @GetMapping("/getAllUsers")
     @PreAuthorize("hasRole('MANAGER')")
-    public List<User> getAllUsers(){
+    public List<UserResponse> getAllUsers(){
         return authService.getAllUsers();
     }
 

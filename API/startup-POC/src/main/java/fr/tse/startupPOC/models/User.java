@@ -28,6 +28,10 @@ public class User extends Profile{
     }
 
     @ManyToMany
-    private List<Project> project;
+    private List<Project> projects;
+
+    public void addProject(Project project){
+        this.projects.add(project);
+    }
 
 }

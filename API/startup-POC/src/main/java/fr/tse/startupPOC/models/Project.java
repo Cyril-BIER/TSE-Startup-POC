@@ -21,7 +21,7 @@ public class Project {
     @ManyToOne
     private Manager manager;
 
-    @ManyToMany (mappedBy = "project", cascade = CascadeType.ALL)
+    @ManyToMany (mappedBy = "projects", cascade = CascadeType.ALL)
     private List<User> projectUsers;
 
     public Project(String projectName, Manager manager,List<User> projectUsers){

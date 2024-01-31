@@ -3,6 +3,7 @@ package fr.tse.startupPOC.service;
 import fr.tse.startupPOC.models.*;
 import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
+import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
 import fr.tse.startupPOC.repository.ProfileRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -110,8 +112,13 @@ public class AuthService {
     }
 
     @Transactional
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        List<UserResponse> response = new ArrayList<>();
+        for(User user : users){
+            response.add(new UserResponse(user));
+        }
+        return response;
     }
 
 

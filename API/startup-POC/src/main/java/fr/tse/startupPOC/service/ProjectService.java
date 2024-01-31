@@ -50,9 +50,15 @@ public class ProjectService {
                 userList
         );
         project = projectRepository.save(project);
-        manager.addProject(project);
 
+        manager.addProject(project);
         managerRepository.save(manager);
+
+        for(User user : userList){
+            user.addProject(project);
+        }
+        userRepository.saveAll(userList);
+
         return new ProjectResponse(project);
     }
 
