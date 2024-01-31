@@ -63,30 +63,6 @@ public class AuthService {
     }
 
     @Transactional
-    public Profile createAdmin(SignupAdminRequest request) throws AuthenticationException {
-        if(profileRepository.existsByEmail(request.getEmail())){
-            throw new AuthenticationException("Email already taken");
-        }
-        Admin admin = new Admin(
-                request.getEmail(),
-                encoder.encode(request.getPassword())
-        );
-        return profileRepository.save(admin);
-    }
-
-    @Transactional
-    public Profile createManager(SignupManagerRequest request) throws AuthenticationException {
-        if(profileRepository.existsByEmail(request.getEmail())){
-            throw new AuthenticationException("Email already taken");
-        }
-        Manager manager = new Manager(
-                request.getEmail(),
-                encoder.encode(request.getPassword())
-        );
-        return profileRepository.save(manager);
-    }
-
-    @Transactional
     public Profile createUser(SignupUserRequest request) throws Exception {
         if(profileRepository.existsByEmail(request.getEmail())){
             throw new AuthenticationException("Email already taken");
@@ -109,39 +85,4 @@ public class AuthService {
             throw new Exception("User not created");
         }
     }
-
-    @Transactional
-    public List<User> getTotalUsers() {
-
-        return userRepository.findAll();
-    }
-
-    @Transactional
-    public List<UserResponse> getAllUsers(){
-        List<User> users = userRepository.findAll();
-        List<UserResponse> response = new ArrayList<>();
-        for(User user : users){
-            response.add(new UserResponse(user));
-        }
-        return response;
-    }
-
-    @Transactional
-    public  Collection<GrantedAuthority> getCurrentUserRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (Collection<GrantedAuthority>) authentication.getAuthorities();
-
-        // Default role for unauthenticated users
-    }
-
-    @Transactional
-    public void changeManager(Long userId, Long managerId){
-        User chosenUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-        Manager chosenManager = managerRepository.findById(managerId)
-                .orElseThrow(() -> new EntityNotFoundException("Manager not found with id: " + managerId));
-        chosenUser.setManager(chosenManager);
-        userRepository.save(chosenUser);
-    }
-
 }
