@@ -87,7 +87,6 @@ public class AuthService {
     }
 
     @Transactional
-
     public Profile createUser(SignupUserRequest request) throws Exception {
         if(profileRepository.existsByEmail(request.getEmail())){
             throw new AuthenticationException("Email already taken");
