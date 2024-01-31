@@ -36,7 +36,7 @@ public class ProjectController {
 
     @GetMapping("/getAllProjects")
     @PreAuthorize("hasRole('MANAGER')")
-    public List<Project> getAllProjects(){
+    public List<ProjectResponse> getAllProjects(){
         return projectService.getAllProjects();
     }
 }

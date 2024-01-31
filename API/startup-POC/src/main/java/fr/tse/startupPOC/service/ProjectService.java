@@ -63,8 +63,14 @@ public class ProjectService {
     }
 
     @Transactional
-    public List<Project> getAllProjects(){
-        return projectRepository.findAll();
+    public List<ProjectResponse> getAllProjects(){
+        List<Project> projects = projectRepository.findAll();
+        List<ProjectResponse> response = new ArrayList<>();
+
+        for(Project project:projects){
+            response.add(new ProjectResponse(project));
+        }
+        return response;
     }
 
 }

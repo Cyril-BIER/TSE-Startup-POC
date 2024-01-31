@@ -28,8 +28,11 @@ public class UserResponse {
         Manager manager = user.getManager();
         this.managerId = manager.getId();
         this.managerName = manager.getFirstName() + " "+manager.getLastName();
-        for(Project project : user.getProjects()){
-            projects.put(project.getId(),project.getProjectName());
+        if(user.getProjects() != null){
+            for(Project project : user.getProjects()){
+                projects.put(project.getId(),project.getProjectName());
+            }
         }
+
     }
 }

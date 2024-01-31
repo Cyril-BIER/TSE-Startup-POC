@@ -23,4 +23,8 @@ public class Manager extends Profile{
      public void addProject(Project project){
         this.projects.add(project);
      }
+
+     public void addUser(User user){
+        this.attachedUsers.add(user);
+     }
 }

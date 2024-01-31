@@ -50,8 +50,8 @@ public class AuthController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupUserRequest request){
         try {
-            Profile profile = authService.createUser(request);
-            return new ResponseEntity<>(profile, HttpStatus.OK);
+            UserResponse response = authService.createUser(request);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
