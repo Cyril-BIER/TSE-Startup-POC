@@ -60,6 +60,10 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/api/imputation/**").permitAll()
+                                .requestMatchers("/api/swagger-ui/**").permitAll()
+                                .requestMatchers("/api/apidocs").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/api/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 );
         http.authenticationProvider(authenticationProvider());

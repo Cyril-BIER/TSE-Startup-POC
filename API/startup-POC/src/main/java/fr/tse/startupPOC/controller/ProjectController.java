@@ -2,6 +2,7 @@ package fr.tse.startupPOC.controller;
 
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.payload.request.createProjectRequest;
+import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.service.AuthService;
 import fr.tse.startupPOC.service.ProjectService;
 import jakarta.validation.Valid;
@@ -14,11 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class ProjectController {
-
-
     @Autowired
     ProjectService projectService;
 
@@ -26,7 +26,7 @@ public class ProjectController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> createProject(@Valid @RequestBody createProjectRequest request){
         try {
-            Project project = projectService.createProjectService(request);
+            ProjectResponse project = projectService.createProjectService(request);
             return new ResponseEntity<>(project, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -36,7 +36,7 @@ public class ProjectController {
 
     @GetMapping("/getAllProjects")
     @PreAuthorize("hasRole('MANAGER')")
-    public List<Project> getAllProjects(){
+    public List<ProjectResponse> getAllProjects(){
         return projectService.getAllProjects();
     }
 }
