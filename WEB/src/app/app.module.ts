@@ -26,7 +26,10 @@ import { CompteRenduComponent } from './compte-rendu/compte-rendu.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatListModule} from "@angular/material/list";
+import {MatExpansionModule} from "@angular/material/expansion";
 import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.component';
+import {MatCardModule} from "@angular/material/card";
 import { AdminComponent } from './admin/admin.component';
 import { AdminFormComponent } from './admin-form/admin-form.component';
 
@@ -64,6 +67,9 @@ import { AdminFormComponent } from './admin-form/admin-form.component';
     MatPaginatorModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatListModule,
+    MatExpansionModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
