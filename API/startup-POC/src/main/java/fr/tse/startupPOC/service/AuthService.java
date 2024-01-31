@@ -124,7 +124,6 @@ public class AuthService {
         // Default role for unauthenticated users
     }
 
-
     @Transactional
     public void changeManager(Long userId, Long managerId){
         User chosenUser = userRepository.findById(userId)
