@@ -3,6 +3,7 @@ package fr.tse.startupPOC.service;
 import fr.tse.startupPOC.models.*;
 import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
+import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
 import fr.tse.startupPOC.repository.ProfileRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
@@ -111,9 +112,19 @@ public class AuthService {
     }
 
     @Transactional
-    public List<User> getAllUsers() {
+    public List<User> getTotalUsers() {
 
         return userRepository.findAll();
+    }
+
+    @Transactional
+    public List<UserResponse> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        List<UserResponse> response = new ArrayList<>();
+        for(User user : users){
+            response.add(new UserResponse(user));
+        }
+        return response;
     }
 
     @Transactional
