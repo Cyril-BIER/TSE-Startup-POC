@@ -28,10 +28,12 @@ public class Imputation {
 
     private float duration;
 
-    // TODO : Projet
+    @ManyToOne
+    private Project project;
 
-    public Imputation(User user, LocalDate date, float duration){
+    public Imputation(User user, Project project ,LocalDate date, float duration){
         this.user = user;
+        this.project = project;
         this.date = date;
         this.duration = duration;
     }
