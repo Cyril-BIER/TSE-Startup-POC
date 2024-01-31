@@ -63,22 +63,6 @@ public class AuthService {
     }
 
     @Transactional
-    public Void changeUserRole(Long userId,String role){
-        User chosenUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-        if(role == "MANAGER"){
-            Manager manager = new Manager(chosenUser.getEmail(), chosenUser.getPassword());
-            profileRepository.save(manager);
-        } else if (role == "ADMIN") {
-            Admin admin = new Admin(chosenUser.getEmail(), chosenUser.getPassword());
-            profileRepository.save(admin);
-        }
-        return null;
-    }
-
-
-
-    @Transactional
 
     public Profile createUser(SignupUserRequest request) throws Exception {
         if(profileRepository.existsByEmail(request.getEmail())){
@@ -101,50 +85,6 @@ public class AuthService {
         }else{
             throw new Exception("User not created");
         }
-    }
-
-    @Transactional
-    public List<User> getTotalUsers() {
-
-        return userRepository.findAll();
-    }
-    @Transactional
-    public List<Manager> getAllManagers() {
-
-        return managerRepository.findAll();
-    }
-
-    @Transactional
-    public List<UserResponse> getAllUsers(){
-        List<User> users = userRepository.findAll();
-        List<UserResponse> response = new ArrayList<>();
-        for(User user : users){
-            response.add(new UserResponse(user));
-        }
-        return response;
-    }
-
-    @Transactional
-    public  Collection<GrantedAuthority> getCurrentUserRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (Collection<GrantedAuthority>) authentication.getAuthorities();
-
-        // Default role for unauthenticated users
-    }
-
-    @Transactional
-    public void changeManager(Long userId, Long managerId){
-        User chosenUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-        Manager chosenManager = managerRepository.findById(managerId)
-                .orElseThrow(() -> new EntityNotFoundException("Manager not found with id: " + managerId));
-        chosenUser.setManager(chosenManager);
-        userRepository.save(chosenUser);
-    }
-
-    @Transactional
-    public void changeStatus(Long userId, String roleName){
-        Optional<User> chosenUser = userRepository.findById(userId);
     }
 
 }

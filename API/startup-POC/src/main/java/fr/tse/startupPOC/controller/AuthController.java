@@ -47,37 +47,4 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/getAllUsers")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUsers(){
-        return authService.getTotalUsers();
-    }
-
-    @GetMapping("/getAllManagers")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<Manager> getAllManagers(){
-        return authService.getAllManagers();
-    }
-
-    @GetMapping("/getAuthentified")
-    @PreAuthorize("hasRole('MANAGER')")
-    public Collection<GrantedAuthority> getRole(){
-        return authService.getCurrentUserRole();
-    }
-
-    @PutMapping("/changeManager")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void changeManager(Long userId,Long newManagerId){
-        authService.changeManager(userId,newManagerId);
-    }
-
-    @PutMapping("/changeStatus")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Void changeStatus(){
-        Long userId = 11L;
-        authService.changeUserRole(userId,"MANAGER");
-        return null;
-    }
-
-
 }
