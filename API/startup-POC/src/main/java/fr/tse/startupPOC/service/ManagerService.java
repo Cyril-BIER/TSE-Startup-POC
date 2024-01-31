@@ -107,4 +107,15 @@ public class ManagerService {
 
         return new ProjectResponse(project);
     }
+
+    public List<ProjectResponse> getProjects(){
+        List<ProjectResponse> reponse = new ArrayList<>();
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Manager manager = managerRepository.findById(userDetails.getId()).get();
+        for(Project project:manager.getProjects()){
+            reponse.add(new ProjectResponse(project));
+        }
+        return reponse;
+    }
 }
