@@ -47,16 +47,16 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/registerUser")
-    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupUserRequest request){
-        try {
-            Profile profile = authService.createUser(request);
-            return new ResponseEntity<>(profile, HttpStatus.OK);
-        }catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @PostMapping("/registerUser")
+//    @PreAuthorize("hasRole('MANAGER')")
+//    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupUserRequest request){
+//        try {
+//            Profile profile = authService.createUser(request);
+//            return new ResponseEntity<>(profile, HttpStatus.OK);
+//        }catch(Exception e){
+//            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @GetMapping("/getAllUsers")
     @PreAuthorize("hasRole('ADMIN')")
