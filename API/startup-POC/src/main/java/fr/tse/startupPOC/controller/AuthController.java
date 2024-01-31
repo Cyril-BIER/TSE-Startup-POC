@@ -5,6 +5,7 @@ import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.*;
 import fr.tse.startupPOC.payload.response.JwtResponse;
+import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -49,8 +50,8 @@ public class AuthController {
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupUserRequest request){
         try {
-            Profile profile = authService.createUser(request);
-            return new ResponseEntity<>(profile, HttpStatus.OK);
+            UserResponse response = authService.createUser(request);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -58,7 +59,7 @@ public class AuthController {
 
     @GetMapping("/getAllUsers")
     @PreAuthorize("hasRole('MANAGER')")
-    public List<User> getAllUsers(){
+    public List<UserResponse> getAllUsers(){
         return authService.getAllUsers();
     }
 

@@ -12,11 +12,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class createProjectRequest {
     @NotBlank
     private String projectName;
-    @NotBlank
-    private String managerName;
-    private List<User> projectUsers;
+
+    private List<Long> projectUsers;
 }
