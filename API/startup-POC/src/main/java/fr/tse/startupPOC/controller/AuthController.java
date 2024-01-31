@@ -73,11 +73,7 @@ public class AuthController {
     @PutMapping("/changeManager")
     @PreAuthorize("hasRole('ADMIN')")
     public void changeManager(Long userId,Long newManagerId){
-        int userID = 11;
-        long longuserId = userID;
-        int managerID = 3;
-        long longmanagerId = managerID;
-        authService.changeManager(longuserId,longmanagerId);
+        authService.changeManager(userId,newManagerId);
     }
 
 
