@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -57,12 +59,26 @@ public class AuthController {
     }
 
     @GetMapping("/getAllUsers")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllUsers(){
         return authService.getAllUsers();
     }
 
+    @GetMapping("/getAuthentified")
+    @PreAuthorize("hasRole('MANAGER')")
+    public Collection<GrantedAuthority> getRole(){
+        return authService.getCurrentUserRole();
+    }
 
+    @PutMapping("/changeManager")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void changeManager(Long userId,Long newManagerId){
+        int userID = 11;
+        long longuserId = userID;
+        int managerID = 3;
+        long longmanagerId = managerID;
+        authService.changeManager(longuserId,longmanagerId);
+    }
 
 
 }

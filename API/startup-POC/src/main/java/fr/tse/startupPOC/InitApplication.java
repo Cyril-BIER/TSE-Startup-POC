@@ -18,8 +18,6 @@ public class InitApplication implements ApplicationRunner {
         try {
             SignupAdminRequest request = new SignupAdminRequest("root@root.com","rootpass");
             authService.createAdmin(request);
-            SignupManagerRequest managerrequest = new SignupManagerRequest("manager@manager.com","managerpass");
-            authService.createManager(managerrequest);
         }catch(Exception e){
             System.out.println("Root user already exists");
         }

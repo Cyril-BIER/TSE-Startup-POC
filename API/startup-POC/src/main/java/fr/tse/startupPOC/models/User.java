@@ -25,7 +25,6 @@ public class User extends Profile{
         this.lastName = lastName;
         this.password = password;
         this.manager = manager;
-        
     }
 
     @ManyToMany

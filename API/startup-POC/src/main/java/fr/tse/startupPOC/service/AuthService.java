@@ -15,15 +15,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,9 +111,28 @@ public class AuthService {
     }
 
     @Transactional
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
+
         return userRepository.findAll();
     }
 
+    @Transactional
+    public  Collection<GrantedAuthority> getCurrentUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (Collection<GrantedAuthority>) authentication.getAuthorities();
+
+        // Default role for unauthenticated users
+    }
+
+
+    @Transactional
+    public void changeManager(Long userId, Long managerId){
+        User chosenUser = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        Manager chosenManager = managerRepository.findById(managerId)
+                .orElseThrow(() -> new EntityNotFoundException("Manager not found with id: " + managerId));
+        chosenUser.setManager(chosenManager);
+        userRepository.save(chosenUser);
+    }
 
 }
