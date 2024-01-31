@@ -1,5 +1,6 @@
 package fr.tse.startupPOC.controller;
 
+import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Profile;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
@@ -35,18 +36,6 @@ public class AuthController {
         }
     }
 
-
-    @PostMapping("/registerManager")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> registerManager(@Valid @RequestBody SignupManagerRequest request){
-        try {
-            Profile profile = authService.createManager(request);
-            return new ResponseEntity<>(profile, HttpStatus.OK);
-        }catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @PostMapping("/registerUser")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupUserRequest request){
@@ -64,6 +53,12 @@ public class AuthController {
         return authService.getTotalUsers();
     }
 
+    @GetMapping("/getAllManagers")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Manager> getAllManagers(){
+        return authService.getAllManagers();
+    }
+
     @GetMapping("/getAuthentified")
     @PreAuthorize("hasRole('MANAGER')")
     public Collection<GrantedAuthority> getRole(){
@@ -74,6 +69,14 @@ public class AuthController {
     @PreAuthorize("hasRole('ADMIN')")
     public void changeManager(Long userId,Long newManagerId){
         authService.changeManager(userId,newManagerId);
+    }
+
+    @PutMapping("/changeStatus")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Void changeStatus(){
+        Long userId = 11L;
+        authService.changeUserRole(userId,"MANAGER");
+        return null;
     }
 
 

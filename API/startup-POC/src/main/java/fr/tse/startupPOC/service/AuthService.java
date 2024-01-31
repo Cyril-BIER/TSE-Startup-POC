@@ -63,28 +63,20 @@ public class AuthService {
     }
 
     @Transactional
-    public Profile createAdmin(SignupAdminRequest request) throws AuthenticationException {
-        if(profileRepository.existsByEmail(request.getEmail())){
-            throw new AuthenticationException("Email already taken");
+    public Void changeUserRole(Long userId,String role){
+        User chosenUser = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        if(role == "MANAGER"){
+            Manager manager = new Manager(chosenUser.getEmail(), chosenUser.getPassword());
+            profileRepository.save(manager);
+        } else if (role == "ADMIN") {
+            Admin admin = new Admin(chosenUser.getEmail(), chosenUser.getPassword());
+            profileRepository.save(admin);
         }
-        Admin admin = new Admin(
-                request.getEmail(),
-                encoder.encode(request.getPassword())
-        );
-        return profileRepository.save(admin);
+        return null;
     }
 
-    @Transactional
-    public Profile createManager(SignupManagerRequest request) throws AuthenticationException {
-        if(profileRepository.existsByEmail(request.getEmail())){
-            throw new AuthenticationException("Email already taken");
-        }
-        Manager manager = new Manager(
-                request.getEmail(),
-                encoder.encode(request.getPassword())
-        );
-        return profileRepository.save(manager);
-    }
+
 
     @Transactional
 
@@ -116,6 +108,11 @@ public class AuthService {
 
         return userRepository.findAll();
     }
+    @Transactional
+    public List<Manager> getAllManagers() {
+
+        return managerRepository.findAll();
+    }
 
     @Transactional
     public List<UserResponse> getAllUsers(){
@@ -143,6 +140,11 @@ public class AuthService {
                 .orElseThrow(() -> new EntityNotFoundException("Manager not found with id: " + managerId));
         chosenUser.setManager(chosenManager);
         userRepository.save(chosenUser);
+    }
+
+    @Transactional
+    public void changeStatus(Long userId, String roleName){
+        Optional<User> chosenUser = userRepository.findById(userId);
     }
 
 }
