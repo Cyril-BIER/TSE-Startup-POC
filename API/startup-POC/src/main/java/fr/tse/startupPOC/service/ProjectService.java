@@ -5,6 +5,7 @@ import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.createProjectRequest;
+import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
 import fr.tse.startupPOC.repository.UserRepository;
@@ -33,7 +34,7 @@ public class ProjectService {
     UserRepository userRepository;
 
     @Transactional
-    public Project createProjectService(createProjectRequest request) throws AuthenticationException {
+    public ProjectResponse createProjectService(createProjectRequest request) throws AuthenticationException {
 
         UserDetailsImpl userDetails =
                 (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -42,13 +43,17 @@ public class ProjectService {
         if(!request.getProjectUsers().isEmpty()){
             userList = userRepository.findByIdIn(request.getProjectUsers());
         }
-        Optional<Manager> manager = managerRepository.findById(userDetails.getId());
+        Manager manager = managerRepository.findById(userDetails.getId()).get();
         Project project = new Project(
                 request.getProjectName(),
-                manager.get(),
+                manager,
                 userList
         );
-        return projectRepository.save(project);
+        project = projectRepository.save(project);
+        manager.addProject(project);
+
+        managerRepository.save(manager);
+        return new ProjectResponse(project);
     }
 
     @Transactional
