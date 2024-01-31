@@ -6,14 +6,39 @@ import { UtilisateurComponent } from './utilisateur/utilisateur.component';
 import { CompteRenduComponent } from './compte-rendu/compte-rendu.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.component';
+import { canActivate } from './services/auth.guard';
+import { AdminComponent } from './admin/admin.component';
+import { AdminFormComponent } from './admin-form/admin-form.component';
 
 const routes: Routes = [
   { path: '', component: ConnexionComponent },
-  { path: 'projet', component: ProjetComponent },
-  { path: 'temps', component: TempsComponent },
-  { path: 'temps-formulaire', component: TempsFormulaireComponent },
-  { path: 'utilisateur', component: UtilisateurComponent },
-  { path: 'compte-rendu', component: CompteRenduComponent },
+  { path: 'projet', component: ProjetComponent, canActivate: [canActivate] },
+  { path: 'temps', component: TempsComponent, canActivate: [canActivate] },
+  {
+    path: 'temps-formulaire',
+    component: TempsFormulaireComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: 'utilisateur',
+    component: UtilisateurComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: 'compte-rendu',
+    component: CompteRenduComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: 'adminForm/:id',
+    component: AdminFormComponent,
+    canActivate: [canActivate],
+  },
 ];
 
 @NgModule({
