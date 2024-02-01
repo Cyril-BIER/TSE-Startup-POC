@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -21,17 +22,18 @@ public class Imputation {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     private User user;
 
     private LocalDate date;
 
-    private float duration;
+    private LocalTime duration;
 
-    // TODO : Projet
+    @ManyToOne
+    private Project project;
 
-    public Imputation(User user, LocalDate date, float duration){
+    public Imputation(User user, Project project ,LocalDate date, LocalTime duration){
         this.user = user;
+        this.project = project;
         this.date = date;
         this.duration = duration;
     }

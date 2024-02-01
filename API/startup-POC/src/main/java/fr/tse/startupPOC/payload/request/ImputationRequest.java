@@ -2,13 +2,16 @@ package fr.tse.startupPOC.payload.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ImputationRequest {
     @NotNull
     private Long projectId;
@@ -17,5 +20,5 @@ public class ImputationRequest {
     private LocalDate date;
 
     @NotNull
-    private float duration;
+    private LocalTime duration;
 }

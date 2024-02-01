@@ -17,7 +17,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/manager")
-public class managerController {
+public class ManagerController {
     @Autowired
     ManagerService managerService;
 
