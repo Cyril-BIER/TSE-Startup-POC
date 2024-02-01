@@ -4,6 +4,7 @@ import fr.tse.startupPOC.models.Imputation;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.ImputationRequest;
+import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.repository.ImputationRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
@@ -43,26 +44,22 @@ public class UserService {
     }
 
     @Transactional
-    public Imputation addImputation(ImputationRequest request){
-        try {
+    public ImputationResponse addImputation(ImputationRequest request){
             UserDetailsImpl userDetails =
                     (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User user = userRepository.findById(userDetails.getId()).get();
 
             Optional<Project> oProject = projectRepository.findById(request.getProjectId());
+            Project project;
             if(oProject.isPresent())
             {
-                Project project = oProject.get();
-                Imputation imputation = new Imputation(user,project,request.getDate(), request.getDuration());
-                return imputationRepository.save(imputation);
-
+                project = oProject.get();
             }else {
                 throw new EntityNotFoundException("Project not found!");
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
 
+            Imputation imputation = new Imputation(user,project,request.getDate(), request.getDuration());
+            imputation = imputationRepository.save(imputation);
+            return new ImputationResponse(imputation);
     }
 }

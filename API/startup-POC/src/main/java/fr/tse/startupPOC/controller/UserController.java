@@ -2,6 +2,7 @@ package fr.tse.startupPOC.controller;
 
 import fr.tse.startupPOC.models.Imputation;
 import fr.tse.startupPOC.payload.request.ImputationRequest;
+import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.service.UserService;
 import jakarta.validation.Valid;
@@ -35,7 +36,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> addImputation(@Valid @RequestBody ImputationRequest request){
         try{
-            Imputation imputation = userService.addImputation(request);
+            ImputationResponse imputation = userService.addImputation(request);
             return new ResponseEntity<>(imputation, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
