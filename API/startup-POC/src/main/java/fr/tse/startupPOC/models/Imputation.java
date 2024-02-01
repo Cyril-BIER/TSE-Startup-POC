@@ -22,7 +22,6 @@ public class Imputation {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     private User user;
 
     private LocalDate date;

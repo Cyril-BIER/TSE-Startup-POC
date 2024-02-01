@@ -60,6 +60,22 @@ public class UserService {
 
             Imputation imputation = new Imputation(user,project,request.getDate(), request.getDuration());
             imputation = imputationRepository.save(imputation);
+
+            user.addImputation(imputation);
+            userRepository.save(user);
             return new ImputationResponse(imputation);
+    }
+
+    public List<ImputationResponse> getImputation(){
+        List<ImputationResponse> reponse = new ArrayList<>();
+
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(userDetails.getId()).get();
+        for(Imputation imputation: user.getImputations()){
+            reponse.add(new ImputationResponse(imputation));
+        }
+
+        return reponse;
     }
 }

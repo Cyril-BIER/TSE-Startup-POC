@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class User extends Profile{
     @ManyToOne
-    @JsonIgnore
     private Manager manager;
 
     public User(String email, String firstName, String lastName,String password, Manager manager){
@@ -29,8 +28,15 @@ public class User extends Profile{
     @ManyToMany
     private List<Project> projects;
 
+    @OneToMany(mappedBy = "user")
+    List<Imputation> imputations;
+
     public void addProject(Project project){
         this.projects.add(project);
+    }
+
+    public void addImputation(Imputation imputation){
+        this.imputations.add(imputation);
     }
 
 }

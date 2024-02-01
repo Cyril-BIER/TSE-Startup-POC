@@ -42,4 +42,15 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/imputation")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getImputation(){
+        try{
+            List<ImputationResponse> response = userService.getImputation();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
