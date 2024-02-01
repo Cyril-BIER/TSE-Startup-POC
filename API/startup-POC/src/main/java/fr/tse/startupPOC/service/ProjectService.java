@@ -1,6 +1,5 @@
 package fr.tse.startupPOC.service;
 
-import fr.tse.startupPOC.controller.ProjectController;
 import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
@@ -17,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProjectService {
