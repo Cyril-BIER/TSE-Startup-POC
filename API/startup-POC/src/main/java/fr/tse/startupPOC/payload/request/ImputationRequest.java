@@ -1,13 +1,12 @@
 package fr.tse.startupPOC.payload.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -20,5 +19,5 @@ public class ImputationRequest {
     private LocalDate date;
 
     @NotNull
-    private LocalTime duration;
+    private Duration duration;
 }
