@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -69,10 +68,9 @@ public class ManagerController {
 
     @GetMapping("/imputation/{userId}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<?> getImputation(RequestParam userId){
+    public ResponseEntity<?> getImputation(@PathVariable Long userId){
         try{
-            List<ImputationResponse> response= new ArrayList<>();
-            // TODO
+            List<ImputationResponse> response= managerService.getImputations(userId);
             return new ResponseEntity<>(response,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
