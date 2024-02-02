@@ -1,10 +1,12 @@
 package fr.tse.startupPOC.service;
 
+import fr.tse.startupPOC.models.Imputation;
 import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.SignupUserRequest;
 import fr.tse.startupPOC.payload.request.createProjectRequest;
+import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
@@ -12,6 +14,7 @@ import fr.tse.startupPOC.repository.ProfileRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
 import fr.tse.startupPOC.repository.UserRepository;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -117,5 +120,18 @@ public class ManagerService {
             reponse.add(new ProjectResponse(project));
         }
         return reponse;
+    }
+
+    public List<ImputationResponse> getImputations(Long userId){
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new EntityNotFoundException("User with id "+userId+" not found");
+        }else {
+            List<ImputationResponse> response = new ArrayList<>();
+            for(Imputation imputation:user.get().getImputations()){
+                response.add(new ImputationResponse(imputation));
+            }
+            return response;
+        }
     }
 }

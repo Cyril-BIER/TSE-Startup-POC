@@ -2,6 +2,7 @@ package fr.tse.startupPOC.controller;
 
 import fr.tse.startupPOC.payload.request.SignupUserRequest;
 import fr.tse.startupPOC.payload.request.createProjectRequest;
+import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.service.ManagerService;
@@ -62,6 +63,17 @@ public class ManagerController {
             return new ResponseEntity<>(response,HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/imputation/{userId}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<?> getImputation(@PathVariable Long userId){
+        try{
+            List<ImputationResponse> response= managerService.getImputations(userId);
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
