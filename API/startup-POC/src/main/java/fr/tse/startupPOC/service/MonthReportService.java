@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Optional;
@@ -40,13 +40,18 @@ public class MonthReportService {
 
                 HashMap<String, Duration> workTimeReport = new HashMap<>();
                 for(Imputation imputation: user.getImputations()){
-                    String projectName = imputation.getProject().getProjectName();
-                    if(! workTimeReport.containsKey(projectName)){
-                        workTimeReport.put(projectName,imputation.getDuration());
-                    }else{
-                        Duration duration = workTimeReport.get(projectName);
-                        workTimeReport.put(projectName,duration.plus(imputation.getDuration()));
+
+                    if (imputation.getDate().getMonth()== LocalDate.now().getMonth()) {
+
+                        String projectName = imputation.getProject().getProjectName();
+                        if(! workTimeReport.containsKey(projectName)){
+                            workTimeReport.put(projectName,imputation.getDuration());
+                        }else{
+                            Duration duration = workTimeReport.get(projectName);
+                            workTimeReport.put(projectName,duration.plus(imputation.getDuration()));
+                        }
                     }
+
                 }
                 monthReport.setWorkTimeReport(workTimeReport);
 
