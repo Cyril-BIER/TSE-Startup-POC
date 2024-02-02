@@ -3,6 +3,7 @@ package fr.tse.startupPOC.controller;
 import fr.tse.startupPOC.models.Imputation;
 import fr.tse.startupPOC.payload.request.ImputationRequest;
 import fr.tse.startupPOC.payload.response.ImputationResponse;
+import fr.tse.startupPOC.payload.response.MonthReportResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.service.UserService;
 import jakarta.validation.Valid;
@@ -48,6 +49,17 @@ public class UserController {
     public ResponseEntity<?> getImputation(){
         try{
             List<ImputationResponse> response = userService.getImputation();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/createMonthReport")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> createMonthReport(){
+        try{
+            MonthReportResponse response = userService.generateReport();
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);

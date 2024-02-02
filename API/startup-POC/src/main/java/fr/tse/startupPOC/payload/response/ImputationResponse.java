@@ -4,8 +4,8 @@ import fr.tse.startupPOC.models.Imputation;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class ImputationResponse {
 
     private LocalDate date;
 
-    private LocalTime duration;
+    private Duration duration;
 
     public ImputationResponse(Imputation imputation){
         this.userName = imputation.getUser().getFirstName() + " "+imputation.getUser().getLastName();

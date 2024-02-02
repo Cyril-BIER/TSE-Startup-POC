@@ -1,6 +1,5 @@
 package fr.tse.startupPOC.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,8 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -26,12 +25,12 @@ public class Imputation {
 
     private LocalDate date;
 
-    private LocalTime duration;
+    private Duration duration;
 
     @ManyToOne
     private Project project;
 
-    public Imputation(User user, Project project ,LocalDate date, LocalTime duration){
+    public Imputation(User user, Project project ,LocalDate date, Duration duration){
         this.user = user;
         this.project = project;
         this.date = date;

@@ -1,12 +1,10 @@
 package fr.tse.startupPOC.service;
 
-import fr.tse.startupPOC.models.Imputation;
-import fr.tse.startupPOC.models.Manager;
-import fr.tse.startupPOC.models.Project;
-import fr.tse.startupPOC.models.User;
+import fr.tse.startupPOC.models.*;
 import fr.tse.startupPOC.payload.request.SignupUserRequest;
 import fr.tse.startupPOC.payload.request.createProjectRequest;
 import fr.tse.startupPOC.payload.response.ImputationResponse;
+import fr.tse.startupPOC.payload.response.MonthReportResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.repository.ManagerRepository;
@@ -42,6 +40,9 @@ public class ManagerService {
 
     @Autowired
     ProjectRepository projectRepository;
+
+    @Autowired
+    MonthReportService monthReportService;
 
     public List<UserResponse> getAttachedUsers(){
         List<UserResponse> response = new ArrayList<>();
@@ -133,5 +134,10 @@ public class ManagerService {
             }
             return response;
         }
+    }
+
+    public MonthReportResponse generateReport(Long userId){
+       MonthReport monthReport = monthReportService.generateReport(userId);
+       return new MonthReportResponse(monthReport);
     }
 }
