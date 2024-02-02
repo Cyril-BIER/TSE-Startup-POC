@@ -1,10 +1,12 @@
 package fr.tse.startupPOC.service;
 
 import fr.tse.startupPOC.models.Imputation;
+import fr.tse.startupPOC.models.MonthReport;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.ImputationRequest;
 import fr.tse.startupPOC.payload.response.ImputationResponse;
+import fr.tse.startupPOC.payload.response.MonthReportResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.repository.ImputationRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
@@ -29,6 +31,9 @@ public class UserService {
     ProjectRepository projectRepository;
     @Autowired
     ImputationRepository imputationRepository;
+
+    @Autowired
+    MonthReportService monthReportService;
 
     public List<ProjectResponse> getProjects(){
         List<ProjectResponse> reponse = new ArrayList<>();
@@ -77,5 +82,13 @@ public class UserService {
         }
 
         return reponse;
+    }
+
+    public MonthReportResponse generateReport(){
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        MonthReport monthReport = monthReportService.generateReport(userDetails.getId());
+        return new MonthReportResponse(monthReport);
     }
 }

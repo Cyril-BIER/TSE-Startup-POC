@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalTime;
+import java.time.Duration;
 import java.time.YearMonth;
 import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class MonthReport {
     private User user;
 
     @ElementCollection
-    private HashMap<String, LocalTime> workTimeReport = new HashMap<>();
+    private Map<String, Duration> workTimeReport = new HashMap<>();
 
 
 }
