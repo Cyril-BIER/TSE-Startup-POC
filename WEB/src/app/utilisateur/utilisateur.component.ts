@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../services/user.service";
 
@@ -7,7 +7,7 @@ import {UserService} from "../services/user.service";
   templateUrl: './utilisateur.component.html',
   styleUrls: ['./utilisateur.component.css']
 })
-export class UtilisateurComponent {
+export class UtilisateurComponent implements OnInit{
   searchText: string = '';
   isUserListVisible: boolean = false;
   isUserVisible: boolean = false;
