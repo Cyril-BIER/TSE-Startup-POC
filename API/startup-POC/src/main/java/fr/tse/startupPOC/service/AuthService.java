@@ -1,31 +1,21 @@
 package fr.tse.startupPOC.service;
 
-import fr.tse.startupPOC.models.*;
-import fr.tse.startupPOC.payload.request.*;
+import fr.tse.startupPOC.models.User;
+import fr.tse.startupPOC.payload.request.LoginRequest;
 import fr.tse.startupPOC.payload.response.JwtResponse;
-import fr.tse.startupPOC.payload.response.UserResponse;
-import fr.tse.startupPOC.repository.ManagerRepository;
-import fr.tse.startupPOC.repository.ProfileRepository;
-import fr.tse.startupPOC.repository.ProjectRepository;
+import fr.tse.startupPOC.repository.MonthReportRepository;
 import fr.tse.startupPOC.repository.UserRepository;
 import fr.tse.startupPOC.security.jwt.JwtUtils;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.AuthenticationException;
-import java.util.*;
+import java.time.YearMonth;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,15 +23,9 @@ public class AuthService {
     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
-    ProfileRepository profileRepository;
-    @Autowired
-    ManagerRepository managerRepository;
-    @Autowired
-    PasswordEncoder encoder;
-    @Autowired
-    ProjectRepository projectRepository;
-    @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    MonthReportRepository monthReportRepository;
     @Autowired
     UserRepository userRepository;
 
@@ -59,30 +43,14 @@ public class AuthService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return new JwtResponse(jwt, userDetails.getId(), userDetails.getEmail(),roles);
+
+        boolean canAddImputation = false;
+        if(roles.contains("ROLE_USER")){
+            User user = userRepository.findById(userDetails.getId()).get();
+            canAddImputation =! monthReportRepository.existsByYearMonthAndUser(YearMonth.now(),user);
+        }
+        return new JwtResponse(jwt, userDetails.getId(), userDetails.getEmail(),roles,canAddImputation);
     }
 
-    @Transactional
-    public Profile createUser(SignupUserRequest request) throws Exception {
-        if(profileRepository.existsByEmail(request.getEmail())){
-            throw new AuthenticationException("Email already taken");
-        }
-        UserDetailsImpl userDetails =
-                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Manager> manager = managerRepository.findById(userDetails.getId());
-        if(manager.isPresent()){
-            // TODO : Relation bidirectionnelle avec Manager?
-            User user = new User(
-                    request.getEmail(),
-                    request.getFirstName(),
-                    request.getLastName(),
-                    encoder.encode(request.getPassword()),
-                    manager.get()
-            );
 
-            return profileRepository.save(user);
-        }else{
-            throw new Exception("User not created");
-        }
-    }
 }
