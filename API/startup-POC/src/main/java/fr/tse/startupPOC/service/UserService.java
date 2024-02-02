@@ -9,15 +9,18 @@ import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.MonthReportResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.repository.ImputationRepository;
+import fr.tse.startupPOC.repository.MonthReportRepository;
 import fr.tse.startupPOC.repository.ProjectRepository;
 import fr.tse.startupPOC.repository.UserRepository;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.AlreadyBuiltException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +34,9 @@ public class UserService {
     ProjectRepository projectRepository;
     @Autowired
     ImputationRepository imputationRepository;
+
+    @Autowired
+    MonthReportRepository monthReportRepository;
 
     @Autowired
     MonthReportService monthReportService;
@@ -54,6 +60,7 @@ public class UserService {
                     (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User user = userRepository.findById(userDetails.getId()).get();
 
+        if (!monthReportRepository.existsByYearMonthAndUser(YearMonth.from(request.getDate()),user)) {
             Optional<Project> oProject = projectRepository.findById(request.getProjectId());
             Project project;
             if(oProject.isPresent())
@@ -69,6 +76,9 @@ public class UserService {
             user.addImputation(imputation);
             userRepository.save(user);
             return new ImputationResponse(imputation);
+        }else{
+            throw new AlreadyBuiltException("The month report for this user has been generated, you can't add Imputation");
+        }
     }
 
     public List<ImputationResponse> getImputation(){
