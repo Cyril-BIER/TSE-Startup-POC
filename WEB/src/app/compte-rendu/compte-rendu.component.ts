@@ -19,7 +19,7 @@ export class CompteRenduComponent implements OnInit {
 
   generatePdf() {
     const doc = new jsPDF()
-    const data: string[][] = [];
+    const data: (string| number)[][] = [];
 
     this.projets.data.forEach(projet => {
       data.push([projet.nom, projet.heures]);
@@ -61,7 +61,7 @@ export class CompteRenduComponent implements OnInit {
             id: imputation.imputationId,
             nom: imputation.projectName,
             date: imputation.date,
-            heures: imputation.duration,
+            heures: this.convertDurationToDecimal(imputation.duration),
             isEditing: false
           };
         });
@@ -81,5 +81,31 @@ export class CompteRenduComponent implements OnInit {
       }
     })
     projet.isEditing = false;
+  }
+  convertDurationToDecimal(durationString: string): number {
+    // imputation renvoie comme format : "PT1H30MIN"
+
+    if (durationString === 'PT0S') {
+      return 0; // Retourne 0 si la durée est nulle
+    }
+
+    // Si la durée est uniquement des minutes (format "PT30M")
+    if (durationString.includes('M') && !durationString.includes('H')) {
+      const minutes = parseInt(durationString.split('M')[0].substring(2));
+      return minutes / 60;
+    }
+
+    const hourPart = durationString.split('H')[0];
+    let minutePart = durationString.split('H')[1].replace('MIN', '');
+
+    if (!minutePart.trim()) {
+      minutePart = '0';
+    }
+    const hours = parseInt(hourPart.substring(2));
+    const minutes = parseInt(minutePart);
+
+    const totalHours = hours + (minutes / 60);
+
+    return Math.round(totalHours * 100) / 100
   }
 }

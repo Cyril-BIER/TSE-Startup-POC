@@ -43,11 +43,13 @@ export class UserService {
     );
   }
 
-  putImputation(imputationID : number, duration: string): Observable<boolean> {
-    console.log("id:", imputationID , "duration : ", duration)
+  putImputation(imputationID : number, duration: number): Observable<boolean> {
+    const intHours = Math.floor(duration)
+    const minutes = Math.round((duration - intHours) * 60)
+
     const credentials = {
       imputationId: imputationID,
-      duration: duration,
+      duration: `PT${intHours}H${minutes}M`
     };
 
     return this.http.put<any>(`${ENV.apiUrl}/user/imputation`, credentials, {headers: this.headers}).pipe(
