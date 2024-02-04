@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import { jsPDF } from 'jspdf'
-import autoTable, { RowInput } from 'jspdf-autotable'
+import {jsPDF} from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import {MatTableDataSource} from "@angular/material/table";
 import {ProjetCompteRendu} from "../models/projet.compteRendu";
 import {AuthService} from "../services/auth.service";
+import {UserService} from "../services/user.service";
 
 
 @Component({
@@ -13,7 +14,7 @@ import {AuthService} from "../services/auth.service";
 })
 export class CompteRenduComponent implements OnInit {
   projets: MatTableDataSource<ProjetCompteRendu> = new MatTableDataSource<ProjetCompteRendu>();
-  displayedColumns: string[] = ['nom', 'heures'];
+  displayedColumns: string[] = ['nom', "date", 'heures'];
   isNotEditable: boolean;
 
   generatePdf() {
@@ -34,21 +35,51 @@ export class CompteRenduComponent implements OnInit {
   }
 
   constructor(
-    private authService: AuthService,) {
+    private authService: AuthService,
+    private userService: UserService) {
     this.isNotEditable = !this.authService.canAddImputation();
   }
 
   ngOnInit(): void {
-    const p1: ProjetCompteRendu = {
-      id: 0,
-      nom: 'Startup poc',
-      heures: '25h',
-    };
-    const p2: ProjetCompteRendu = {
-      id: 1,
-      nom: 'Startup poc 2',
-      heures: '25h',
-    };
-    this.projets.data = [p1, p2];
+    this.getImputation();
+  }
+
+  getImputation() {
+    this.userService.getImputation().subscribe((res) => {
+      if (res != null) {
+        console.log(res)
+
+        this.projets.data = res.map((imputation: {
+          imputationId: any;
+          userName: string;
+          projectId: number;
+          projectName: string;
+          date: string;
+          duration: string;
+        }) => {
+          return {
+            id: imputation.imputationId,
+            nom: imputation.projectName,
+            date: imputation.date,
+            heures: imputation.duration,
+            isEditing: false
+          };
+        });
+      }
+    })
+  }
+  editImputation(projet: ProjetCompteRendu) {
+    projet.isEditing = true;
+  }
+  saveImputation(projet: ProjetCompteRendu) {
+    this.userService.putImputation(projet.id,projet.heures).subscribe((res) => {
+      if (res) {
+        console.log("Imputation changed successfully")
+      }
+      else {
+        console.log("erreur in changing the imputation")
+      }
+    })
+    projet.isEditing = false;
   }
 }

@@ -1,13 +1,14 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ManagerService} from "../services/manager.service";
 
+// Créer/afficher un utilisateur en tant que manager
 @Component({
   selector: 'app-utilisateur',
   templateUrl: './utilisateur.component.html',
   styleUrls: ['./utilisateur.component.css']
 })
-export class UtilisateurComponent {
+export class UtilisateurComponent implements OnInit {
   searchText: string = '';
   isUserListVisible: boolean = false;
   isUserVisible: boolean = false;
@@ -28,17 +29,7 @@ export class UtilisateurComponent {
 
   projetsExistants: {
     nom: string;
-  }[] = [
-    {
-      nom: "info"
-    },
-    {
-      nom: "vision"
-    },
-    {
-      nom: "réseau"
-    }
-  ]
+  }[] = []
 
   manager: string;
 
@@ -49,24 +40,8 @@ export class UtilisateurComponent {
     } else {
       this.manager = "Pas de manager";
     }
-    this.managerService.getAttachedUsers().subscribe((res) => {
-      console.log('Get all users attached to the connected manager:', res);
-      if (res != null) {
-        res.forEach((user: { firstName: any; lastName: any; email: any; projets: any; managerName: any; }) => {
-            this.users.push({
-              nom: user.firstName,
-              prenom: user.lastName,
-              email: user.email,
-              role: 'ROLE_UTILISATEUR',
-              projets: user.projets,
-              manager: user.managerName
-            });
-          }
-        )
-      } else {
-        alert("Il y a eu un problème pour récupérer les utilisateurs");
-      }
-    });
+    this.getAttachedUsers();
+    this.getProjects();
   }
 
   ngOnInit(): void {
@@ -75,8 +50,6 @@ export class UtilisateurComponent {
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
       email: ['', Validators.required],
-      role: ['', Validators.required],
-      projets: [[], Validators.required],
       motDePasse: ['', Validators.required]
     });
   }
@@ -87,10 +60,6 @@ export class UtilisateurComponent {
       user.nom.toLowerCase().includes(this.searchText.toLowerCase()) &&
       (this.selectedProjet === null || (user.projets && user.projets.some(projet => projet === this.selectedProjet)))
     );
-  }
-
-  onNgModelChange(event: any) {
-    console.log('On ngModelChange : ', event);
   }
 
   showUsers() {
@@ -111,6 +80,43 @@ export class UtilisateurComponent {
   hideCreation() {
     this.isUserVisible = false;
     this.isCreationFormVisible = false;
+  }
+
+  getProjects() {
+    this.managerService.getProjects().subscribe((res) => {
+      console.log('Get all projects of the connected manager:', res);
+      if (res != null) {
+        res.forEach((project: { id: any; projectName: any; managerId: any; managerName: any; projectUser: any }) => {
+            this.projetsExistants.push({
+              nom: project.projectName
+            });
+          }
+        )
+      } else {
+        alert("Il y a eu un problème pour récupérer les utilisateurs");
+      }
+    });
+  }
+
+  getAttachedUsers() {
+    this.managerService.getAttachedUsers().subscribe((res) => {
+      console.log('Get all users attached to the connected manager:', res);
+      if (res != null) {
+        res.forEach((user: { firstName: any; lastName: any; email: any; projets: any; managerName: any; }) => {
+            this.users.push({
+              nom: user.firstName,
+              prenom: user.lastName,
+              email: user.email,
+              role: "utilisateur",
+              projets: user.projets,
+              manager: user.managerName
+            });
+          }
+        )
+      } else {
+        alert("Il y a eu un problème pour récupérer les utilisateurs");
+      }
+    });
   }
 
   onSubmit(): void {

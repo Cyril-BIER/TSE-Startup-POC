@@ -42,6 +42,24 @@ export class UserService {
       })
     );
   }
+
+  putImputation(imputationID : number, duration: string): Observable<boolean> {
+    console.log("id:", imputationID , "duration : ", duration)
+    const credentials = {
+      imputationId: imputationID,
+      duration: duration,
+    };
+
+    return this.http.put<any>(`${ENV.apiUrl}/user/imputation`, credentials, {headers: this.headers}).pipe(
+      map((response) => {
+        return true;
+      }),
+      catchError((error) => {
+        return of(false);
+      })
+    );
+  }
+
   createMonthReport() {
     return this.http.get<any>(`${ENV.apiUrl}/user/createMonthReport`, {headers: this.headers}).pipe(
       map((response) => {

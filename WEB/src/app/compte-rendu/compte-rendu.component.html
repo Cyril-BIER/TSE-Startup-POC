@@ -3,13 +3,24 @@
 
     <ng-container matColumnDef="nom">
       <th mat-header-cell *matHeaderCellDef> Nom</th>
-      <td mat-cell *matCellDef="let projet"> {{projet.nom}} </td>
+      <td mat-cell *matCellDef="let projet"> {{projet.nom}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let projet"> {{projet.date}}</td>
     </ng-container>
 
     <ng-container matColumnDef="heures">
       <th mat-header-cell *matHeaderCellDef> Heures effectuées</th>
       <td mat-cell *matCellDef="let projet">
-        <input type="text" [(ngModel)]="projet.heures" [readOnly]="isNotEditable"/>
+        <input type="text" [(ngModel)]="projet.heures" [readOnly]="!projet.isEditing"/>
+        <button mat-icon-button (click)="editImputation(projet)" *ngIf="!projet.isEditing && !isNotEditable">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="saveImputation(projet)" *ngIf="projet.isEditing">
+          <mat-icon>save</mat-icon>
+        </button>
       </td>
     </ng-container>
 

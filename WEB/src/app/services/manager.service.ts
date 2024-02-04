@@ -50,4 +50,16 @@ export class ManagerService {
       })
     );
   }
+  getProjects() {
+    return this.http.get<any>(`${ENV.apiUrl}/manager/projects`, { headers: this.headers }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error fetching projects :', error);
+        return throwError(false);
+      })
+    );
+  }
+
 }
