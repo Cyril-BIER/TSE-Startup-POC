@@ -4,6 +4,7 @@ import fr.tse.startupPOC.models.Imputation;
 import fr.tse.startupPOC.models.MonthReport;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
+import fr.tse.startupPOC.payload.request.ChangeImputationRequest;
 import fr.tse.startupPOC.payload.request.ImputationRequest;
 import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.MonthReportResponse;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -100,5 +102,28 @@ public class UserService {
 
         MonthReport monthReport = monthReportService.generateReport(userDetails.getId());
         return new MonthReportResponse(monthReport);
+    }
+
+    public ImputationResponse changeImputation(ChangeImputationRequest request){
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(userDetails.getId()).get();
+        if (!monthReportRepository.existsByYearMonthAndUser(YearMonth.now(),user)) {
+            Optional<Imputation> oImputation = user.getImputations().stream()
+                    .filter( i -> Objects.equals(i.getId(), request.getImputationId()))
+                    .findFirst();
+
+            if (oImputation.isEmpty()) {
+                throw new EntityNotFoundException("Imputation with Id "+request.getImputationId()+" not found in the imputation of the user");
+            }
+            Imputation imputation = oImputation.get();
+            imputation.setDuration(request.getDuration());
+
+            imputation = imputationRepository.save(imputation);
+
+            return new ImputationResponse(imputation);
+        }else{
+            throw new AlreadyBuiltException("The month report has already been generated, you can't change its imputations");
+        }
     }
 }
