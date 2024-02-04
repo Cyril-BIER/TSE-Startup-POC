@@ -1,6 +1,6 @@
 package fr.tse.startupPOC.controller;
 
-import fr.tse.startupPOC.models.Imputation;
+import fr.tse.startupPOC.payload.request.ChangeImputationRequest;
 import fr.tse.startupPOC.payload.request.ImputationRequest;
 import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.MonthReportResponse;
@@ -49,6 +49,17 @@ public class UserController {
     public ResponseEntity<?> getImputation(){
         try{
             List<ImputationResponse> response = userService.getImputation();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/imputation")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> putImputation(@Valid @RequestBody ChangeImputationRequest request){
+        try{
+            ImputationResponse response = userService.changeImputation(request);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
