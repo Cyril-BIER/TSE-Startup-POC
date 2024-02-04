@@ -1,4 +1,4 @@
-import {catchError, map, Observable, of, throwError} from "rxjs";
+import {catchError, map, throwError} from "rxjs";
 import {ENV} from "../../environments/env";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Injectable} from "@angular/core";
@@ -6,7 +6,8 @@ import {Injectable} from "@angular/core";
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class ManagerService {
+  userCreated: boolean = false;
 
   private headers: HttpHeaders;
 
@@ -19,40 +20,34 @@ export class UserService {
     });
   }
 
-  getProjets() {
-    return this.http.get<any>(`${ENV.apiUrl}/api/user/projects`, {headers: this.headers}).pipe(
+  createUser(email: string, firstName: string, lastName: string, password: string) {
+    const credentials = {
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      password: password,
+    };
+    return this.http.post<any>(`${ENV.apiUrl}/manager/registerUser`, credentials, {headers: this.headers}).pipe(
       map((response) => {
+        this.userCreated = true;
         return true;
       }),
       catchError((error) => {
-        console.error('Error fetching projets:', error);
+        console.error('Error creating user:', error);
+        this.userCreated = false;
         return throwError(false);
       })
     );
   }
-
-  getImputation() {
-    return this.http.get<any>(`${ENV.apiUrl}/user/imputation`, {headers: this.headers}).pipe(
+  getAttachedUsers() {
+    return this.http.get<any>(`${ENV.apiUrl}/manager/attachedUser`, { headers: this.headers }).pipe(
       map((response) => {
         return response;
       }),
       catchError((error) => {
-        console.error('Error fetching imputation:', error);
+        console.error('Error fetching users :', error);
         return throwError(false);
       })
     );
   }
-  createMonthReport() {
-    return this.http.get<any>(`${ENV.apiUrl}/user/createMonthReport`, {headers: this.headers}).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((error) => {
-        console.error('Error fetching imputation:', error);
-        return throwError(false);
-      })
-    );
-  }
-
-
 }

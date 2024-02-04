@@ -4,7 +4,7 @@
             <mat-toolbar-row>
                 <img class="logo" src="../../favicon.ico" alt="logo">
                 <div class="routes">
-                    <a routerLink="/utilisateur" routerLinkActive="active" class="link">
+                    <a routerLink="/utilisateur" routerLinkActive="active"  *ngIf="authService.whatRole()==='ROLE_MANAGER'"  class="link">
                         <svg width="25px" height="25px" viewBox="0 0 24 24" role="img"
                             xmlns="http://www.w3.org/2000/svg" aria-labelledby="contactBookIconTitle" stroke="#fff"
                             stroke-width="0.9600000000000002" stroke-linecap="square" stroke-linejoin="miter"

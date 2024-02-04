@@ -24,6 +24,7 @@ export class AuthService {
         localStorage.setItem('user', response.email);
         localStorage.setItem('user_id', response.id);
         localStorage.setItem('token', response.token);
+        localStorage.setItem('canAddImputation', response.canAddImputation);
         localStorage.setItem('role', response.roles[0]);
         this.loggedIn.next(true);
         return true;
@@ -57,5 +58,9 @@ export class AuthService {
 
   whoAmI(): number {
     return parseInt(localStorage.getItem('user_id')!);
+  }
+
+  canAddImputation(): boolean {
+    return (localStorage.getItem("canAddImputation")=="true")
   }
 }

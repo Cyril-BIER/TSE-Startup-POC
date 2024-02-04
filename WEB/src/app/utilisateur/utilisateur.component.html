@@ -65,15 +65,6 @@
             <mat-icon matSuffix>alternate_email</mat-icon>
           </mat-form-field>
 
-          <!-- pour le moment j'ai ça pour admin -->
-          <mat-form-field appearance="outline">
-            <mat-label>Role</mat-label>
-            <mat-select formControlName="role" multiple="false">
-              <mat-option *ngFor="let role of rolesExistants" [value]="role">{{ role }}</mat-option>
-            </mat-select>
-            <mat-icon matSuffix>face</mat-icon>
-          </mat-form-field>
-
           <mat-form-field appearance="outline">
             <mat-label>Mot de passe temporaire</mat-label>
             <input matInput formControlName="motDePasse" [type]="hide ? 'password' : 'text'">

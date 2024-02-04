@@ -3,6 +3,7 @@ import { jsPDF } from 'jspdf'
 import autoTable, { RowInput } from 'jspdf-autotable'
 import {MatTableDataSource} from "@angular/material/table";
 import {ProjetCompteRendu} from "../models/projet.compteRendu";
+import {AuthService} from "../services/auth.service";
 
 
 @Component({
@@ -13,7 +14,7 @@ import {ProjetCompteRendu} from "../models/projet.compteRendu";
 export class CompteRenduComponent implements OnInit {
   projets: MatTableDataSource<ProjetCompteRendu> = new MatTableDataSource<ProjetCompteRendu>();
   displayedColumns: string[] = ['nom', 'heures'];
-  isEditable="true"
+  isNotEditable: boolean;
 
   generatePdf() {
     const doc = new jsPDF()
@@ -32,6 +33,11 @@ export class CompteRenduComponent implements OnInit {
     console.log('./table.pdf generated')
   }
 
+  constructor(
+    private authService: AuthService,) {
+    this.isNotEditable = !this.authService.canAddImputation();
+  }
+
   ngOnInit(): void {
     const p1: ProjetCompteRendu = {
       id: 0,
@@ -45,5 +51,4 @@ export class CompteRenduComponent implements OnInit {
     };
     this.projets.data = [p1, p2];
   }
-
 }

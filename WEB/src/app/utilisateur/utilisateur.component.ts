@@ -1,13 +1,13 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../services/user.service";
+import {ManagerService} from "../services/manager.service";
 
 @Component({
   selector: 'app-utilisateur',
   templateUrl: './utilisateur.component.html',
   styleUrls: ['./utilisateur.component.css']
 })
-export class UtilisateurComponent implements OnInit{
+export class UtilisateurComponent {
   searchText: string = '';
   isUserListVisible: boolean = false;
   isUserVisible: boolean = false;
@@ -18,38 +18,11 @@ export class UtilisateurComponent implements OnInit{
   users: {
     nom: string,
     prenom: string,
+    email: string,
     role: string,
     projets: string[],
     manager: string,
-  }[] = [
-    {
-      nom: 'User 1 nom',
-      prenom: 'User 1 prenom',
-      role: "Utilisateur",
-      projets: [
-        "info"
-      ],
-      manager: ""
-    },
-    {
-      nom: 'User 2 nom',
-      prenom: 'User 2 prenom',
-      role: "Utilisateur",
-      projets: [
-        "réseau"
-      ],
-      manager: ""
-    },
-    {
-      nom: 'User 3 nom',
-      prenom: 'User 3 prenom',
-      role: "Utilisateur",
-      projets: [
-        "vision"
-      ],
-      manager: ""
-    },
-  ];
+  }[] = [];
   selectedUser: string | null = null;
   selectedProjet: string | null = null;
 
@@ -66,10 +39,34 @@ export class UtilisateurComponent implements OnInit{
       nom: "réseau"
     }
   ]
-  rolesExistants: string [] = ["manager", "Utilisateur"];
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  manager: string;
 
+  constructor(private fb: FormBuilder, private managerService: ManagerService) {
+    let managerFromLocalStorage = localStorage.getItem('user');
+    if (managerFromLocalStorage !== null) {
+      this.manager = managerFromLocalStorage;
+    } else {
+      this.manager = "Pas de manager";
+    }
+    this.managerService.getAttachedUsers().subscribe((res) => {
+      console.log('Get all users attached to the connected manager:', res);
+      if (res != null) {
+        res.forEach((user: { firstName: any; lastName: any; email: any; projets: any; managerName: any; }) => {
+            this.users.push({
+              nom: user.firstName,
+              prenom: user.lastName,
+              email: user.email,
+              role: 'ROLE_UTILISATEUR',
+              projets: user.projets,
+              manager: user.managerName
+            });
+          }
+        )
+      } else {
+        alert("Il y a eu un problème pour récupérer les utilisateurs");
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -82,13 +79,13 @@ export class UtilisateurComponent implements OnInit{
       projets: [[], Validators.required],
       motDePasse: ['', Validators.required]
     });
-    this.userService
   }
+
 
   get filteredUsers(): any[] {
     return this.users.filter(user =>
       user.nom.toLowerCase().includes(this.searchText.toLowerCase()) &&
-      (this.selectedProjet === null || user.projets.some(projet => projet === this.selectedProjet))
+      (this.selectedProjet === null || (user.projets && user.projets.some(projet => projet === this.selectedProjet)))
     );
   }
 
@@ -117,12 +114,20 @@ export class UtilisateurComponent implements OnInit{
   }
 
   onSubmit(): void {
-    const {nom, prenom, email, role, motDePasse} = this.form.value;
-    this.userService.createUser(email, nom, prenom, motDePasse).subscribe((res) => {
+    const {nom, prenom, email, motDePasse} = this.form.value;
+    const manager = localStorage.getItem('user');
+    this.managerService.createUser(email, nom, prenom, motDePasse).subscribe((res) => {
       console.log('User created:', res);
       if (res) {
         // Projet vide à implementer plus tard
-        this.users.push({nom: nom, prenom: prenom, role: role, projets: [], manager: 'test'});
+        this.users.push({
+          nom: nom,
+          prenom: prenom,
+          role: "Utilisateur",
+          email: email,
+          projets: [],
+          manager: this.manager
+        });
         this.isCreationFormVisible = false;
         this.form.reset(); // Réinitialiser le formulaire ici
       } else {
@@ -155,4 +160,3 @@ export class UtilisateurComponent implements OnInit{
     this.isUserVisible = true;
   }
 }
-
