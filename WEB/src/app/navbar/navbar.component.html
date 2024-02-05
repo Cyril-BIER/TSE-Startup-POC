@@ -4,7 +4,8 @@
             <mat-toolbar-row>
                 <img class="logo" src="../../favicon.ico" alt="logo">
                 <div class="routes">
-                    <a routerLink="/utilisateur" routerLinkActive="active"  *ngIf="authService.whatRole()==='ROLE_MANAGER'"  class="link">
+                    <a routerLink="/utilisateur" routerLinkActive="active" *ngIf="authService.whatRole()!=='ROLE_USER'"
+                        class="link">
                         <svg width="25px" height="25px" viewBox="0 0 24 24" role="img"
                             xmlns="http://www.w3.org/2000/svg" aria-labelledby="contactBookIconTitle" stroke="#fff"
                             stroke-width="0.9600000000000002" stroke-linecap="square" stroke-linejoin="miter"
@@ -24,7 +25,8 @@
                         </svg>
                         <h3>Utilisateurs</h3>
                     </a>
-                    <a routerLink="/temps" routerLinkActive="active" class="link">
+                    <a routerLink="/temps" routerLinkActive="active" class="link"
+                        *ngIf="authService.whatRole()!=='ROLE_ADMIN'">
                         <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -38,7 +40,8 @@
                         </svg>
                         <h3>Saisir un temps</h3>
                     </a>
-                    <a routerLink="/projet" routerLinkActive="active" class="link">
+                    <a routerLink="/projet" routerLinkActive="active" class="link"
+                        *ngIf="authService.whatRole()!=='ROLE_ADMIN'">
                         <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 75 75"
                             enable-background="new 0 0 50 50" xml:space="preserve" fill="#000000">
@@ -63,7 +66,8 @@
                         </svg>
                         <h3>Projets</h3>
                     </a>
-                    <a routerLink="/compte-rendu" routerLinkActive="active" class="link">
+                    <a routerLink="/compte-rendu" routerLinkActive="active" class="link"
+                        *ngIf="authService.whatRole()!=='ROLE_ADMIN'">
                         <svg fill="#fff" width="25px" height="25px" viewBox="0 0 1920 1920"
                             xmlns="http://www.w3.org/2000/svg" stroke="#fff" stroke-width="0.019200000000000002">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

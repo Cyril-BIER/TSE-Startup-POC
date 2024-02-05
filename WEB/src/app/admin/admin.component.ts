@@ -18,8 +18,8 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     const u1: User = {
       id: 1,
-      nom: 'EL GUERMAT',
-      prenom: 'Mohamed',
+      lastName: 'EL GUERMAT',
+      firstName: 'Mohamed',
       statut: 'Manager',
     };
     this.users.data.push(u1);

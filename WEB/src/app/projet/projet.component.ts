@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Projet } from '../models/projet';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
+import { ManagerService } from '../services/manager.service';
 
 @Component({
   selector: 'app-projet',
@@ -9,21 +13,33 @@ import { Projet } from '../models/projet';
 })
 export class ProjetComponent implements OnInit {
   projets: MatTableDataSource<Projet> = new MatTableDataSource<Projet>();
-  displayedColumns: string[] = ['nom', 'responsable'];
+  displayedColumns: string[] = ['nom', 'responsable', 'utilisateur'];
+
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    private userService: UserService,
+    private managerService: ManagerService
+  ) {}
 
   ngOnInit(): void {
-    const p1: Projet = {
-      nom: 'Startup poc',
-      responsable_nom: 'EL GUERMAT',
-      responsable_prenom: 'Mohamed',
-      id: 0,
-    };
-    const p2: Projet = {
-      nom: 'Startup poc 2',
-      responsable_nom: 'EL GUERMAT',
-      responsable_prenom: 'Mohamed',
-      id: 0,
-    };
-    this.projets.data = [p1, p2];
+    switch (this.authService.whatRole()) {
+      case 'ROLE_USER':
+        this.userService.getProjets().subscribe((projets) => {
+          console.log(projets);
+          this.projets.data = projets;
+        });
+        break;
+      case 'ROLE_MANAGER':
+        this.managerService.getProjects().subscribe((users) => {
+          console.log(users);
+          this.projets.data = users;
+        });
+        break;
+    }
+  }
+
+  addProjet() {
+    this.router.navigate(['/projetForm']);
   }
 }

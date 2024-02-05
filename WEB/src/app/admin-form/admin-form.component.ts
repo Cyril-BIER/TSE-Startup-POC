@@ -31,14 +31,14 @@ export class AdminFormComponent implements OnInit {
       console.log(this.formId);
       const u1: User = {
         id: 1,
-        nom: 'EL GUERMAT',
-        prenom: 'Mohamed',
+        lastName: 'EL GUERMAT',
+        firstName: 'Mohamed',
         statut: 'ROLE_MANAGER',
       };
       const u2: User = {
         id: 2,
-        nom: 'BIER',
-        prenom: 'Cyril',
+        lastName: 'BIER',
+        firstName: 'Cyril',
         statut: 'ROLE_USER',
       };
       this.managers = [u2];
