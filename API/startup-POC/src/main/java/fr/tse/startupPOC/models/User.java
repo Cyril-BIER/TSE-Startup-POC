@@ -1,7 +1,5 @@
 package fr.tse.startupPOC.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,11 +23,14 @@ public class User extends Profile{
         this.manager = manager;
     }
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Imputation> imputations;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<MonthReport> monthReports;
 
     public void addProject(Project project){
         this.projects.add(project);

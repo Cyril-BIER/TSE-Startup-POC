@@ -1,5 +1,6 @@
 package fr.tse.startupPOC.controller;
 
+import fr.tse.startupPOC.models.Admin;
 import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Profile;
 import fr.tse.startupPOC.models.User;
@@ -37,18 +38,25 @@ public class AdminController {
         return adminService.getProfileById(id);
     }
 
-    @PutMapping("/updateProfile")
+    @PutMapping("/userToManager/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    // A changer
-    public Void updateProfile(){
-      return null;
+    public ResponseEntity<?> userToManager(@PathVariable Long userId){
+        try {
+            Manager manager = adminService.userToManager(userId);
+            return new ResponseEntity<>(manager, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @PutMapping("/changeStatus")
+    @PutMapping("/userToAdmin/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Void changeStatus(){
-        Long userId = 11L;
-        adminService.changeUserRole(userId,"MANAGER");
-        return null;
+    public ResponseEntity<?> userToAdmin(@PathVariable Long userId){
+        try {
+            Admin admin = adminService.userToAdmin(userId);
+            return new ResponseEntity<>(admin, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/changeManager")

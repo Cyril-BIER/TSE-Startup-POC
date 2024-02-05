@@ -6,10 +6,7 @@ import fr.tse.startupPOC.models.Profile;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.SignupAdminRequest;
 import fr.tse.startupPOC.payload.request.SignupManagerRequest;
-import fr.tse.startupPOC.payload.response.UserResponse;
-import fr.tse.startupPOC.repository.ManagerRepository;
-import fr.tse.startupPOC.repository.ProfileRepository;
-import fr.tse.startupPOC.repository.UserRepository;
+import fr.tse.startupPOC.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -30,6 +27,11 @@ public class AdminService {
     UserRepository userRepository;
     @Autowired
     ManagerRepository managerRepository;
+    @Autowired
+    ImputationRepository imputationRepository;
+    @Autowired
+    AdminRepository adminRepository;
+
     @Transactional
     public Profile createAdmin(SignupAdminRequest request) throws AuthenticationException {
         if(profileRepository.existsByEmail(request.getEmail())){
@@ -56,9 +58,8 @@ public class AdminService {
 
     @Transactional
     public Profile getProfileById(Long profileId){
-        Profile profile = profileRepository.findById(profileId)
+        return profileRepository.findById(profileId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + profileId));
-        return profile;
     }
 
     @Transactional
@@ -82,16 +83,44 @@ public class AdminService {
     }
 
     @Transactional
-    public Void changeUserRole(Long userId,String role){
-        User chosenUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-        if(role == "MANAGER"){
-            Manager manager = new Manager(chosenUser.getEmail(), chosenUser.getPassword());
-            profileRepository.save(manager);
-        } else if (role == "ADMIN") {
-            Admin admin = new Admin(chosenUser.getEmail(), chosenUser.getPassword());
-            profileRepository.save(admin);
+    public Manager userToManager(Long userId){
+        Optional<User> oUser = userRepository.findById(userId);
+
+        if(oUser.isPresent()){
+            User user = oUser.get();
+            imputationRepository.deleteAll(user.getImputations());
+            userRepository.delete(user);
+            Manager manager = new Manager(
+                    user.getId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPassword());
+            managerRepository.flush();
+            return managerRepository.save(manager);
+        }else {
+            throw new EntityNotFoundException("User not found with id: " + userId);
         }
-        return null;
+    }
+
+    @Transactional
+    public Admin userToAdmin(Long userId){
+        Optional<User> oUser = userRepository.findById(userId);
+
+        if(oUser.isPresent()){
+            User user = oUser.get();
+            imputationRepository.deleteAll(user.getImputations());
+            userRepository.delete(user);
+            Admin admin = new Admin(
+                    user.getId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPassword());
+            adminRepository.flush();
+            return adminRepository.save(admin);
+        }else {
+            throw new EntityNotFoundException("User not found with id: " + userId);
+        }
     }
 }
