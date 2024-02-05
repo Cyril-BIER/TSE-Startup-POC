@@ -32,6 +32,7 @@ import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.co
 import {MatCardModule} from "@angular/material/card";
 import { AdminComponent } from './admin/admin.component';
 import { AdminFormComponent } from './admin-form/admin-form.component';
+import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { AdminFormComponent } from './admin-form/admin-form.component';
     TempsFormulaireComponent,
     AdminComponent,
     AdminFormComponent,
+    ProjetFormulaireComponent,
   ],
   imports: [
     BrowserModule,

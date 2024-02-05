@@ -3,7 +3,7 @@
     <mat-form-field>
         <mat-label>Projet :</mat-label>
         <mat-select matNativeControl formControlName="projet" required>
-            <mat-option *ngFor="let projet of projets" [value]="projet.id">{{projet.nom}}</mat-option>
+            <mat-option *ngFor="let projet of projets" [value]="projet.id">{{projet.projectName}}</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field>

@@ -1,7 +1,7 @@
-import {catchError, map, throwError} from "rxjs";
-import {ENV} from "../../environments/env";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Injectable} from "@angular/core";
+import { catchError, map, throwError } from 'rxjs';
+import { ENV } from '../../environments/env';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -16,50 +16,76 @@ export class ManagerService {
     const token = localStorage.getItem('token');
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
-  createUser(email: string, firstName: string, lastName: string, password: string) {
+  createUser(
+    email: string,
+    firstName: string,
+    lastName: string,
+    password: string
+  ) {
     const credentials = {
       email: email,
       firstName: firstName,
       lastName: lastName,
       password: password,
     };
-    return this.http.post<any>(`${ENV.apiUrl}/manager/registerUser`, credentials, {headers: this.headers}).pipe(
-      map((response) => {
-        this.userCreated = true;
-        return true;
-      }),
-      catchError((error) => {
-        console.error('Error creating user:', error);
-        this.userCreated = false;
-        return throwError(false);
+    return this.http
+      .post<any>(`${ENV.apiUrl}/manager/registerUser`, credentials, {
+        headers: this.headers,
       })
-    );
+      .pipe(
+        map((response) => {
+          this.userCreated = true;
+          return true;
+        }),
+        catchError((error) => {
+          console.error('Error creating user:', error);
+          this.userCreated = false;
+          return throwError(false);
+        })
+      );
   }
   getAttachedUsers() {
-    return this.http.get<any>(`${ENV.apiUrl}/manager/attachedUser`, { headers: this.headers }).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((error) => {
-        console.error('Error fetching users :', error);
-        return throwError(false);
-      })
-    );
+    return this.http
+      .get<any>(`${ENV.apiUrl}/manager/attachedUser`, { headers: this.headers })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Error fetching users :', error);
+          return throwError(false);
+        })
+      );
   }
   getProjects() {
-    return this.http.get<any>(`${ENV.apiUrl}/manager/projects`, { headers: this.headers }).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((error) => {
-        console.error('Error fetching projects :', error);
-        return throwError(false);
-      })
-    );
+    return this.http
+      .get<any>(`${ENV.apiUrl}/manager/projects`, { headers: this.headers })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Error fetching projects :', error);
+          return throwError(false);
+        })
+      );
   }
-
+  postProject(data: any) {
+    return this.http
+      .post<any>(`${ENV.apiUrl}/manager/createProject`, data, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          return error;
+        })
+      );
+  }
 }

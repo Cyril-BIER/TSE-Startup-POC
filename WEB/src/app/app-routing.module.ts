@@ -9,6 +9,7 @@ import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.co
 import { canActivate } from './services/auth.guard';
 import { AdminComponent } from './admin/admin.component';
 import { AdminFormComponent } from './admin-form/admin-form.component';
+import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire.component';
 
 const routes: Routes = [
   { path: '', component: ConnexionComponent },
@@ -37,6 +38,11 @@ const routes: Routes = [
   {
     path: 'adminForm/:id',
     component: AdminFormComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: 'projetForm',
+    component: ProjetFormulaireComponent,
     canActivate: [canActivate],
   },
 ];

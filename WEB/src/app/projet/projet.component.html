@@ -1,4 +1,4 @@
-<button mat-raised-button color="primary"
+<button mat-raised-button color="primary" *ngIf="authService.whatRole()==='ROLE_MANAGER'" (click)="addProjet()"
     style="width:15%; margin-left: 42.5%; margin-top:1%;margin-bottom:1%; font-size:20px"><mat-icon>add</mat-icon>
     Nouveau projet</button>
 
@@ -6,12 +6,17 @@
 
     <ng-container matColumnDef="nom">
         <th mat-header-cell *matHeaderCellDef> Nom </th>
-        <td mat-cell *matCellDef="let projet"> {{projet.nom}} </td>
+        <td mat-cell *matCellDef="let projet"> {{projet.projectName}} </td>
     </ng-container>
 
     <ng-container matColumnDef="responsable">
         <th mat-header-cell *matHeaderCellDef> Responsable </th>
-        <td mat-cell *matCellDef="let projet"> {{projet.responsable_nom}} {{projet.responsable_prenom}} </td>
+        <td mat-cell *matCellDef="let projet"> {{projet.managerName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="utilisateur">
+        <th mat-header-cell *matHeaderCellDef> Nombre d'utilisateurs </th>
+        <td mat-cell *matCellDef="let projet"> {{projet.projectUsers.length}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
