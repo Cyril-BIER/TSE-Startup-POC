@@ -12,6 +12,7 @@ export class AdminmanagerComponent {
   isUserListVisible: boolean = false;
   isUserVisible: boolean = false;
   isCreationFormVisible: boolean = false;
+  isManagerButtonVisible = false;
   hide = true;
   value = 'Clear me';
   form!: FormGroup;
@@ -51,11 +52,13 @@ export class AdminmanagerComponent {
   showUsers() {
     this.isUserListVisible = true;
     this.isUserVisible = false;
+    this.isManagerButtonVisible = true;
   }
 
   hideUsers() {
     this.isUserListVisible = false;
     this.isUserVisible = false;
+    this.isManagerButtonVisible = false;
   }
 
   showCreation() {
@@ -105,17 +108,6 @@ export class AdminmanagerComponent {
         alert("Il y a eu un problème pour enregistrer l'utilisateur");
       }
     });
-  }
-
-  supprimerUtilisateur(): void {
-    if (this.selectedUser && this.selectedUser.length > 0) {
-      const selectedUserName = this.selectedUser[0]; // Prendre le premier élément du tableau
-      const index = this.users.findIndex(user => user.firstName === selectedUserName);
-      if (index !== -1) {
-        this.users.splice(index, 1);
-        this.selectedUser = '';
-      }
-    }
   }
 
   findSelectedUser(): any {

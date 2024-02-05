@@ -1,24 +1,29 @@
 <main>
   <div class="container">
     <div class="buttons">
-      <button mat-raised-button color="primary" (click)="showUsers(); hideCreation()">Voir la liste des utilisateurs
+      <button mat-raised-button color="primary" (click)="showUsers(); hideCreation()">Voir la liste des managers
       </button>
-      <button mat-raised-button color="primary" (click)="hideUsers(); showCreation()">Créer un utilisateur</button>
+      <button mat-raised-button color="primary" (click)="hideUsers(); showCreation()">Créer un manager</button>
     </div>
 
     <div class="users" *ngIf="isUserListVisible">
       <div class="search-user">
         <mat-form-field class="form-field">
-          <mat-label>Rechercher un utilisateur</mat-label>
+          <mat-label>Rechercher un manager</mat-label>
           <input matInput type="text" [(ngModel)]="searchText">
           <button matSuffix mat-icon-button aria-label="Clear" (click)="searchText=''">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
       </div>
-      <div class="bouton">
-        <button mat-raised-button color="primary" (click)="afficherUtilisateur()">Afiicher l'utilisateur</button>
-        <button mat-raised-button color="warn" (click)="supprimerUtilisateur()">Supprimer l'utilisateur</button>
+      <mat-selection-list [multiple]="false" #list [(ngModel)]="selectedUser">
+        <mat-list-option *ngFor="let user of users" [value]="user.firstName">
+          {{ user.firstName }}
+        </mat-list-option>
+      </mat-selection-list>
+      </div>
+      <div class="bouton" *ngIf="isManagerButtonVisible">
+        <button mat-raised-button color="primary" (click)="afficherUtilisateur()">Afficher le manager</button>
       </div>
     </div>
     <div class="creationUser" *ngIf="isCreationFormVisible">
@@ -61,30 +66,19 @@
     <div class="displayUser" *ngIf="isUserVisible">
       <mat-card class="user-card" *ngIf="selectedUser !== null">
         <mat-card-header>
-          <!-- Mettez ici les détails de l'utilisateur -->
-          <mat-card-title>Information sur l'utilisateur</mat-card-title>
+          <mat-card-title>Information sur le manager</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <!-- Affichez d'autres détails de l'utilisateur ici -->
-          <p></p>
-          <p>Nom: {{ findSelectedUser()?.nom }}</p>
-          <p>Prénom: {{ findSelectedUser()?.prenom }}</p>
-          <p>Role: {{ findSelectedUser()?.role }}</p>
-          <p>Manager responsible: {{ findSelectedUser()?.manager }}</p>
-          <p>Projets:
-            <span *ngFor="let projet of findSelectedUser()?.projets">
-        {{ projet }}
-
-      </span>
-          </p>
+          <p>Email : {{ findSelectedUser()?.email}}</p>
+          <p>Nom: {{ findSelectedUser()?.firstName }}</p>
+          <p>Prénom: {{ findSelectedUser()?.lastName }}</p>
         </mat-card-content>
         <mat-card-actions>
           <button mat-button (click)="selectedUser = null;(isUserVisible=!isUserVisible);
           (isUserListVisible=!isUserListVisible)">Retour
           </button>
-          <!-- Ajoutez d'autres actions si nécessaire -->
         </mat-card-actions>
       </mat-card>
     </div>
-  </div>
+
 </main>

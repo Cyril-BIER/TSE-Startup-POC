@@ -39,7 +39,7 @@
         </mat-list-option>
       </mat-selection-list>
       <div class="bouton">
-        <button mat-raised-button color="primary" (click)="afficherUtilisateur()">Afiicher l'utilisateur</button>
+        <button mat-raised-button color="primary" (click)="afficherUtilisateur()">Afficher l'utilisateur</button>
         <button mat-raised-button color="warn" (click)="supprimerUtilisateur()">Supprimer l'utilisateur</button>
       </div>
     </div>
@@ -83,11 +83,9 @@
     <div class="displayUser" *ngIf="isUserVisible">
       <mat-card class="user-card" *ngIf="selectedUser !== null">
         <mat-card-header>
-          <!-- Mettez ici les détails de l'utilisateur -->
           <mat-card-title>Information sur l'utilisateur</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <!-- Affichez d'autres détails de l'utilisateur ici -->
           <p></p>
           <p>Nom: {{ findSelectedUser()?.nom }}</p>
           <p>Prénom: {{ findSelectedUser()?.prenom }}</p>
