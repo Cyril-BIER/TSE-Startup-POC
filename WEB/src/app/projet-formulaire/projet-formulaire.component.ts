@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TempsService } from '../services/temps.service';
 import { UserService } from '../services/user.service';
 import { ManagerService } from '../services/manager.service';
 import { User } from '../models/user';
@@ -21,7 +20,6 @@ export class ProjetFormulaireComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private userService: UserService,
-    private tempsService: TempsService,
     private managerService: ManagerService
   ) {}
 
@@ -43,9 +41,9 @@ export class ProjetFormulaireComponent implements OnInit {
   toggleUserSelection(userId: string): void {
     const index = this.selectedUserIds.indexOf(userId);
     if (index === -1) {
-      this.selectedUserIds.push(userId); // If not already selected, add to the array
+      this.selectedUserIds.push(userId);
     } else {
-      this.selectedUserIds.splice(index, 1); // If already selected, remove from the array
+      this.selectedUserIds.splice(index, 1);
     }
   }
 

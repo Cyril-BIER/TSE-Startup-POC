@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { STATUS } from 'src/environments/env';
 import { User } from '../models/user';
+import { UserService } from '../services/user.service';
+import { ManagerService } from '../services/manager.service';
 
 @Component({
   selector: 'app-admin-form',
@@ -19,7 +21,9 @@ export class AdminFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private managerService: ManagerService
   ) {}
 
   ngOnInit(): void {
@@ -27,23 +31,11 @@ export class AdminFormComponent implements OnInit {
       this.formId = params['id'];
     });
     this.initializeForm();
+    this.managerService.getAllManagers().subscribe((managers) => {
+      this.managers = managers;
+    });
     if (this.formId) {
-      console.log(this.formId);
-      const u1: User = {
-        id: 1,
-        lastName: 'EL GUERMAT',
-        firstName: 'Mohamed',
-        statut: 'ROLE_MANAGER',
-      };
-      const u2: User = {
-        id: 2,
-        lastName: 'BIER',
-        firstName: 'Cyril',
-        statut: 'ROLE_USER',
-      };
-      this.managers = [u2];
-      this.user = u1;
-      this.user.id = parseInt(this.formId);
+      this.user;
       this.userForm.patchValue({});
     } else {
       this.router.navigate(['/admin']);
@@ -52,21 +44,25 @@ export class AdminFormComponent implements OnInit {
 
   private initializeForm(): void {
     this.userForm = this.fb.group({
-      statut: ['', Validators.required],
+      statut: [''],
       id: [''],
+      choice: ['', Validators.required],
     });
   }
 
   onSubmit(): void {
-    this.user.statut = this.userForm.get('statut')?.value;
-    if (this.userForm.get('id')?.value != '') {
+    //TODO : connect the endpoints
+    if (this.userForm.get('choice')?.value == 'role') {
       const res = {
-        user: this.user,
-        managerId: this.userForm.get('id')?.value,
+        userId: this.user.id,
       };
       console.log(res);
     } else {
-      console.log(this.user);
+      const res = {
+        userId: this.user.id,
+        managerId: this.userForm.get('id')?.value,
+      };
+      console.log(res);
     }
     alert('User mis à jour');
     this.fermer();

@@ -88,4 +88,20 @@ export class ManagerService {
         })
       );
   }
+
+  getAllManagers() {
+    return this.http
+      .get<any>(`${ENV.apiUrl}/admin/getAllManagers`, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Error fetching imputation:', error);
+          return throwError(false);
+        })
+      );
+  }
 }

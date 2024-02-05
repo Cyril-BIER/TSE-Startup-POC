@@ -1,15 +1,18 @@
 <h1>Mise à jour d'un User</h1>
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <h2 *ngIf="user">{{user.lastName}} {{user.firstName}}</h2>
-    <mat-form-field>
+    <mat-radio-group formControlName="choice">
+        <mat-radio-button value="role">Changer de rôle</mat-radio-button>
+        <mat-radio-button value="manager">Changer de manager</mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field *ngIf="this.userForm.get('choice')?.value=='role'">
         <mat-label>Rôle :</mat-label>
         <mat-select matNativeControl formControlName="statut" required>
             <mat-option [value]="status.admin.nom_db">{{status.admin.nom}}</mat-option>
             <mat-option [value]="status.manager.nom_db">{{status.manager.nom}}</mat-option>
-            <mat-option [value]="status.utilisateur.nom_db">{{status.utilisateur.nom}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="user.statut==='ROLE_USER' || userForm.get('statut')?.value==='ROLE_USER'">
+    <mat-form-field *ngIf="this.userForm.get('choice')?.value=='manager'">
         <mat-label>Manager :</mat-label>
         <mat-select matNativeControl formControlName="id" required>
             <mat-option *ngFor="let manager of managers" [value]="manager.id">{{manager.lastName}}
@@ -17,7 +20,7 @@
         </mat-select>
     </mat-form-field>
     <div class="buttons">
-        <button color="primary" mat-raised-button type="submit" [disabled]="!userForm.valid">Enregistrer</button>
-        <button color="basic" mat-raised-button type="button" (click)="fermer()">Fermer sans enregistrer</button>
+        <button color="primary" mat-raised-button type="submit" [disabled]="!userForm.valid">Valider</button>
+        <button color="basic" mat-raised-button type="button" (click)="fermer()">Fermer sans modification</button>
     </div>
 </form>
