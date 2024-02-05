@@ -22,7 +22,7 @@
         </mat-list-option>
       </mat-selection-list>
       </div>
-      <div class="bouton" *ngIf="isManagerButtonVisible">
+      <div class="bouton"  *ngIf="isManagerButtonVisible && !isUserVisible">
         <button mat-raised-button color="primary" (click)="afficherUtilisateur()">Afficher le manager</button>
       </div>
     </div>

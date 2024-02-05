@@ -115,7 +115,7 @@ export class AdminmanagerComponent {
       return null; // Si aucun utilisateur n'est sélectionné, retourne null
     }
     // @ts-ignore // car on enlève le cas ou selectedUser== null
-    return this.users.find(user => user.nom === this.selectedUser.toString());
+    return this.users.find(user => user.firstName === this.selectedUser.toString());
   }
 
   afficherUtilisateur() {
