@@ -37,11 +37,15 @@ public class AdminController {
         return adminService.getProfileById(id);
     }
 
-    @PutMapping("/updateProfile")
+    @GetMapping("/updateProfile/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    // A changer
-    public Void updateProfile(){
-      return null;
+    public ResponseEntity<?> updateProfile(@PathVariable Long id){
+        try {
+            Manager manager = adminService.userToManager(id);
+            return new ResponseEntity<>(manager, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @PutMapping("/changeStatus")
     @PreAuthorize("hasRole('ADMIN')")

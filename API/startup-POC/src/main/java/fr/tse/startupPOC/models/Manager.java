@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -21,6 +20,10 @@ public class Manager extends Profile{
     public Manager(String email, String password){
         this.email = email;
         this.password = password;
+    }
+
+    public Manager(Long id, String firstName, String lastName, String email, String password){
+        super(id, firstName, lastName, email, password);
     }
      public void addProject(Project project){
         this.projects.add(project);
