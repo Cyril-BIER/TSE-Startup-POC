@@ -46,6 +46,30 @@ export class UserService {
       );
   }
 
+  postImputation(data: any): Observable<any> {
+    const intHours = Math.floor(data.duration);
+    const minutes = Math.round((data.duration - intHours) * 60);
+
+    const body = {
+      projectId: data.projectId,
+      date: data.date,
+      duration: `PT${intHours}H${minutes}M`,
+    };
+
+    return this.http
+      .post<any>(`${ENV.apiUrl}/user/imputation`, body, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return true;
+        }),
+        catchError((error) => {
+          return of(false);
+        })
+      );
+  }
+
   putImputation(imputationID: number, duration: number): Observable<boolean> {
     const intHours = Math.floor(duration);
     const minutes = Math.round((duration - intHours) * 60);
@@ -72,6 +96,22 @@ export class UserService {
   createMonthReport() {
     return this.http
       .get<any>(`${ENV.apiUrl}/user/createMonthReport`, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Error fetching imputation:', error);
+          return throwError(false);
+        })
+      );
+  }
+
+  getAllUsers() {
+    return this.http
+      .get<any>(`${ENV.apiUrl}/admin/getAllUsers`, {
         headers: this.headers,
       })
       .pipe(

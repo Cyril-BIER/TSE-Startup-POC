@@ -4,7 +4,6 @@ import { Temps } from '../models/temps';
 import { Projet } from '../models/projet';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { TempsService } from '../services/temps.service';
 
 @Component({
   selector: 'app-temps-formulaire',
@@ -20,16 +19,14 @@ export class TempsFormulaireComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private userService: UserService,
-    private tempsService: TempsService
-  ) {
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
     this.userService.getProjets().subscribe((projects) => {
       console.log(projects);
       this.projets = projects;
     });
-  }
-
-  ngOnInit(): void {
     this.initializeForm();
   }
 
@@ -55,14 +52,12 @@ export class TempsFormulaireComponent implements OnInit {
 
       const formData = {
         projectId: this.tempsForm.get('projet')?.value,
-        duration: this.convertDurationToDecimal(
-          this.tempsForm.get('nbr_heures')?.value
-        ),
+        duration: this.tempsForm.get('nbr_heures')?.value,
         date: formattedDate,
       };
 
-      console.log(formData);
-      this.tempsService.postTemps(formData).subscribe((res) => {
+      console.log('temps', formData);
+      this.userService.postImputation(formData).subscribe((res) => {
         console.log(res);
       });
       alert('Temps enregistré');
@@ -72,32 +67,5 @@ export class TempsFormulaireComponent implements OnInit {
 
   fermer() {
     this.router.navigate(['/temps']);
-  }
-
-  convertDurationToDecimal(durationString: string): number {
-    // imputation renvoie comme format : "PT1H30MIN"
-
-    if (durationString === 'PT0S') {
-      return 0; // Retourne 0 si la durée est nulle
-    }
-
-    // Si la durée est uniquement des minutes (format "PT30M")
-    if (durationString.includes('M') && !durationString.includes('H')) {
-      const minutes = parseInt(durationString.split('M')[0].substring(2));
-      return minutes / 60;
-    }
-
-    const hourPart = durationString.split('H')[0];
-    let minutePart = durationString.split('H')[1].replace('MIN', '');
-
-    if (!minutePart.trim()) {
-      minutePart = '0';
-    }
-    const hours = parseInt(hourPart.substring(2));
-    const minutes = parseInt(minutePart);
-
-    const totalHours = hours + minutes / 60;
-
-    return Math.round(totalHours * 100) / 100;
   }
 }

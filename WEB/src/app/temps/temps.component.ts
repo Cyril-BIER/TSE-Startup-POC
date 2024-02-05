@@ -13,7 +13,7 @@ import { ManagerService } from '../services/manager.service';
 })
 export class TempsComponent implements OnInit {
   temps: MatTableDataSource<Temps> = new MatTableDataSource<Temps>();
-  displayedColumns: string[] = ['nom', 'responsable'];
+  displayedColumns: string[] = ['projet', 'duree', 'date'];
 
   constructor(
     public authService: AuthService,
@@ -40,5 +40,32 @@ export class TempsComponent implements OnInit {
 
   AddElement() {
     this.router.navigate(['/temps-formulaire']);
+  }
+
+  formatDurationString(durationString: string): string {
+    if (!durationString || durationString === 'PT0S') {
+      return '0 min';
+    }
+
+    const match = durationString.match(/PT(\d+)H(\d+)M/);
+    if (!match) {
+      return 'Invalid duration';
+    }
+
+    const hours = parseInt(match[1]);
+    const minutes = parseInt(match[2]);
+
+    let formattedString = '';
+    if (hours > 0) {
+      formattedString += `${hours}h`;
+    }
+    if (minutes > 0) {
+      if (formattedString !== '') {
+        formattedString += ' ';
+      }
+      formattedString += `${minutes}min`;
+    }
+
+    return formattedString;
   }
 }

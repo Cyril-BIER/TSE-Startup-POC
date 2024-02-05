@@ -4,6 +4,11 @@ h2 {
   padding: 1.5%;
 }
 
+mat-radio-group {
+  text-align: center;
+  padding: 1%;
+}
+
 form {
   display: flex;
   flex-direction: column;

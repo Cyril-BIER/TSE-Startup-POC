@@ -1,17 +1,23 @@
-<button mat-raised-button color="primary" *ngIf="this.authService.whatRole()=='ROLE_USER'" (click)="AddElement()"
+<button mat-raised-button color="primary"
+    *ngIf="this.authService.whatRole()=='ROLE_USER' && this.authService.canAddImputation()" (click)="AddElement()"
     style="width:15%; margin-left: 42.5%; margin-top:1%;margin-bottom:1%; font-size:20px"><mat-icon>add</mat-icon>
     Saisir un temps</button>
 
 <table mat-table [dataSource]="temps" class="mat-elevation-z2">
 
-    <ng-container matColumnDef="nom">
-        <th mat-header-cell *matHeaderCellDef> Nom </th>
-        <td mat-cell *matCellDef="let projet"> {{projet.nom}} </td>
+    <ng-container matColumnDef="projet">
+        <th mat-header-cell *matHeaderCellDef> Projet </th>
+        <td mat-cell *matCellDef="let projet"> {{projet.projectName}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="responsable">
-        <th mat-header-cell *matHeaderCellDef> Responsable </th>
-        <td mat-cell *matCellDef="let projet"> {{projet.responsable_nom}} {{projet.responsable_prenom}} </td>
+    <ng-container matColumnDef="duree">
+        <th mat-header-cell *matHeaderCellDef> Durée </th>
+        <td mat-cell *matCellDef="let projet"> {{formatDurationString(projet.duration)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let projet"> {{projet.date}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

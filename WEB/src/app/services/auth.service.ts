@@ -61,6 +61,6 @@ export class AuthService {
   }
 
   canAddImputation(): boolean {
-    return (localStorage.getItem("canAddImputation")=="true")
+    return localStorage.getItem('canAddImputation') == 'true';
   }
 }
