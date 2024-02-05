@@ -19,6 +19,7 @@ public class UserResponse {
     private Long managerId;
     private String managerName;
     private Map<Long, String> projects = new HashMap<>();
+    private boolean canAddImputation = true;
 
     public UserResponse(User user){
         this.id = user.getId();

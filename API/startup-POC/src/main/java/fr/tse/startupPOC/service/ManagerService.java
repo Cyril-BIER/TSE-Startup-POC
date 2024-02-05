@@ -7,10 +7,7 @@ import fr.tse.startupPOC.payload.response.ImputationResponse;
 import fr.tse.startupPOC.payload.response.MonthReportResponse;
 import fr.tse.startupPOC.payload.response.ProjectResponse;
 import fr.tse.startupPOC.payload.response.UserResponse;
-import fr.tse.startupPOC.repository.ManagerRepository;
-import fr.tse.startupPOC.repository.ProfileRepository;
-import fr.tse.startupPOC.repository.ProjectRepository;
-import fr.tse.startupPOC.repository.UserRepository;
+import fr.tse.startupPOC.repository.*;
 import fr.tse.startupPOC.security.services.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +42,9 @@ public class ManagerService {
     @Autowired
     MonthReportService monthReportService;
 
+    @Autowired
+    MonthReportRepository monthReportRepository;
+
     public List<UserResponse> getAttachedUsers(){
         List<UserResponse> response = new ArrayList<>();
         UserDetailsImpl userDetails =
@@ -52,7 +53,9 @@ public class ManagerService {
         Manager manager = managerRepository.findById(userDetails.getId()).get();
 
         for(User user:manager.getAttachedUsers()){
-            response.add(new UserResponse(user));
+            UserResponse userResponse = new UserResponse(user);
+            userResponse.setCanAddImputation(!monthReportRepository.existsByYearMonthAndUser(YearMonth.now(),user));
+            response.add(userResponse);
         }
         return response;
     }
@@ -77,7 +80,10 @@ public class ManagerService {
 
             manager.get().addUser(user);
             managerRepository.save(manager.get());
-            return  new UserResponse(user);
+
+            UserResponse userResponse = new UserResponse(user);
+            userResponse.setCanAddImputation(!monthReportRepository.existsByYearMonthAndUser(YearMonth.now(),user));
+            return userResponse;
         }else{
             throw new Exception("User not created");
         }
