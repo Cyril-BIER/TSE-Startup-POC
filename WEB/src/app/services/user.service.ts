@@ -7,8 +7,6 @@ import {Injectable} from "@angular/core";
   providedIn: 'root',
 })
 export class UserService {
-  userCreated:boolean = false;
-  managerCreater:boolean = false;
 
   private headers: HttpHeaders;
 
@@ -20,47 +18,61 @@ export class UserService {
       'Authorization': `Bearer ${token}`
     });
   }
-  createUser(email: string, firstName: string, lastName: string, password: string) {
-    const credentials = {
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
-    };
-    return this.http.post<any>(`${ENV.apiUrl}/auth/registerUser`, credentials, { headers: this.headers }).pipe(
+
+  getProjets() {
+    return this.http.get<any>(`${ENV.apiUrl}/api/user/projects`, {headers: this.headers}).pipe(
       map((response) => {
-        this.userCreated = true;
         return true;
       }),
       catchError((error) => {
-        console.error('Error creating user:', error);
-        this.userCreated = false;
+        console.error('Error fetching projets:', error);
         return throwError(false);
       })
     );
   }
 
-  createUManager(email: string, password: string) {
-    const credentials = {
-      email: email,
-      password: password,
-    };
-    return this.http.post<any>(`${ENV.apiUrl}/auth/registerManager`, credentials).pipe(
+  getImputation() {
+    return this.http.get<any>(`${ENV.apiUrl}/user/imputation`, {headers: this.headers}).pipe(
       map((response) => {
-        localStorage.setItem('user', response.email);
-        localStorage.setItem('user_id', response.id);
-        localStorage.setItem('role', response.roles[0]);
-        this.managerCreater=true;
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error fetching imputation:', error);
+        return throwError(false);
+      })
+    );
+  }
+
+  putImputation(imputationID : number, duration: number): Observable<boolean> {
+    const intHours = Math.floor(duration)
+    const minutes = Math.round((duration - intHours) * 60)
+
+    const credentials = {
+      imputationId: imputationID,
+      duration: `PT${intHours}H${minutes}M`
+    };
+
+    return this.http.put<any>(`${ENV.apiUrl}/user/imputation`, credentials, {headers: this.headers}).pipe(
+      map((response) => {
         return true;
       }),
       catchError((error) => {
-        this.managerCreater=false;
         return of(false);
       })
     );
   }
-  getEmail(): string {
-    return localStorage.getItem('user')!;
+
+  createMonthReport() {
+    return this.http.get<any>(`${ENV.apiUrl}/user/createMonthReport`, {headers: this.headers}).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error fetching imputation:', error);
+        return throwError(false);
+      })
+    );
   }
+
 
 }
