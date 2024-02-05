@@ -3,15 +3,16 @@ package fr.tse.startupPOC.controller;
 import fr.tse.startupPOC.models.Admin;
 import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Profile;
-import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.SignupManagerRequest;
+import fr.tse.startupPOC.payload.response.ManagerResponse;
+import fr.tse.startupPOC.payload.response.UserResponse;
+import fr.tse.startupPOC.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import fr.tse.startupPOC.service.AdminService;
 
 import java.util.List;
 
@@ -67,13 +68,23 @@ public class AdminController {
 
     @GetMapping("/getAllUsers")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUsers(){
-        return adminService.getTotalUsers();
+    public ResponseEntity<?> getAllUsers(){
+        try {
+            List< UserResponse> response = adminService.getAllUsers();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/getAllManagers")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Manager> getAllManagers(){
-        return adminService.getAllManagers();
+    public ResponseEntity<?> getAllManagers(){
+        try {
+            List<ManagerResponse> response = adminService.getAllManagers();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
