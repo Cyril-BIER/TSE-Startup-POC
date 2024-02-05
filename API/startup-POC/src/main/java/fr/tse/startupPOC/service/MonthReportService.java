@@ -36,7 +36,6 @@ public class MonthReportService {
                 MonthReport monthReport = new MonthReport();
                 monthReport.setYearMonth(YearMonth.now());
 
-                //TODO : add monthReport to the user
                 monthReport.setUser(user);
 
                 HashMap<String, Duration> workTimeReport = new HashMap<>();
