@@ -3,6 +3,7 @@ package fr.tse.startupPOC.payload.response;
 import fr.tse.startupPOC.models.Manager;
 import fr.tse.startupPOC.models.Project;
 import fr.tse.startupPOC.models.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,14 +33,10 @@ public class ProjectResponse {
 
     @Getter
     @Setter
+    @AllArgsConstructor
     private static class UserInfo {
         private Long userId;
         private String fullName;
-
-        public UserInfo(Long userId, String fullName) {
-            this.userId = userId;
-            this.fullName = fullName;
-        }
     }
 
 }
