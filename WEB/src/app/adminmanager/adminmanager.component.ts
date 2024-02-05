@@ -96,7 +96,6 @@ export class AdminmanagerComponent {
     this.adminService.createManager(email, nom, prenom, motDePasse).subscribe((res) => {
       console.log('User created:', res);
       if (res) {
-        // Projet vide à implementer plus tard
         this.users.push({
           firstName: nom,
           lastName: prenom,
