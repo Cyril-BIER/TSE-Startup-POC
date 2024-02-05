@@ -88,4 +88,15 @@ public class ManagerController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/monthReport/{userId}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<?> getMonthReport(@PathVariable Long userId){
+        try{
+            List<MonthReportResponse> response= managerService.getMonthReport(userId);
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

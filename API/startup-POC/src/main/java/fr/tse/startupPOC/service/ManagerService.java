@@ -140,4 +140,13 @@ public class ManagerService {
        MonthReport monthReport = monthReportService.generateReport(userId);
        return new MonthReportResponse(monthReport);
     }
+
+    public List<MonthReportResponse>getMonthReport(Long userId){
+        List<MonthReportResponse> response = new ArrayList<>();
+        List<MonthReport> monthReports = monthReportService.getMonthReport(userId);
+        for(MonthReport monthReport:monthReports){
+            response.add(new MonthReportResponse(monthReport));
+        }
+        return response;
+    }
 }

@@ -126,4 +126,17 @@ public class UserService {
             throw new AlreadyBuiltException("The month report has already been generated, you can't change its imputations");
         }
     }
+
+    public List<MonthReportResponse> getMonthReport(){
+        List<MonthReportResponse> response = new ArrayList<>();
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<MonthReport> monthReports = monthReportService.getMonthReport(userDetails.getId());
+
+        for(MonthReport monthReport:monthReports){
+            response.add(new MonthReportResponse(monthReport));
+        }
+        return response;
+    }
 }

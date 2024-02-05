@@ -76,4 +76,15 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/monthReport")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getMonthReport(){
+        try{
+            List<MonthReportResponse> response = userService.getMonthReport();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
