@@ -41,7 +41,8 @@ public class MonthReportService {
                 HashMap<String, Duration> workTimeReport = new HashMap<>();
                 for(Imputation imputation: user.getImputations()){
 
-                    if (imputation.getDate().getMonth()== LocalDate.now().getMonth()) {
+                    if (imputation.getDate().getMonth()== LocalDate.now().getMonth() &&
+                            imputation.getDate().getYear() == LocalDate.now().getYear()) {
 
                         String projectName = imputation.getProject().getProjectName();
                         if(! workTimeReport.containsKey(projectName)){
