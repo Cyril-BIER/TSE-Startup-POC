@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {jsPDF} from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import {MatTableDataSource} from "@angular/material/table";
-import {ProjetCompteRendu} from "../models/projet.compteRendu";
+import {ImputationCompteRendu} from "../models/imputationCompteRendu";
 import {AuthService} from "../services/auth.service";
 import {UserService} from "../services/user.service";
+import {compteRendu} from "../models/compte.rendu";
 
 
 @Component({
@@ -13,26 +14,15 @@ import {UserService} from "../services/user.service";
   styleUrls: ['./compte-rendu.component.css']
 })
 export class CompteRenduComponent implements OnInit {
-  projets: MatTableDataSource<ProjetCompteRendu> = new MatTableDataSource<ProjetCompteRendu>();
+  projets: MatTableDataSource<ImputationCompteRendu> = new MatTableDataSource<ImputationCompteRendu>();
   displayedColumns: string[] = ['nom', "date", 'heures'];
   isNotEditable: boolean;
-
-  generatePdf() {
-    const doc = new jsPDF()
-    const data: (string| number)[][] = [];
-
-    this.projets.data.forEach(projet => {
-      data.push([projet.nom, projet.heures]);
-    });
-
-    autoTable(doc, {
-      head: [['Nom du projet', 'Heures effectuées']],
-      body: data
-    })
-
-    doc.save('table.pdf')
-    console.log('./table.pdf generated')
-  }
+  monthReportData: compteRendu = {
+    userId: 0,
+    userName: '',
+    yearMonth: '',
+    workTimeReport: {}
+  };
 
   constructor(
     private authService: AuthService,
@@ -42,6 +32,32 @@ export class CompteRenduComponent implements OnInit {
 
   ngOnInit(): void {
     this.getImputation();
+    if (!this.isNotEditable){
+      this.getMonthreportData();
+    }
+  }
+
+  generatePdf() {
+    const doc = new jsPDF()
+    const data: (string | number)[][] = [];
+
+    doc.text('Rapport mensuel de travail de : '+this.monthReportData.userName, 50, 20); // Positionnez le titre selon vos préférences
+
+    const entriesOfWorkTimeReport = Object.entries(this.monthReportData.workTimeReport);
+    entriesOfWorkTimeReport.forEach(([key, value]) => {
+      const cleanedValue = value.replace(/[^0-9HM]/g, '');
+      data.push([key, cleanedValue]);
+    });
+
+
+    autoTable(doc, {
+      head: [['Nom du projet', 'Heures effectuées']],
+      body: data,
+      startY: 30
+    })
+
+    doc.save('table.pdf')
+    console.log('./table.pdf generated')
   }
 
   getImputation() {
@@ -68,20 +84,42 @@ export class CompteRenduComponent implements OnInit {
       }
     })
   }
-  editImputation(projet: ProjetCompteRendu) {
+
+  editImputation(projet: ImputationCompteRendu) {
     projet.isEditing = true;
   }
-  saveImputation(projet: ProjetCompteRendu) {
-    this.userService.putImputation(projet.id,projet.heures).subscribe((res) => {
+
+  saveImputation(projet: ImputationCompteRendu) {
+    this.userService.putImputation(projet.id, projet.heures).subscribe((res) => {
       if (res) {
         console.log("Imputation changed successfully")
-      }
-      else {
+      } else {
         console.log("erreur in changing the imputation")
       }
     })
     projet.isEditing = false;
   }
+
+  getMonthreportData() {
+    this.userService.getMonthReport().subscribe((res) => {
+      if (res != null) {
+        this.monthReportData = res[0];
+        console.log(res)
+      }
+    })
+  }
+
+  enregistrerCompteRendu() {
+    this.userService.createMonthReport().subscribe((res)=>{
+      if (res) {
+        this.getMonthreportData();
+      }
+      else {
+        console.log("Erreur")
+      }
+    })
+  }
+
   convertDurationToDecimal(durationString: string): number {
     // imputation renvoie comme format : "PT1H30MIN"
 
