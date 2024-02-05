@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,6 +61,15 @@ public class MonthReportService {
             }else{
                 throw new AlreadyBuiltException("The month report for this user has already been generated");
             }
+        }
+    }
+
+    public List<MonthReport> getMonthReport(Long userId){
+        Optional<User> oUser = userRepository.findById(userId);
+        if(oUser.isEmpty()){
+            throw new EntityNotFoundException("User with id "+userId+" doesn't exists.");
+        }else{
+            return monthReportRepository.findByUser(oUser.get());
         }
     }
 }
