@@ -76,6 +76,10 @@ public class ManagerService {
                     encoder.encode(request.getPassword()),
                     manager.get()
             );
+
+            List<Project> projects = projectRepository.findAllById(request.getProjects());
+            user.setProjects(projects);
+
             user = userRepository.save(user);
 
             manager.get().addUser(user);

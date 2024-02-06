@@ -14,7 +14,7 @@
     </mat-form-field>
     <mat-form-field *ngIf="this.userForm.get('choice')?.value=='manager'">
         <mat-label>Manager :</mat-label>
-        <mat-select matNativeControl formControlName="id" required>
+        <mat-select matNativeControl formControlName="managerId" required>
             <mat-option *ngFor="let manager of managers" [value]="manager.id">{{manager.lastName}}
                 {{manager.firstName}}</mat-option>
         </mat-select>

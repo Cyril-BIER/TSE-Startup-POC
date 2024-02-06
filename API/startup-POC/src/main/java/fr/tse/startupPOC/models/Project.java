@@ -3,7 +3,6 @@ package fr.tse.startupPOC.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import fr.tse.startupPOC.models.Manager;
 
 import java.util.List;
 
@@ -28,6 +27,10 @@ public class Project {
         this.projectName = projectName;
         this.manager = manager;
         this.projectUsers = projectUsers;
+    }
+
+    public void AddUser(User user){
+        this.projectUsers.add(user);
     }
 
 }
