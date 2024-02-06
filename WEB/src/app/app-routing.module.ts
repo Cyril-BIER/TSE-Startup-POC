@@ -8,6 +8,7 @@ import { ConnexionComponent } from './connexion/connexion.component';
 import { TempsFormulaireComponent } from './temps-formulaire/temps-formulaire.component';
 import { canActivate } from './services/auth.guard';
 import { AdminComponent } from './admin/admin.component';
+import { AdminmanagerComponent } from './adminmanager/adminmanager.component';
 import { AdminFormComponent } from './admin-form/admin-form.component';
 import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire.component';
 import {CompteRenduManagerComponent} from "./compte-rendu-manager/compte-rendu-manager.component";
@@ -44,6 +45,11 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: 'manager',
+    component: AdminmanagerComponent,
     canActivate: [canActivate],
   },
   {
