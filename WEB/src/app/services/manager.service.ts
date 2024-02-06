@@ -134,6 +134,22 @@ export class ManagerService {
       );
   }
 
+  getImputationUser(userId: string) {
+    return this.http
+      .get<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Error fetching imputation:', error);
+          return throwError(false);
+        })
+      );
+  }
+
   createMonthReportUser(userId: string) {
     return this.http
       .get<any>(`${ENV.apiUrl}/manager/createMonthReport/${userId}`, {
