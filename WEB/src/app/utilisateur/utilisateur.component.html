@@ -93,9 +93,8 @@
           <p>Manager responsible: {{ findSelectedUser()?.manager }}</p>
           <p>Projets:
             <span *ngFor="let projet of findSelectedUser()?.projets">
-        {{ projet }}
-
-      </span>
+              {{ projet }}
+            </span>
           </p>
         </mat-card-content>
         <mat-card-actions>

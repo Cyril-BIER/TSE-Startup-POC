@@ -25,7 +25,6 @@
       <div class="bouton"  *ngIf="isManagerButtonVisible && !isUserVisible">
         <button mat-raised-button color="primary" (click)="afficherUtilisateur()">Afficher le manager</button>
       </div>
-    </div>
     <div class="creationUser" *ngIf="isCreationFormVisible">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="pad">
@@ -80,5 +79,6 @@
         </mat-card-actions>
       </mat-card>
     </div>
+  </div>
 
 </main>
