@@ -62,10 +62,11 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/changeManager")
+    @GetMapping("/changeManager/{userId}/{managerId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void changeManager(Long userId, Long newManagerId) {
-        adminService.changeManager(userId, newManagerId);
+    public void changeManager(@PathVariable Long userId,
+                              @PathVariable Long managerId) {
+        adminService.changeManager(userId, managerId);
     }
 
     @GetMapping("/getAllUsers")
