@@ -42,30 +42,23 @@ export class TempsComponent implements OnInit {
     this.router.navigate(['/temps-formulaire']);
   }
 
-  formatDurationString(durationString: string): string {
-    if (!durationString || durationString === 'PT0S') {
-      return '0 min';
-    }
-
-    const match = durationString.match(/PT(\d+)H(\d+)M/);
+  formatDurationString(timeString: string): string {
+    const match = timeString.match(/PT(?:(\d+)H)?(?:(\d+)M)?S?/);
     if (!match) {
-      return 'Invalid duration';
+      return timeString;
     }
-
-    const hours = parseInt(match[1]);
-    const minutes = parseInt(match[2]);
-
-    let formattedString = '';
+    const hours = match[1] ? parseInt(match[1]) : 0;
+    const minutes = match[2] ? parseInt(match[2]) : 0;
+    const parts: string[] = [];
     if (hours > 0) {
-      formattedString += `${hours}h`;
+      parts.push(`${hours} ${hours === 1 ? 'heure' : 'heures'}`);
     }
     if (minutes > 0) {
-      if (formattedString !== '') {
-        formattedString += ' ';
-      }
-      formattedString += `${minutes}min`;
+      parts.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`);
     }
-
-    return formattedString;
+    if (!parts.length) {
+      parts.push('0 minutes');
+    }
+    return parts.join(' ');
   }
 }

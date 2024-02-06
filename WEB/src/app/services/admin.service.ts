@@ -82,7 +82,7 @@ export class AdminService {
 
   userToManager(userId: string) {
     return this.http
-      .put<any>(`${ENV.apiUrl}/admin/userToManager/${userId}`, {
+      .get<any>(`${ENV.apiUrl}/admin/userToManager/${userId}`, {
         headers: this.headers,
       })
       .pipe(
@@ -98,7 +98,7 @@ export class AdminService {
 
   userToAdmin(userId: string) {
     return this.http
-      .put<any>(`${ENV.apiUrl}/admin/userToAdmin/${userId}`, {
+      .get<any>(`${ENV.apiUrl}/admin/userToAdmin/${userId}`, {
         headers: this.headers,
       })
       .pipe(
@@ -114,7 +114,7 @@ export class AdminService {
 
   changeManager(userId: string, managerId: string) {
     return this.http
-      .put<any>(`${ENV.apiUrl}/admin/changeManager/${userId}/${managerId}`, {
+      .get<any>(`${ENV.apiUrl}/admin/changeManager/${userId}/${managerId}`, {
         headers: this.headers,
       })
       .pipe(
