@@ -25,8 +25,8 @@ export class CompteRenduManagerComponent implements OnInit {
       });
   }
 
-  redirectUser(id: number): void {
-    this.router.navigate(['/compte-rendu', id]);
+  redirectUser(id: number,canAddImputation: boolean): void {
+    this.router.navigate(['/compte-rendu', id,canAddImputation]);
     return;
   }
 }

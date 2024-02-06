@@ -18,8 +18,9 @@ import {ManagerService} from "../services/manager.service";
 export class CompteRenduComponent implements OnInit {
   projets: MatTableDataSource<ImputationCompteRendu> = new MatTableDataSource<ImputationCompteRendu>();
   displayedColumns: string[] = ['nom', "date", 'heures'];
-  isNotEditable: boolean = false;
+  isNotEditable: boolean = true;
   formId!: string;
+  isManager: boolean = false;
 
   monthReportData: compteRendu = {
     userId: 0,
@@ -33,12 +34,13 @@ export class CompteRenduComponent implements OnInit {
     private userService: UserService,
     private managerService: ManagerService,
     private route: ActivatedRoute) {
+
   }
 
   ngOnInit(): void {
     switch (this.authService.whatRole()) {
       case 'ROLE_USER':
-        this.isNotEditable = !this.authService.canAddImputation();
+        this.isNotEditable = this.authService.canAddImputation();
         this.getImputation();
         if (!this.isNotEditable) {
           this.getMonthreportData();
@@ -47,6 +49,8 @@ export class CompteRenduComponent implements OnInit {
       case 'ROLE_MANAGER':
         this.route.params.subscribe((params) => {
           this.formId = params['id'];
+          this.isNotEditable = !(params['canAddImputation'] == "false");
+          this.isManager = true;
         });
         this.getImputationUser();
         if(!this.isNotEditable) {
@@ -67,7 +71,6 @@ export class CompteRenduComponent implements OnInit {
       const cleanedValue = value.replace(/[^0-9HM]/g, '');
       data.push([key, cleanedValue]);
     });
-
 
     autoTable(doc, {
       head: [['Nom du projet', 'Heures effectuées']],
@@ -161,13 +164,24 @@ export class CompteRenduComponent implements OnInit {
   }
 
   enregistrerCompteRendu() {
-    this.userService.createMonthReport().subscribe((res) => {
-      if (res) {
-        this.getMonthreportData();
-      } else {
-        console.log("Erreur")
-      }
-    })
+    if(this.isManager) {
+      this.managerService.createMonthReportUser(this.formId).subscribe((res) => {
+        if (res) {
+          this.getMonthreportData();
+        } else {
+          console.log("Erreur")
+        }
+      })
+    }
+    else {
+      this.userService.createMonthReport().subscribe((res) => {
+        if (res) {
+          this.getMonthreportData();
+        } else {
+          console.log("Erreur")
+        }
+      })
+    }
   }
 
   convertDurationToDecimal(durationString: string): number {
@@ -195,5 +209,9 @@ export class CompteRenduComponent implements OnInit {
     const totalHours = hours + (minutes / 60);
 
     return Math.round(totalHours * 100) / 100
+  }
+
+  isImputationEditable(projet: ImputationCompteRendu) {
+    return !projet.isEditing && this.isNotEditable && !this.isManager
   }
 }
