@@ -10,9 +10,6 @@ services:
       - db
     ports:
       - "8081:8081"
-    networks:
-      - front
-      - back
   web:
     container_name: web
     build: ./WEB
@@ -21,8 +18,6 @@ services:
       - api
     ports:
       - "8082:8082"
-    networks:
-      - front
   db:
     container_name: db
     image: postgres
