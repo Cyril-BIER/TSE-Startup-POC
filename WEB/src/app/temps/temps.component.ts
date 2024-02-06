@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Temps } from '../models/temps';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { UserService } from '../services/user.service';
 import { ManagerService } from '../services/manager.service';
 
@@ -14,10 +14,12 @@ import { ManagerService } from '../services/manager.service';
 export class TempsComponent implements OnInit {
   temps: MatTableDataSource<Temps> = new MatTableDataSource<Temps>();
   displayedColumns: string[] = ['projet', 'duree', 'date'];
+  formId: string ='';
 
   constructor(
     public authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private userService: UserService,
     private managerService: ManagerService
   ) {}
@@ -31,8 +33,11 @@ export class TempsComponent implements OnInit {
         });
         break;
       case 'ROLE_MANAGER':
-        this.managerService.getAttachedUsers().subscribe((users) => {
-          console.log(users);
+        this.route.params.subscribe((params) => {
+          this.formId = params['id'];
+        });
+        this.managerService.getImputationUser(this.formId).subscribe((temps) => {
+          this.temps = temps;
         });
         break;
     }

@@ -17,7 +17,7 @@ import {ManagerService} from "../services/manager.service";
 
 export class CompteRenduComponent implements OnInit {
   imputationCompteRendu: MatTableDataSource<ImputationCompteRendu> = new MatTableDataSource<ImputationCompteRendu>();
-  displayedColumns: string[] = ['nom', "date", 'heures'];
+  displayedColumns: string[] = ['projet', "duree", 'date'];
   isNotEditable: boolean = true;
   formId!: string;
   isManager: boolean = false;

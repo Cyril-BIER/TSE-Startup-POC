@@ -35,6 +35,7 @@ import { AdminFormComponent } from './admin-form/admin-form.component';
 import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire.component';
 import { AdminmanagerComponent } from './adminmanager/adminmanager.component';
 import { CompteRenduManagerComponent } from './compte-rendu-manager/compte-rendu-manager.component';
+import { TempsListeUsersComponent } from './temps-liste-users/temps-liste-users.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { CompteRenduManagerComponent } from './compte-rendu-manager/compte-rendu
     ProjetFormulaireComponent,
     CompteRenduManagerComponent,
     AdminmanagerComponent,
+    TempsListeUsersComponent,
   ],
   imports: [
     BrowserModule,

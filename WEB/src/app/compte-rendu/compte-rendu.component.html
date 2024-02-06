@@ -1,6 +1,6 @@
 <table mat-table [dataSource]="imputationCompteRendu" class="mat-elevation-z2">
 
-  <ng-container matColumnDef="nom">
+  <ng-container matColumnDef="projet">
     <th mat-header-cell *matHeaderCellDef> Nom</th>
     <td mat-cell *matCellDef="let imputation"> {{imputation.nom}}</td>
   </ng-container>
@@ -10,7 +10,7 @@
     <td mat-cell *matCellDef="let projet"> {{projet.date}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="heures">
+  <ng-container matColumnDef="duree">
     <th mat-header-cell *matHeaderCellDef> Heures effectuées</th>
     <td mat-cell *matCellDef="let projet">
       <input type="text" [(ngModel)]="projet.heures" [readOnly]="!projet.isEditing"/>
