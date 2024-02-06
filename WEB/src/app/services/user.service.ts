@@ -100,6 +100,22 @@ export class UserService {
       })
       .pipe(
         map((response) => {
+          return true;
+        }),
+        catchError((error) => {
+          console.error('Error fetching imputation:', error);
+          return throwError(false);
+        })
+      );
+  }
+
+  getMonthReport() {
+    return this.http
+      .get<any>(`${ENV.apiUrl}/user/monthReport`, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
           return response;
         }),
         catchError((error) => {

@@ -2,9 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {jsPDF} from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import {MatTableDataSource} from "@angular/material/table";
-import {ProjetCompteRendu} from "../models/projet.compteRendu";
+import {ImputationCompteRendu} from "../models/imputationCompteRendu";
 import {AuthService} from "../services/auth.service";
 import {UserService} from "../services/user.service";
+import {compteRendu} from "../models/compte.rendu";
+import {ActivatedRoute} from "@angular/router";
+import {ManagerService} from "../services/manager.service";
 
 
 @Component({
@@ -13,42 +16,97 @@ import {UserService} from "../services/user.service";
   styleUrls: ['./compte-rendu.component.css']
 })
 export class CompteRenduComponent implements OnInit {
-  projets: MatTableDataSource<ProjetCompteRendu> = new MatTableDataSource<ProjetCompteRendu>();
+  projets: MatTableDataSource<ImputationCompteRendu> = new MatTableDataSource<ImputationCompteRendu>();
   displayedColumns: string[] = ['nom', "date", 'heures'];
-  isNotEditable: boolean;
+  isNotEditable: boolean = true;
+  formId!: string;
+  isManager: boolean = false;
+
+  monthReportData: compteRendu = {
+    userId: 0,
+    userName: '',
+    yearMonth: '',
+    workTimeReport: {}
+  };
+
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private managerService: ManagerService,
+    private route: ActivatedRoute) {
+
+  }
+
+  ngOnInit(): void {
+    switch (this.authService.whatRole()) {
+      case 'ROLE_USER':
+        this.isNotEditable = this.authService.canAddImputation();
+        this.getImputation();
+        if (!this.isNotEditable) {
+          this.getMonthreportData();
+        }
+        break;
+      case 'ROLE_MANAGER':
+        this.route.params.subscribe((params) => {
+          this.formId = params['id'];
+          this.isNotEditable = !(params['canAddImputation'] == "false");
+          this.isManager = true;
+        });
+        this.getImputationUser();
+        if(!this.isNotEditable) {
+          this.getMonthreportDataUser();
+        }
+        break;
+    }
+  }
 
   generatePdf() {
     const doc = new jsPDF()
-    const data: (string| number)[][] = [];
+    const data: (string | number)[][] = [];
 
-    this.projets.data.forEach(projet => {
-      data.push([projet.nom, projet.heures]);
+    doc.text('Rapport mensuel de travail de : ' + this.monthReportData.userName, 50, 20); // Positionnez le titre selon vos préférences
+
+    const entriesOfWorkTimeReport = Object.entries(this.monthReportData.workTimeReport);
+    entriesOfWorkTimeReport.forEach(([key, value]) => {
+      const cleanedValue = value.replace(/[^0-9HM]/g, '');
+      data.push([key, cleanedValue]);
     });
 
     autoTable(doc, {
       head: [['Nom du projet', 'Heures effectuées']],
-      body: data
+      body: data,
+      startY: 30
     })
 
     doc.save('table.pdf')
     console.log('./table.pdf generated')
   }
 
-  constructor(
-    private authService: AuthService,
-    private userService: UserService) {
-    this.isNotEditable = !this.authService.canAddImputation();
-  }
-
-  ngOnInit(): void {
-    this.getImputation();
-  }
-
   getImputation() {
     this.userService.getImputation().subscribe((res) => {
       if (res != null) {
-        console.log(res)
+        this.projets.data = res.map((imputation: {
+          imputationId: any;
+          userName: string;
+          projectId: number;
+          projectName: string;
+          date: string;
+          duration: string;
+        }) => {
+          return {
+            id: imputation.imputationId,
+            nom: imputation.projectName,
+            date: imputation.date,
+            heures: this.convertDurationToDecimal(imputation.duration),
+            isEditing: false
+          };
+        });      }
+    })
 
+  }
+  getImputationUser(){
+    this.managerService.getImputationUser(this.formId).subscribe((res) => {
+      if (res != null) {
         this.projets.data = res.map((imputation: {
           imputationId: any;
           userName: string;
@@ -68,20 +126,64 @@ export class CompteRenduComponent implements OnInit {
       }
     })
   }
-  editImputation(projet: ProjetCompteRendu) {
+
+  editImputation(projet
+                   :
+                   ImputationCompteRendu
+  ) {
     projet.isEditing = true;
   }
-  saveImputation(projet: ProjetCompteRendu) {
-    this.userService.putImputation(projet.id,projet.heures).subscribe((res) => {
+
+  saveImputation(projet: ImputationCompteRendu) {
+    this.userService.putImputation(projet.id, projet.heures).subscribe((res) => {
       if (res) {
         console.log("Imputation changed successfully")
-      }
-      else {
+      } else {
         console.log("erreur in changing the imputation")
       }
     })
     projet.isEditing = false;
   }
+
+  getMonthreportData() {
+    this.userService.getMonthReport().subscribe((res) => {
+      if (res != null) {
+        this.monthReportData = res[0];
+        console.log(res)
+      }
+    })
+  }
+
+  getMonthreportDataUser() {
+    this.managerService.getMonthReportUser(this.formId).subscribe((res) => {
+      if (res != null) {
+        this.monthReportData = res[0];
+        console.log(res)
+      }
+    })
+  }
+
+  enregistrerCompteRendu() {
+    if(this.isManager) {
+      this.managerService.createMonthReportUser(this.formId).subscribe((res) => {
+        if (res) {
+          this.getMonthreportData();
+        } else {
+          console.log("Erreur")
+        }
+      })
+    }
+    else {
+      this.userService.createMonthReport().subscribe((res) => {
+        if (res) {
+          this.getMonthreportData();
+        } else {
+          console.log("Erreur")
+        }
+      })
+    }
+  }
+
   convertDurationToDecimal(durationString: string): number {
     // imputation renvoie comme format : "PT1H30MIN"
 
@@ -107,5 +209,9 @@ export class CompteRenduComponent implements OnInit {
     const totalHours = hours + (minutes / 60);
 
     return Math.round(totalHours * 100) / 100
+  }
+
+  isImputationEditable(projet: ImputationCompteRendu) {
+    return !projet.isEditing && this.isNotEditable && !this.isManager
   }
 }

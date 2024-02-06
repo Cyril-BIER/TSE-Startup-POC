@@ -1,4 +1,4 @@
-export interface ProjetCompteRendu {
+export interface ImputationCompteRendu {
   id: number;
   nom: string;
   date: string;

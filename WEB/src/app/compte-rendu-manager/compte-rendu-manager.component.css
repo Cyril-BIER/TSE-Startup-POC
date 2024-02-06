@@ -9,11 +9,3 @@ td {
 .row:hover {
   cursor: pointer;
 }
-
-button {
-  width:auto;
-  margin-left: 42.5%;
-  margin-top:1%;
-  margin-bottom:1%;
-  font-size:20px;
-}
