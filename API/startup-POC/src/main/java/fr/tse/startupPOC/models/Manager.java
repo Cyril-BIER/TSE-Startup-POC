@@ -17,8 +17,10 @@ public class Manager extends Profile{
     @OneToMany(mappedBy = "manager")
     List<Project> projects;
 
-    public Manager(String email, String password){
+    public Manager(String email, String firstName, String lastName, String password){
         this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
     }
 

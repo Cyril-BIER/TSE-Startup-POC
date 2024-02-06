@@ -26,7 +26,7 @@ public class InitApplication implements ApplicationRunner {
         }
 
         try {
-            SignupManagerRequest managerrequest = new SignupManagerRequest("manager@manager.com","managerpass");
+            SignupManagerRequest managerrequest = new SignupManagerRequest("manager@manager.com","manager","manager","managerpass");
             adminService.createManager(managerrequest);
         }catch(Exception e){
             System.out.println("Manager already exists");
