@@ -9,19 +9,20 @@ import {compteRendu} from "../models/compte.rendu";
 import {ActivatedRoute} from "@angular/router";
 import {ManagerService} from "../services/manager.service";
 
-
 @Component({
   selector: 'app-compte-rendu',
   templateUrl: './compte-rendu.component.html',
   styleUrls: ['./compte-rendu.component.css']
 })
+
 export class CompteRenduComponent implements OnInit {
-  projets: MatTableDataSource<ImputationCompteRendu> = new MatTableDataSource<ImputationCompteRendu>();
+  imputationCompteRendu: MatTableDataSource<ImputationCompteRendu> = new MatTableDataSource<ImputationCompteRendu>();
   displayedColumns: string[] = ['nom', "date", 'heures'];
   isNotEditable: boolean = true;
   formId!: string;
   isManager: boolean = false;
-
+  moisActuel: string = '';
+  anneeActuelle: string = '';
   monthReportData: compteRendu = {
     userId: 0,
     userName: '',
@@ -33,11 +34,13 @@ export class CompteRenduComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private managerService: ManagerService,
-    private route: ActivatedRoute) {
-
-  }
+    private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    const dateActuelle = new Date();
+    this.moisActuel = dateActuelle.toLocaleString('default', { month: 'long' });
+    this.anneeActuelle = dateActuelle.toLocaleString('default', { year: "numeric" });
+
     switch (this.authService.whatRole()) {
       case 'ROLE_USER':
         this.isNotEditable = this.authService.canAddImputation();
@@ -64,7 +67,10 @@ export class CompteRenduComponent implements OnInit {
     const doc = new jsPDF()
     const data: (string | number)[][] = [];
 
-    doc.text('Rapport mensuel de travail de : ' + this.monthReportData.userName, 50, 20); // Positionnez le titre selon vos préférences
+    doc.setFont("italic");
+    doc.text('Rapport mensuel de travail de ' + this.monthReportData.userName, 55, 20);
+    doc.text('du mois de '+ this.moisActuel + ' ' + this.anneeActuelle, 75, 30);
+
 
     const entriesOfWorkTimeReport = Object.entries(this.monthReportData.workTimeReport);
     entriesOfWorkTimeReport.forEach(([key, value]) => {
@@ -75,7 +81,7 @@ export class CompteRenduComponent implements OnInit {
     autoTable(doc, {
       head: [['Nom du projet', 'Heures effectuées']],
       body: data,
-      startY: 30
+      startY: 40
     })
 
     doc.save('table.pdf')
@@ -85,7 +91,7 @@ export class CompteRenduComponent implements OnInit {
   getImputation() {
     this.userService.getImputation().subscribe((res) => {
       if (res != null) {
-        this.projets.data = res.map((imputation: {
+        this.imputationCompteRendu.data = res.map((imputation: {
           imputationId: any;
           userName: string;
           projectId: number;
@@ -107,7 +113,7 @@ export class CompteRenduComponent implements OnInit {
   getImputationUser(){
     this.managerService.getImputationUser(this.formId).subscribe((res) => {
       if (res != null) {
-        this.projets.data = res.map((imputation: {
+        this.imputationCompteRendu.data = res.map((imputation: {
           imputationId: any;
           userName: string;
           projectId: number;

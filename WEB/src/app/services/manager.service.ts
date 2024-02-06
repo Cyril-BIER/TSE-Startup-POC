@@ -92,9 +92,9 @@ export class ManagerService {
       );
   }
 
-  getImputationUser(userId: string) {
+  getAllManagers() {
     return this.http
-      .get<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, {
+      .get<any>(`${ENV.apiUrl}/admin/getAllManagers`, {
         headers: this.headers,
       })
       .pipe(
