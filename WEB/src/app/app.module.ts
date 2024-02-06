@@ -33,6 +33,7 @@ import {MatCardModule} from "@angular/material/card";
 import { AdminComponent } from './admin/admin.component';
 import { AdminFormComponent } from './admin-form/admin-form.component';
 import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire.component';
+import { CompteRenduManagerComponent } from './compte-rendu-manager/compte-rendu-manager.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire
     AdminComponent,
     AdminFormComponent,
     ProjetFormulaireComponent,
+    CompteRenduManagerComponent,
   ],
   imports: [
     BrowserModule,

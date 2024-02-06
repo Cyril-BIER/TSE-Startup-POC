@@ -1,4 +1,4 @@
-import { catchError, map, throwError } from 'rxjs';
+import {catchError, map, Observable, of, throwError} from 'rxjs';
 import { ENV } from '../../environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -61,6 +61,7 @@ export class ManagerService {
         })
       );
   }
+
   getProjects() {
     return this.http
       .get<any>(`${ENV.apiUrl}/manager/projects`, { headers: this.headers })
@@ -74,6 +75,7 @@ export class ManagerService {
         })
       );
   }
+
   postProject(data: any) {
     return this.http
       .post<any>(`${ENV.apiUrl}/manager/createProject`, data, {
@@ -104,4 +106,72 @@ export class ManagerService {
         })
       );
   }
+  getImputationUser(userId: string) {
+    return this.http
+      .get<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, { headers: this.headers })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Error fetching imputation:', error);
+          return throwError(false);
+        })
+      );
+  }
+  putImputationUser(imputationID: number, duration: number, userId: string): Observable<boolean> {
+    const intHours = Math.floor(duration);
+    const minutes = Math.round((duration - intHours) * 60);
+
+    const credentials = {
+      imputationId: imputationID,
+      duration: `PT${intHours}H${minutes}M`,
+    };
+
+    return this.http
+      .put<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, credentials, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return true;
+        }),
+        catchError((error) => {
+          return of(false);
+        })
+      );
+  }
+
+  createMonthReportUser(userId: string) {
+    return this.http
+      .get<any>(`${ENV.apiUrl}/manager/createMonthReport/${userId}`, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return true;
+        }),
+        catchError((error) => {
+          console.error('Error fetching imputation:', error);
+          return throwError(false);
+        })
+      );
+  }
+
+  getMonthReportUser(userId: string) {
+    return this.http
+      .get<any>(`${ENV.apiUrl}/manager/monthReport/${userId}`, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error) => {
+          console.error('Error fetching imputation:', error);
+          return throwError(false);
+        })
+      );
+  }
+
 }

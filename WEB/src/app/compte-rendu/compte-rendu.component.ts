@@ -6,6 +6,8 @@ import {ImputationCompteRendu} from "../models/imputationCompteRendu";
 import {AuthService} from "../services/auth.service";
 import {UserService} from "../services/user.service";
 import {compteRendu} from "../models/compte.rendu";
+import {ActivatedRoute} from "@angular/router";
+import {ManagerService} from "../services/manager.service";
 
 
 @Component({
@@ -16,7 +18,9 @@ import {compteRendu} from "../models/compte.rendu";
 export class CompteRenduComponent implements OnInit {
   projets: MatTableDataSource<ImputationCompteRendu> = new MatTableDataSource<ImputationCompteRendu>();
   displayedColumns: string[] = ['nom', "date", 'heures'];
-  isNotEditable: boolean;
+  isNotEditable: boolean = false;
+  formId!: string;
+
   monthReportData: compteRendu = {
     userId: 0,
     userName: '',
@@ -26,14 +30,29 @@ export class CompteRenduComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService) {
-    this.isNotEditable = !this.authService.canAddImputation();
+    private userService: UserService,
+    private managerService: ManagerService,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.getImputation();
-    if (!this.isNotEditable){
-      this.getMonthreportData();
+    switch (this.authService.whatRole()) {
+      case 'ROLE_USER':
+        this.isNotEditable = !this.authService.canAddImputation();
+        this.getImputation();
+        if (!this.isNotEditable) {
+          this.getMonthreportData();
+        }
+        break;
+      case 'ROLE_MANAGER':
+        this.route.params.subscribe((params) => {
+          this.formId = params['id'];
+        });
+        this.getImputationUser();
+        if(!this.isNotEditable) {
+          this.getMonthreportDataUser();
+        }
+        break;
     }
   }
 
@@ -41,7 +60,7 @@ export class CompteRenduComponent implements OnInit {
     const doc = new jsPDF()
     const data: (string | number)[][] = [];
 
-    doc.text('Rapport mensuel de travail de : '+this.monthReportData.userName, 50, 20); // Positionnez le titre selon vos préférences
+    doc.text('Rapport mensuel de travail de : ' + this.monthReportData.userName, 50, 20); // Positionnez le titre selon vos préférences
 
     const entriesOfWorkTimeReport = Object.entries(this.monthReportData.workTimeReport);
     entriesOfWorkTimeReport.forEach(([key, value]) => {
@@ -63,8 +82,28 @@ export class CompteRenduComponent implements OnInit {
   getImputation() {
     this.userService.getImputation().subscribe((res) => {
       if (res != null) {
-        console.log(res)
+        this.projets.data = res.map((imputation: {
+          imputationId: any;
+          userName: string;
+          projectId: number;
+          projectName: string;
+          date: string;
+          duration: string;
+        }) => {
+          return {
+            id: imputation.imputationId,
+            nom: imputation.projectName,
+            date: imputation.date,
+            heures: this.convertDurationToDecimal(imputation.duration),
+            isEditing: false
+          };
+        });      }
+    })
 
+  }
+  getImputationUser(){
+    this.managerService.getImputationUser(this.formId).subscribe((res) => {
+      if (res != null) {
         this.projets.data = res.map((imputation: {
           imputationId: any;
           userName: string;
@@ -85,7 +124,10 @@ export class CompteRenduComponent implements OnInit {
     })
   }
 
-  editImputation(projet: ImputationCompteRendu) {
+  editImputation(projet
+                   :
+                   ImputationCompteRendu
+  ) {
     projet.isEditing = true;
   }
 
@@ -109,12 +151,20 @@ export class CompteRenduComponent implements OnInit {
     })
   }
 
+  getMonthreportDataUser() {
+    this.managerService.getMonthReportUser(this.formId).subscribe((res) => {
+      if (res != null) {
+        this.monthReportData = res[0];
+        console.log(res)
+      }
+    })
+  }
+
   enregistrerCompteRendu() {
-    this.userService.createMonthReport().subscribe((res)=>{
+    this.userService.createMonthReport().subscribe((res) => {
       if (res) {
         this.getMonthreportData();
-      }
-      else {
+      } else {
         console.log("Erreur")
       }
     })

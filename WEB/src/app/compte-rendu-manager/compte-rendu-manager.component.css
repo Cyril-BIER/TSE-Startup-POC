@@ -1,0 +1,47 @@
+main {
+  background-size: cover;
+  background: no-repeat top;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-field {
+  width: 300px;
+  height: 71px;
+}
+.search-user {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  gap:15px
+}
+
+.bouton {
+  display: flex;
+  justify-content: center;
+  gap:70px
+}
+
+.users {
+  margin-top: 35px;
+}
+
+.pad {
+  padding: 3%;
+  display: flex;
+  flex-direction: column;
+}
+
+.creationUser {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
