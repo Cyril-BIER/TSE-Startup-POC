@@ -6,6 +6,8 @@ import fr.tse.startupPOC.models.Profile;
 import fr.tse.startupPOC.models.User;
 import fr.tse.startupPOC.payload.request.SignupAdminRequest;
 import fr.tse.startupPOC.payload.request.SignupManagerRequest;
+import fr.tse.startupPOC.payload.response.ManagerResponse;
+import fr.tse.startupPOC.payload.response.UserResponse;
 import fr.tse.startupPOC.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.AuthenticationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,14 +75,22 @@ public class AdminService {
         userRepository.save(chosenUser);
     }
 
-    @Transactional
-    public List<User> getTotalUsers() {
-
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<UserResponse> response = new ArrayList<>();
+        List<User> users =userRepository.findAll();
+        for(User user:users){
+            response.add(new UserResponse(user));
+        }
+        return response;
     }
-    @Transactional
-    public List<Manager> getAllManagers() {
-        return managerRepository.findAll();
+
+    public List<ManagerResponse> getAllManagers() {
+        List<ManagerResponse> response = new ArrayList<>();
+        List<Manager> managers = managerRepository.findAll();
+        for(Manager manager:managers){
+            response.add(new ManagerResponse(manager));
+        }
+        return response;
     }
 
     @Transactional
