@@ -2,6 +2,7 @@ import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ENV } from '../../environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +10,9 @@ import { Injectable } from '@angular/core';
 export class UserService {
   private headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     // Initialize headers with authorization token
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken();
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -112,22 +113,6 @@ export class UserService {
   getMonthReport() {
     return this.http
       .get<any>(`${ENV.apiUrl}/user/monthReport`, {
-        headers: this.headers,
-      })
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
-        })
-      );
-  }
-
-  getAllUsers() {
-    return this.http
-      .get<any>(`${ENV.apiUrl}/admin/getAllUsers`, {
         headers: this.headers,
       })
       .pipe(

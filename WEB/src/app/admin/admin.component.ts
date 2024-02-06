@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 import { ManagerService } from '../services/manager.service';
+import { AdminService } from '../services/admin.service';
 
 @Component({
   selector: 'app-admin',
@@ -18,14 +19,15 @@ export class AdminComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private router: Router,
-    private userService: UserService,
+    private adminservice: AdminService,
     private managerService: ManagerService
   ) {}
 
   ngOnInit(): void {
-    this.userService.getAllUsers().subscribe((users) => {
-      this.managerService.getAllManagers().subscribe((managers) => {
-        this.users.data = users + managers;
+    this.adminservice.getAllUsers().subscribe((users) => {
+      this.adminservice.getAllManagers().subscribe((managers) => {
+        this.users.data = [...users, ...managers];
+        console.log(this.users.data);
       });
     });
   }

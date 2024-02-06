@@ -1,7 +1,8 @@
-import {catchError, map, Observable, of, throwError} from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ENV } from '../../environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +12,9 @@ export class ManagerService {
 
   private headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     // Initialize headers with authorization token
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken();
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -91,9 +92,9 @@ export class ManagerService {
       );
   }
 
-  getAllManagers() {
+  getImputationUser(userId: string) {
     return this.http
-      .get<any>(`${ENV.apiUrl}/admin/getAllManagers`, {
+      .get<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, {
         headers: this.headers,
       })
       .pipe(
@@ -106,20 +107,11 @@ export class ManagerService {
         })
       );
   }
-  getImputationUser(userId: string) {
-    return this.http
-      .get<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, { headers: this.headers })
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
-        })
-      );
-  }
-  putImputationUser(imputationID: number, duration: number, userId: string): Observable<boolean> {
+  putImputationUser(
+    imputationID: number,
+    duration: number,
+    userId: string
+  ): Observable<boolean> {
     const intHours = Math.floor(duration);
     const minutes = Math.round((duration - intHours) * 60);
 
@@ -173,5 +165,4 @@ export class ManagerService {
         })
       );
   }
-
 }
