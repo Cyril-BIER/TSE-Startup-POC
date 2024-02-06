@@ -10,10 +10,10 @@ import {ManagerService} from "../services/manager.service";
   templateUrl: './temps-liste-users.component.html',
   styleUrls: ['./temps-liste-users.component.css']
 })
+
 export class TempsListeUsersComponent {
   users: MatTableDataSource<User> = new MatTableDataSource<User>();
   displayedColumns: string[] = ['nom'];
-
 
   constructor(private fb: FormBuilder, private router: Router,
               private managerService: ManagerService) {}

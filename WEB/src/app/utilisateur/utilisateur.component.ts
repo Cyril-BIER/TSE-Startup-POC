@@ -1,13 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ManagerService} from "../services/manager.service";
+import {Router} from "@angular/router";
 
-// Créer/afficher un utilisateur en tant que manager
+/**
+ * Créer ou afficher un utilisateur en tant que manager
+ */
+
 @Component({
   selector: 'app-utilisateur',
   templateUrl: './utilisateur.component.html',
   styleUrls: ['./utilisateur.component.css']
 })
+
 export class UtilisateurComponent implements OnInit {
   searchText: string = '';
   isUserListVisible: boolean = false;
@@ -26,14 +31,12 @@ export class UtilisateurComponent implements OnInit {
   }[] = [];
   selectedUser: string | null = null;
   selectedProjet: string | null = null;
-
   projetsExistants: {
     nom: string;
   }[] = []
-
   manager: string;
 
-  constructor(private fb: FormBuilder, private managerService: ManagerService) {
+  constructor(private fb: FormBuilder, private managerService: ManagerService, private router: Router) {
     let managerFromLocalStorage = localStorage.getItem('user');
     if (managerFromLocalStorage !== null) {
       this.manager = managerFromLocalStorage;
@@ -84,7 +87,7 @@ export class UtilisateurComponent implements OnInit {
 
   getProjects() {
     this.managerService.getProjects().subscribe((res) => {
-      console.log('Get all projects of the connected manager:', res);
+      console.log('Récupérer tous les projets du manager connectés :', res);
       if (res != null) {
         res.forEach((project: { id: any; projectName: any; managerId: any; managerName: any; projectUser: any }) => {
             this.projetsExistants.push({
@@ -121,11 +124,10 @@ export class UtilisateurComponent implements OnInit {
 
   onSubmit(): void {
     const {nom, prenom, email, motDePasse} = this.form.value;
-    const manager = localStorage.getItem('user');
     this.managerService.createUser(email, nom, prenom, motDePasse).subscribe((res) => {
       console.log('User created:', res);
       if (res) {
-        // Projet vide à implementer plus tard
+        // TODO: Projet vide à implementer plus tard
         this.users.push({
           nom: nom,
           prenom: prenom,
@@ -135,30 +137,24 @@ export class UtilisateurComponent implements OnInit {
           manager: this.manager
         });
         this.isCreationFormVisible = false;
-        this.form.reset(); // Réinitialiser le formulaire ici
+        this.form.reset();
       } else {
         alert("Il y a eu un problème pour enregistrer l'utilisateur");
       }
     });
+    alert('Utilisateur enregistré');
+    this.fermer();
   }
 
-  supprimerUtilisateur(): void {
-    if (this.selectedUser && this.selectedUser.length > 0) {
-      const selectedUserName = this.selectedUser[0]; // Prendre le premier élément du tableau
-      const index = this.users.findIndex(user => user.nom === selectedUserName);
-      if (index !== -1) {
-        this.users.splice(index, 1);
-        this.selectedUser = '';
-      }
-    }
+  fermer() {
+    this.router.navigate(['/utilisateur']);
   }
 
   findSelectedUser(): any {
-    if (this.selectedUser === null) {
-      return null; // Si aucun utilisateur n'est sélectionné, retourne null
+    if (this.selectedUser != null) {
+      return this.users.find(user => user.nom == this.selectedUser?.toString());
     }
-    // @ts-ignore // car on enlève le cas ou selectedUser== null
-    return this.users.find(user => user.nom === this.selectedUser.toString());
+    return null;
   }
 
   afficherUtilisateur() {

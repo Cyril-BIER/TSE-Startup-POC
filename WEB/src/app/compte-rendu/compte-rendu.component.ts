@@ -6,7 +6,7 @@ import {ImputationCompteRendu} from "../models/imputationCompteRendu";
 import {AuthService} from "../services/auth.service";
 import {UserService} from "../services/user.service";
 import {compteRendu} from "../models/compte.rendu";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ManagerService} from "../services/manager.service";
 
 @Component({
@@ -32,6 +32,7 @@ export class CompteRenduComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private router: Router,
     private userService: UserService,
     private managerService: ManagerService,
     private route: ActivatedRoute) {}
@@ -106,10 +107,11 @@ export class CompteRenduComponent implements OnInit {
             heures: this.convertDurationToDecimal(imputation.duration),
             isEditing: false
           };
-        });      }
+        });
+      }
     })
-
   }
+
   getImputationUser(){
     this.managerService.getImputationUser(this.formId).subscribe((res) => {
       if (res != null) {
@@ -187,6 +189,17 @@ export class CompteRenduComponent implements OnInit {
           console.log("Erreur")
         }
       })
+    }
+    alert('Compte rendu enregistré');
+    this.fermer();
+  }
+
+  fermer() {
+    if (this.isManager) {
+      this.router.navigate(['/compte-rendu-manager']);
+    }
+    else {
+      this.router.navigate(['/compte-rendu']);
     }
   }
 

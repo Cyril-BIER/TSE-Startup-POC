@@ -5,6 +5,7 @@ import { STATUS } from 'src/environments/env';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 import { ManagerService } from '../services/manager.service';
+import {AdminService} from "../services/admin.service";
 
 @Component({
   selector: 'app-admin-form',
@@ -23,7 +24,8 @@ export class AdminFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
-    private managerService: ManagerService
+    private managerService: ManagerService,
+    private adminService: AdminService
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +33,7 @@ export class AdminFormComponent implements OnInit {
       this.formId = params['id'];
     });
     this.initializeForm();
-    this.managerService.getAllManagers().subscribe((managers) => {
+    this.adminService.getAllManagers().subscribe((managers) => {
       this.managers = managers;
     });
     if (this.formId) {

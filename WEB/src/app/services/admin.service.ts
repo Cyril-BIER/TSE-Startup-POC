@@ -7,8 +7,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AdminService {
-  userCreated: boolean = false;
-
   private headers: HttpHeaders;
 
   constructor(private http: HttpClient) {
@@ -38,27 +36,25 @@ export class AdminService {
       })
       .pipe(
         map((response) => {
-          this.userCreated = true;
           return true;
         }),
         catchError((error) => {
-          console.error('Error creating user:', error);
-          this.userCreated = false;
-          return throwError(false);
+          return error;
         })
       );
   }
 
   getAllManagers() {
     return this.http
-      .get<any>(`${ENV.apiUrl}/admin/getAllManagers`, { headers: this.headers })
+      .get<any>(`${ENV.apiUrl}/admin/getAllManagers`, {
+        headers: this.headers,
+      })
       .pipe(
         map((response) => {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching users :', error);
-          return throwError(false);
+          return error;
         })
       );
   }

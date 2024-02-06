@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
-import { ManagerService } from '../services/manager.service';
+import {AdminService} from "../services/admin.service";
 
 @Component({
   selector: 'app-admin',
@@ -16,15 +15,14 @@ export class AdminComponent implements OnInit {
   displayedColumns: string[] = ['nom', 'statut'];
 
   constructor(
-    public authService: AuthService,
     private router: Router,
     private userService: UserService,
-    private managerService: ManagerService
+    private adminService: AdminService
   ) {}
 
   ngOnInit(): void {
     this.userService.getAllUsers().subscribe((users) => {
-      this.managerService.getAllManagers().subscribe((managers) => {
+      this.adminService.getAllManagers().subscribe((managers) => {
         this.users.data = users + managers;
       });
     });

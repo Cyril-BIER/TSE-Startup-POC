@@ -1,4 +1,4 @@
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { catchError, map, Observable, of} from 'rxjs';
 import { ENV } from '../../environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
+
 export class UserService {
   private headers: HttpHeaders;
 
@@ -26,8 +27,7 @@ export class UserService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching projets:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -40,8 +40,7 @@ export class UserService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -103,8 +102,7 @@ export class UserService {
           return true;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -119,8 +117,7 @@ export class UserService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -135,8 +132,7 @@ export class UserService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }

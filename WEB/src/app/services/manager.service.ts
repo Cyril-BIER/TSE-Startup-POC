@@ -1,4 +1,4 @@
-import {catchError, map, Observable, of, throwError} from 'rxjs';
+import {catchError, map, throwError} from 'rxjs';
 import { ENV } from '../../environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -7,8 +7,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ManagerService {
-  userCreated: boolean = false;
-
   private headers: HttpHeaders;
 
   constructor(private http: HttpClient) {
@@ -38,16 +36,14 @@ export class ManagerService {
       })
       .pipe(
         map((response) => {
-          this.userCreated = true;
           return true;
         }),
         catchError((error) => {
-          console.error('Error creating user:', error);
-          this.userCreated = false;
-          return throwError(false);
+          return error;
         })
       );
   }
+
   getAttachedUsers() {
     return this.http
       .get<any>(`${ENV.apiUrl}/manager/attachedUser`, { headers: this.headers })
@@ -56,8 +52,7 @@ export class ManagerService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching users :', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -70,8 +65,7 @@ export class ManagerService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching projects :', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -91,21 +85,6 @@ export class ManagerService {
       );
   }
 
-  getAllManagers() {
-    return this.http
-      .get<any>(`${ENV.apiUrl}/admin/getAllManagers`, {
-        headers: this.headers,
-      })
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
-        })
-      );
-  }
   getImputationUser(userId: string) {
     return this.http
       .get<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, { headers: this.headers })
@@ -114,8 +93,7 @@ export class ManagerService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -130,8 +108,7 @@ export class ManagerService {
           return true;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -146,10 +123,8 @@ export class ManagerService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error
         })
       );
   }
-
 }

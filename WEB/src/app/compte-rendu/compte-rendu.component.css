@@ -6,14 +6,15 @@ td {
   border-right: solid 1px #e0e0e0;
 }
 
-.row:hover {
-  cursor: pointer;
-}
-
-button {
+.save {
   width:auto;
   margin-left: 42.5%;
   margin-top:1%;
   margin-bottom:1%;
   font-size:20px;
+}
+
+.inputButton {
+  display: flex;
+  align-items: center;
 }

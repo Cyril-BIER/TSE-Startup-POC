@@ -1,7 +1,7 @@
 <table mat-table [dataSource]="imputationCompteRendu" class="mat-elevation-z2">
 
   <ng-container matColumnDef="projet">
-    <th mat-header-cell *matHeaderCellDef> Nom</th>
+    <th mat-header-cell *matHeaderCellDef> Nom du projet</th>
     <td mat-cell *matCellDef="let imputation"> {{imputation.nom}}</td>
   </ng-container>
 
@@ -10,16 +10,20 @@
     <td mat-cell *matCellDef="let projet"> {{projet.date}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="duree">
-    <th mat-header-cell *matHeaderCellDef> Heures effectuées</th>
+  <ng-container matColumnDef="duree" class="cell-with-button">
+    <th mat-header-cell *matHeaderCellDef> Durée</th>
     <td mat-cell *matCellDef="let projet">
-      <input type="text" [(ngModel)]="projet.heures" [readOnly]="!projet.isEditing"/>
-      <button mat-icon-button color="primary" (click)="editImputation(projet)" *ngIf="isImputationEditable(projet)">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button mat-icon-button color="primary" (click)="saveImputation(projet)" *ngIf="projet.isEditing">
-        <mat-icon>save</mat-icon>
-      </button>
+      <div class="inputButton">
+        <input type="text" [(ngModel)]="projet.heures" [readOnly]="!projet.isEditing"/>
+        <button mat-icon-button color="primary" (click)="editImputation(projet)" *ngIf="isImputationEditable(projet)"
+                class="corner-button">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="saveImputation(projet)" *ngIf="projet.isEditing"
+                class="corner-button">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
     </td>
   </ng-container>
 
@@ -28,5 +32,7 @@
 
 </table>
 
-<button mat-raised-button color="primary" (click)="enregistrerCompteRendu()" *ngIf="isNotEditable">Enregistrer compte Rendu</button>
-<button mat-raised-button color="primary" (click)="generatePdf()" *ngIf="!isNotEditable">Imprimer PDF</button>
+<button class="save" mat-raised-button color="primary" (click)="enregistrerCompteRendu()" *ngIf="isNotEditable">Enregistrer compte
+  Rendu
+</button>
+<button class="save" mat-raised-button color="primary" (click)="generatePdf()" *ngIf="!isNotEditable">Imprimer PDF</button>
