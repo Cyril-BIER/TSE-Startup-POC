@@ -119,28 +119,6 @@ export class ManagerService {
         })
       );
   }
-  putImputationUser(imputationID: number, duration: number, userId: string): Observable<boolean> {
-    const intHours = Math.floor(duration);
-    const minutes = Math.round((duration - intHours) * 60);
-
-    const credentials = {
-      imputationId: imputationID,
-      duration: `PT${intHours}H${minutes}M`,
-    };
-
-    return this.http
-      .put<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, credentials, {
-        headers: this.headers,
-      })
-      .pipe(
-        map((response) => {
-          return true;
-        }),
-        catchError((error) => {
-          return of(false);
-        })
-      );
-  }
 
   createMonthReportUser(userId: string) {
     return this.http
