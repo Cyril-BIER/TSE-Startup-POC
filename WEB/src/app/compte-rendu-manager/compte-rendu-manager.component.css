@@ -1,47 +1,11 @@
-main {
-  background-size: cover;
-  background: no-repeat top;
-  height: 100vh;
+th {
+  text-align: center;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+td {
+  border-right: solid 1px #e0e0e0;
 }
 
-.form-field {
-  width: 300px;
-  height: 71px;
+.row:hover {
+  cursor: pointer;
 }
-.search-user {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-  gap:15px
-}
-
-.bouton {
-  display: flex;
-  justify-content: center;
-  gap:70px
-}
-
-.users {
-  margin-top: 35px;
-}
-
-.pad {
-  padding: 3%;
-  display: flex;
-  flex-direction: column;
-}
-
-.creationUser {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
-

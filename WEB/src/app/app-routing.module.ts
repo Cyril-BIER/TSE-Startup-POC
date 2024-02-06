@@ -32,7 +32,7 @@ const routes: Routes = [
     canActivate: [canActivate],
   },
   {
-    path: 'compte-rendu/:id',
+    path: 'compte-rendu/:id/:canAddImputation',
     component: CompteRenduComponent,
     canActivate: [canActivate],
   },
