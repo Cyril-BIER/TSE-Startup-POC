@@ -5,6 +5,7 @@ import { STATUS } from 'src/environments/env';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 import { ManagerService } from '../services/manager.service';
+import { AdminService } from '../services/admin.service';
 
 @Component({
   selector: 'app-admin-form',
@@ -22,16 +23,17 @@ export class AdminFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private userService: UserService,
+    private adminservice: AdminService,
     private managerService: ManagerService
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.formId = params['id'];
+      console.log(this.formId);
     });
     this.initializeForm();
-    this.managerService.getAllManagers().subscribe((managers) => {
+    this.adminservice.getAllManagers().subscribe((managers) => {
       this.managers = managers;
     });
     if (this.formId) {
@@ -44,28 +46,38 @@ export class AdminFormComponent implements OnInit {
 
   private initializeForm(): void {
     this.userForm = this.fb.group({
-      statut: [''],
-      id: [''],
       choice: ['', Validators.required],
+      statut: [''],
+      managerId: [''],
     });
   }
 
   onSubmit(): void {
-    //TODO : connect the endpoints
     if (this.userForm.get('choice')?.value == 'role') {
-      const res = {
-        userId: this.user.id,
-      };
-      console.log(res);
+      if (this.userForm.get('statut')?.value == 'ROLE_ADMIN') {
+        this.adminservice.userToAdmin(this.formId).subscribe((res) => {
+          console.log(res);
+          alert('User mis à jour');
+          this.fermer();
+        });
+      } else {
+        this.adminservice.userToManager(this.formId).subscribe((res) => {
+          console.log(res);
+          alert('User mis à jour');
+          this.fermer();
+        });
+      }
     } else {
-      const res = {
-        userId: this.user.id,
-        managerId: this.userForm.get('id')?.value,
-      };
-      console.log(res);
+      this.adminservice
+        .changeManager(this.formId, this.userForm.get('managerId')?.value)
+        .subscribe((res) => {
+          console.log(res);
+          alert('User mis à jour');
+          this.fermer();
+        });
     }
-    alert('User mis à jour');
-    this.fermer();
+    // alert('User mis à jour');
+    // this.fermer();
   }
 
   fermer(): void {

@@ -1,7 +1,8 @@
-import {catchError, map, Observable, of, throwError} from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ENV } from '../../environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +12,9 @@ export class ManagerService {
 
   private headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     // Initialize headers with authorization token
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken();
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -106,16 +107,29 @@ export class ManagerService {
         })
       );
   }
-  getImputationUser(userId: string) {
+  putImputationUser(
+    imputationID: number,
+    duration: number,
+    userId: string
+  ): Observable<boolean> {
+    const intHours = Math.floor(duration);
+    const minutes = Math.round((duration - intHours) * 60);
+
+    const credentials = {
+      imputationId: imputationID,
+      duration: `PT${intHours}H${minutes}M`,
+    };
+
     return this.http
-      .get<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, { headers: this.headers })
+      .put<any>(`${ENV.apiUrl}/manager/imputation/${userId}`, credentials, {
+        headers: this.headers,
+      })
       .pipe(
         map((response) => {
-          return response;
+          return true;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return of(false);
         })
       );
   }
@@ -151,5 +165,4 @@ export class ManagerService {
         })
       );
   }
-
 }
