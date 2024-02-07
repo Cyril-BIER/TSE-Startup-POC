@@ -190,6 +190,7 @@ export class CompteRenduComponent implements OnInit {
         }
       })
     }
+    this.isNotEditable = !this.isNotEditable;
     alert('Compte rendu enregistré');
     this.fermer();
   }
