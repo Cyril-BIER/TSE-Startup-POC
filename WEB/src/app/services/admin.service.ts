@@ -70,8 +70,7 @@ export class AdminService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }

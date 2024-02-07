@@ -64,12 +64,12 @@ export class AdminmanagerComponent {
   getAllManagers() {
     this.adminService.getAllManagers().subscribe((res) => {
       if (res != null) {
-        res.forEach((user: { firstName: any; lastName: any; email: any; projets: any; managerName: any; }) => {
-            console.log(user)
+        res.forEach((manager: { id: any; firstName: any; lastName: any; email: any; password: any; }) => {
+            console.log(manager)
           this.managers.push({
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email
+              firstName: manager.firstName,
+              lastName: manager.lastName,
+              email: manager.email
             });
           }
         )
@@ -81,6 +81,7 @@ export class AdminmanagerComponent {
 
   onSubmit(): void {
     const {nom, prenom, email, motDePasse} = this.form.value;
+    // TODO : s'assurer que les noms et prenoms sont pris en compte
     this.adminService.createManager(email, nom, prenom, motDePasse).subscribe((res) => {
       console.log('manager created:', res);
       if (res) {

@@ -122,19 +122,4 @@ export class UserService {
         })
       );
   }
-
-  getAllUsers() {
-    return this.http
-      .get<any>(`${ENV.apiUrl}/admin/getAllUsers`, {
-        headers: this.headers,
-      })
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error) => {
-          return error;
-        })
-      );
-  }
 }

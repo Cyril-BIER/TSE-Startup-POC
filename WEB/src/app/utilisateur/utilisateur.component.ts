@@ -26,12 +26,13 @@ export class UtilisateurComponent implements OnInit {
     prenom: string,
     email: string,
     role: string,
-    projets: string[],
+    projets: {id: number; nom: string;}[],
     manager: string,
   }[] = [];
   selectedUser: string | null = null;
   selectedProjet: string | null = null;
   projetsExistants: {
+    id: number;
     nom: string;
   }[] = []
   manager: string;
@@ -57,11 +58,9 @@ export class UtilisateurComponent implements OnInit {
     });
   }
 
-
   get filteredUsers(): any[] {
     return this.users.filter(user =>
-      user.nom.toLowerCase().includes(this.searchText.toLowerCase()) &&
-      (this.selectedProjet === null || (user.projets && user.projets.some(projet => projet === this.selectedProjet)))
+      user.nom.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
@@ -89,14 +88,14 @@ export class UtilisateurComponent implements OnInit {
     this.managerService.getProjects().subscribe((res) => {
       console.log('Récupérer tous les projets du manager connectés :', res);
       if (res != null) {
-        res.forEach((project: { id: any; projectName: any; managerId: any; managerName: any; projectUser: any }) => {
-            this.projetsExistants.push({
-              nom: project.projectName
-            });
-          }
-        )
+        this.projetsExistants = res.map((project: any) => {
+          return {
+            id: project.id,
+            nom: project.projectName
+          };
+        });
       } else {
-        alert("Il y a eu un problème pour récupérer les utilisateurs");
+        alert("Il y a eu un problème pour récupérer les projets");
       }
     });
   }
@@ -105,17 +104,17 @@ export class UtilisateurComponent implements OnInit {
     this.managerService.getAttachedUsers().subscribe((res) => {
       console.log('Get all users attached to the connected manager:', res);
       if (res != null) {
-        res.forEach((user: { firstName: any; lastName: any; email: any; projets: any; managerName: any; }) => {
-            this.users.push({
-              nom: user.firstName,
-              prenom: user.lastName,
-              email: user.email,
-              role: "utilisateur",
-              projets: user.projets,
-              manager: user.managerName
-            });
-          }
-        )
+        this.users = res.map((user: any) => {
+          return {
+            nom: user.firstName,
+            prenom: user.lastName,
+            email: user.email,
+            role: "utilisateur",
+            projets: user.projects,
+            manager: user.managerName
+          };
+
+        });
       } else {
         alert("Il y a eu un problème pour récupérer les utilisateurs");
       }
@@ -123,18 +122,18 @@ export class UtilisateurComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const {nom, prenom, email, motDePasse} = this.form.value;
-    this.managerService.createUser(email, nom, prenom, motDePasse).subscribe((res) => {
+    const { nom, prenom, email, motDePasse } = this.form.value;
+    const projetIds = this.projetsExistants.map(projet => projet.id);
+    this.managerService.createUser(email, nom, prenom, motDePasse, projetIds).subscribe((res) => {
       console.log('User created:', res);
-      if (res) {
-        // TODO: Projet vide à implementer plus tard
+      if (res != null) {
         this.users.push({
           nom: nom,
           prenom: prenom,
           role: "Utilisateur",
           email: email,
-          projets: [],
-          manager: this.manager
+          projets: res.projects,
+          manager: res.managerName
         });
         this.isCreationFormVisible = false;
         this.form.reset();
@@ -152,6 +151,7 @@ export class UtilisateurComponent implements OnInit {
 
   findSelectedUser(): any {
     if (this.selectedUser != null) {
+        console.log(this.users[7].projets)
       return this.users.find(user => user.nom == this.selectedUser?.toString());
     }
     return null;
