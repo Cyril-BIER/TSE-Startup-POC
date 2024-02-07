@@ -14,7 +14,7 @@ main {
   width: 300px;
   height: 71px;
 }
-.search-user {
+.search-manager {
   display: flex;
   justify-content: space-around;
   flex-direction: row;
@@ -58,7 +58,7 @@ main {
 form {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 600px;
   margin-top: 7.5%;
   padding-left: 15%;
   padding-right: 15%;

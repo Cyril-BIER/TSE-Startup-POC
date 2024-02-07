@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root',
 })
+
 export class UserService {
   private headers: HttpHeaders;
 
@@ -27,8 +28,7 @@ export class UserService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching projets:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -41,8 +41,7 @@ export class UserService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -104,8 +103,7 @@ export class UserService {
           return true;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }
@@ -120,8 +118,7 @@ export class UserService {
           return response;
         }),
         catchError((error) => {
-          console.error('Error fetching imputation:', error);
-          return throwError(false);
+          return error;
         })
       );
   }

@@ -39,7 +39,17 @@ export class ConnexionComponent implements OnInit {
       if (res) {
         console.log(this.authService.whoAmI());
         console.log(this.authService.whatRole());
-        this.router.navigate(['/temps']);
+        switch (this.authService.whatRole()) {
+          case 'ROLE_ADMIN':
+            this.router.navigate(['/admin']);
+            break;
+          case 'ROLE_MANAGER':
+            this.router.navigate(['/utilisateur']);
+            break;
+          default:
+            this.router.navigate(['/temps']);
+            break;
+        }
       } else {
         alert('Identifiant ou mot de passe incorrect');
       }

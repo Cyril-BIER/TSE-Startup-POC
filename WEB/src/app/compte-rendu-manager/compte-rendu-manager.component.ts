@@ -15,7 +15,6 @@ export class CompteRenduManagerComponent implements OnInit {
   users: MatTableDataSource<User> = new MatTableDataSource<User>();
   displayedColumns: string[] = ['nom'];
 
-
   constructor(private fb: FormBuilder, private router: Router,
               private managerService: ManagerService) {}
 

@@ -1,40 +1,31 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ManagerService} from "../services/manager.service";
 import {AdminService} from "../services/admin.service";
+import {Router} from "@angular/router";
+
 @Component({
   selector: 'app-adminmanager',
   templateUrl: './adminmanager.component.html',
   styleUrls: ['./adminmanager.component.css']
 })
+
 export class AdminmanagerComponent {
   searchText: string = '';
-  isUserListVisible: boolean = false;
-  isUserVisible: boolean = false;
+  isManagerListVisible: boolean = false;
+  isManagerVisible: boolean = false;
   isCreationFormVisible: boolean = false;
   isManagerButtonVisible = false;
   hide = true;
   value = 'Clear me';
   form!: FormGroup;
-  users: {
+  managers: {
     firstName: string,
     lastName: string,
     email: string
   }[] = [];
-  selectedUser: string | null = null;
-  projetsExistants: {
-    nom: string;
-  }[] = []
+  selectedManager: string | null = null;
 
-  manager: string;
-
-  constructor(private fb: FormBuilder, private managerService: ManagerService, private adminService: AdminService) {
-    let managerFromLocalStorage = localStorage.getItem('user');
-    if (managerFromLocalStorage !== null) {
-      this.manager = managerFromLocalStorage;
-    } else {
-      this.manager = "Pas de manager";
-    }
+  constructor(private fb: FormBuilder, private adminService: AdminService, private router: Router) {
     this.getAllManagers();
   }
 
@@ -49,76 +40,78 @@ export class AdminmanagerComponent {
   }
 
 
-  showUsers() {
-    this.isUserListVisible = true;
-    this.isUserVisible = false;
+  showManagers() {
+    this.isManagerListVisible = true;
+    this.isManagerVisible = false;
     this.isManagerButtonVisible = true;
   }
 
-  hideUsers() {
-    this.isUserListVisible = false;
-    this.isUserVisible = false;
+  hideManagers() {
+    this.isManagerListVisible = false;
+    this.isManagerVisible = false;
     this.isManagerButtonVisible = false;
   }
 
   showCreation() {
     this.isCreationFormVisible = true;
-    this.isUserVisible = false;
+    this.isManagerVisible = false;
   }
 
   hideCreation() {
-    this.isUserVisible = false;
+    this.isManagerVisible = false;
     this.isCreationFormVisible = false;
   }
 
   getAllManagers() {
     this.adminService.getAllManagers().subscribe((res) => {
-      console.log('Get all users attached to the connected manager:', res);
       if (res != null) {
-        res.forEach((user: { firstName: any; lastName: any; email: any; projets: any; managerName: any; }) => {
-            console.log(user)
-          this.users.push({
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email
+        res.forEach((manager: { id: any; firstName: any; lastName: any; email: any; password: any; }) => {
+          this.managers.push({
+              firstName: manager.firstName,
+              lastName: manager.lastName,
+              email: manager.email
             });
           }
         )
       } else {
-        alert("Il y a eu un problème pour récupérer les utilisateurs");
+        alert("Il y a eu un problème pour récupérer les managers");
       }
     });
   }
 
   onSubmit(): void {
     const {nom, prenom, email, motDePasse} = this.form.value;
-    const manager = localStorage.getItem('user');
     this.adminService.createManager(email, nom, prenom, motDePasse).subscribe((res) => {
-      console.log('User created:', res);
+      console.log('manager created:', res);
       if (res) {
-        this.users.push({
+        this.managers.push({
           firstName: nom,
           lastName: prenom,
           email: email
         });
         this.isCreationFormVisible = false;
-        this.form.reset(); // Réinitialiser le formulaire ici
+        this.form.reset();
       } else {
-        alert("Il y a eu un problème pour enregistrer l'utilisateur");
+        alert("Il y a eu un problème pour enregistrer le manager");
       }
     });
+    alert('Utilisateur enregistré');
+    this.fermer();
   }
 
-  findSelectedUser(): any {
-    if (this.selectedUser === null) {
-      return null; // Si aucun utilisateur n'est sélectionné, retourne null
+  fermer() {
+    this.router.navigate(['/manager']);
+  }
+
+  findSelectedManager(): any {
+    if (this.selectedManager != null) {
+      return this.managers.find(manager => manager.firstName == this.selectedManager?.toString());
     }
-    // @ts-ignore // car on enlève le cas ou selectedUser== null
-    return this.users.find(user => user.firstName === this.selectedUser.toString());
+    return null;
   }
 
-  afficherUtilisateur() {
-    this.isUserListVisible = false
-    this.isUserVisible = true;
+  afficherManager() {
+    this.isManagerListVisible = false
+    this.isManagerVisible = true;
   }
 }

@@ -12,14 +12,25 @@ import { AdminmanagerComponent } from './adminmanager/adminmanager.component';
 import { AdminFormComponent } from './admin-form/admin-form.component';
 import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire.component';
 import {CompteRenduManagerComponent} from "./compte-rendu-manager/compte-rendu-manager.component";
+import {TempsListeUsersComponent} from "./temps-liste-users/temps-liste-users.component";
 
 const routes: Routes = [
   { path: '', component: ConnexionComponent },
   { path: 'projet', component: ProjetComponent, canActivate: [canActivate] },
   { path: 'temps', component: TempsComponent, canActivate: [canActivate] },
   {
+    path: 'temps/:id',
+    component: TempsComponent,
+    canActivate: [canActivate]
+  },
+  {
     path: 'temps-formulaire',
     component: TempsFormulaireComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: 'temps-liste-users',
+    component: TempsListeUsersComponent,
     canActivate: [canActivate],
   },
   {

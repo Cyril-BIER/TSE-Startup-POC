@@ -3,8 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user';
-import { UserService } from '../services/user.service';
-import { ManagerService } from '../services/manager.service';
 import { AdminService } from '../services/admin.service';
 
 @Component({
@@ -19,13 +17,12 @@ export class AdminComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private router: Router,
-    private adminservice: AdminService,
-    private managerService: ManagerService
+    private adminService: AdminService,
   ) {}
 
   ngOnInit(): void {
-    this.adminservice.getAllUsers().subscribe((users) => {
-      this.adminservice.getAllManagers().subscribe((managers) => {
+    this.adminService.getAllUsers().subscribe((users) => {
+      this.adminService.getAllManagers().subscribe((managers) => {
         this.users.data = [...users, ...managers];
         console.log(this.users.data);
       });
