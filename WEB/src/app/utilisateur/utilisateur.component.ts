@@ -123,7 +123,7 @@ export class UtilisateurComponent implements OnInit {
   onSubmit(): void {
     const { nom, prenom, email, motDePasse } = this.form.value;
     const projetIds = this.projetsExistants.map(projet => projet.id);
-    this.managerService.createUser(email, nom, prenom, motDePasse, projetIds).subscribe((res) => {
+    this.managerService.createUser(email, prenom, nom, motDePasse, projetIds).subscribe((res) => {
       console.log('User created:', res);
       if (res != null) {
         this.users.push({
