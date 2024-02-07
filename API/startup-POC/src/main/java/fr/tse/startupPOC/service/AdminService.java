@@ -54,6 +54,8 @@ public class AdminService {
         }
         Manager manager = new Manager(
                 request.getEmail(),
+                request.getFirstName(),
+                request.getLastName(),
                 encoder.encode(request.getPassword())
         );
         return profileRepository.save(manager);

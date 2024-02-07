@@ -5,7 +5,3 @@ th {
 td {
   border-right: solid 1px #e0e0e0;
 }
-
-.row:hover {
-  cursor: pointer;
-}
