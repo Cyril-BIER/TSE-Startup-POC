@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AdminService} from "../services/admin.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-adminmanager',
@@ -24,7 +25,7 @@ export class AdminmanagerComponent {
   }[] = [];
   selectedManager: string | null = null;
 
-  constructor(private fb: FormBuilder, private adminService: AdminService) {
+  constructor(private fb: FormBuilder, private adminService: AdminService, private router: Router) {
     this.getAllManagers();
   }
 
@@ -65,7 +66,6 @@ export class AdminmanagerComponent {
     this.adminService.getAllManagers().subscribe((res) => {
       if (res != null) {
         res.forEach((manager: { id: any; firstName: any; lastName: any; email: any; password: any; }) => {
-            console.log(manager)
           this.managers.push({
               firstName: manager.firstName,
               lastName: manager.lastName,
@@ -81,7 +81,6 @@ export class AdminmanagerComponent {
 
   onSubmit(): void {
     const {nom, prenom, email, motDePasse} = this.form.value;
-    // TODO : s'assurer que les noms et prenoms sont pris en compte
     this.adminService.createManager(email, nom, prenom, motDePasse).subscribe((res) => {
       console.log('manager created:', res);
       if (res) {
@@ -96,6 +95,12 @@ export class AdminmanagerComponent {
         alert("Il y a eu un problème pour enregistrer le manager");
       }
     });
+    alert('Utilisateur enregistré');
+    this.fermer();
+  }
+
+  fermer() {
+    this.router.navigate(['/manager']);
   }
 
   findSelectedManager(): any {

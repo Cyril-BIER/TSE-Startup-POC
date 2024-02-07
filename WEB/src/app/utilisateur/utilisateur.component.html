@@ -72,13 +72,13 @@
                 </mat-card-header>
                 <mat-card-content>
                     <p></p>
-                    <p>Nom: {{ findSelectedUser()?.nom }}</p>
-                    <p>Prénom: {{ findSelectedUser()?.prenom }}</p>
-                    <p>Role: {{ findSelectedUser()?.role }}</p>
-                    <p>Manager responsible: {{ findSelectedUser()?.manager }}</p>
-                    <p>Projets:
+                    <p><strong>Nom:</strong> {{ findSelectedUser()?.nom }}</p>
+                    <p><strong>Prénom:</strong> {{ findSelectedUser()?.prenom }}</p>
+                    <p><strong>Role:</strong> {{ findSelectedUser()?.role }}</p>
+                    <p><strong>Manager responsible:</strong> {{ findSelectedUser()?.manager }}</p>
+                    <p><strong>Projets:</strong>
                         <span *ngFor="let projet of findSelectedUser()?.projets | keyvalue">
-                            {{ projet.value }} ,
+                            {{ projet.value }} <br>
                         </span>
                     </p>
                 </mat-card-content>

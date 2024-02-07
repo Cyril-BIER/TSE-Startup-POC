@@ -30,7 +30,6 @@ export class UtilisateurComponent implements OnInit {
     manager: string,
   }[] = [];
   selectedUser: string | null = null;
-  selectedProjet: string | null = null;
   projetsExistants: {
     id: number;
     nom: string;
@@ -151,7 +150,6 @@ export class UtilisateurComponent implements OnInit {
 
   findSelectedUser(): any {
     if (this.selectedUser != null) {
-        console.log(this.users[7].projets)
       return this.users.find(user => user.nom == this.selectedUser?.toString());
     }
     return null;
