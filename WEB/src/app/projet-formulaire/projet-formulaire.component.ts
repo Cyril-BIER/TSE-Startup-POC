@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
 import { ManagerService } from '../services/manager.service';
 import { User } from '../models/user';
 
+/**
+ * Composant Angular pour la création de projet.
+ */
 @Component({
   selector: 'app-projet-formulaire',
   templateUrl: './projet-formulaire.component.html',
@@ -12,17 +14,22 @@ import { User } from '../models/user';
 })
 export class ProjetFormulaireComponent implements OnInit {
   projetForm!: FormGroup;
-  formId!: string;
   attachedUsers: User[] = [];
   selectedUserIds: string[] = [];
 
+  /**
+   * Constructeur du composant.
+   * @param fb Constructeur de formulaire
+   * @param router Service de routage
+   * @param managerService Service de gestion des managers
+   */
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private userService: UserService,
     private managerService: ManagerService
   ) {}
 
+  /** Méthode d'initialisation du composant */
   ngOnInit(): void {
     this.initializeForm();
     this.managerService.getAttachedUsers().subscribe((users) => {
@@ -31,6 +38,7 @@ export class ProjetFormulaireComponent implements OnInit {
     });
   }
 
+  /** Initialise le formulaire de création de projet */
   private initializeForm(): void {
     this.projetForm = this.fb.group({
       projet_nom: ['', Validators.required],
@@ -38,6 +46,10 @@ export class ProjetFormulaireComponent implements OnInit {
     });
   }
 
+  /**
+   * Gère la sélection ou la désélection d'un utilisateur pour le projet.
+   * @param userId Identifiant de l'utilisateur
+   */
   toggleUserSelection(userId: string): void {
     const index = this.selectedUserIds.indexOf(userId);
     if (index === -1) {
@@ -47,6 +59,7 @@ export class ProjetFormulaireComponent implements OnInit {
     }
   }
 
+  /** Soumettre le formulaire de création de projet */
   onSubmit() {
     if (this.projetForm.valid) {
       const formData = {
@@ -63,6 +76,7 @@ export class ProjetFormulaireComponent implements OnInit {
     }
   }
 
+  /** Redirige vers la page de gestion des projets */
   fermer() {
     this.router.navigate(['/projet']);
   }

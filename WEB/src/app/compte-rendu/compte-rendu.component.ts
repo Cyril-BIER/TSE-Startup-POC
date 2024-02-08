@@ -9,6 +9,10 @@ import {compteRendu} from "../models/compte.rendu";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ManagerService} from "../services/manager.service";
 
+/**
+ * Composant Angular pour la gestion des comptes rendus :
+ *    Modification des imputations et la génération des comptes rendus
+ */
 @Component({
   selector: 'app-compte-rendu',
   templateUrl: './compte-rendu.component.html',
@@ -30,6 +34,14 @@ export class CompteRenduComponent implements OnInit {
     workTimeReport: {}
   };
 
+  /**
+   * Constructeur du composant.
+   * @param authService Service d'authentification
+   * @param router Service de routage
+   * @param userService Service utilisateur
+   * @param managerService Service manager
+   * @param route Service de routage activé
+   */
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -37,6 +49,7 @@ export class CompteRenduComponent implements OnInit {
     private managerService: ManagerService,
     private route: ActivatedRoute) {}
 
+  /** Méthode d'initialisation du composant. */
   ngOnInit(): void {
     const dateActuelle = new Date();
     this.moisActuel = dateActuelle.toLocaleString('default', { month: 'long' });
@@ -64,6 +77,9 @@ export class CompteRenduComponent implements OnInit {
     }
   }
 
+  /**
+   * Génère un fichier PDF à partir des données du rapport mensuel.
+   */
   generatePdf() {
     const doc = new jsPDF()
     const data: (string | number)[][] = [];
@@ -85,10 +101,13 @@ export class CompteRenduComponent implements OnInit {
       startY: 40
     })
 
-    doc.save('table.pdf')
+    doc.save(`Compte_rendu_${this.monthReportData.userName}_${this.moisActuel}.pdf`)
     console.log('./table.pdf generated')
   }
 
+  /**
+   * Récupère les données d'imputation lorsque l'utilisateur est connecté.
+   */
   getImputation() {
     this.userService.getImputation().subscribe((res) => {
       if (res != null) {
@@ -112,6 +131,9 @@ export class CompteRenduComponent implements OnInit {
     })
   }
 
+  /**
+   * Récupère les données d'imputation pour un utilisateur lorsqu'un manager est connecté.
+   */
   getImputationUser(){
     this.managerService.getImputationUser(this.formId).subscribe((res) => {
       if (res != null) {
@@ -135,13 +157,18 @@ export class CompteRenduComponent implements OnInit {
     })
   }
 
-  editImputation(projet
-                   :
-                   ImputationCompteRendu
-  ) {
+  /**
+   * Active le mode édition pour une imputation.
+   * @param projet Imputation à éditer
+   */
+  editImputation(projet: ImputationCompteRendu) {
     projet.isEditing = true;
   }
 
+  /**
+   * Sauvegarde une imputation modifiée.
+   * @param projet Imputation modifiée
+   */
   saveImputation(projet: ImputationCompteRendu) {
     this.userService.putImputation(projet.id, projet.heures).subscribe((res) => {
       if (res) {
@@ -153,6 +180,9 @@ export class CompteRenduComponent implements OnInit {
     projet.isEditing = false;
   }
 
+  /**
+   * Récupère les données du rapport mensuel lorsque l'utilisateur est connecté.
+   */
   getMonthreportData() {
     this.userService.getMonthReport().subscribe((res) => {
       if (res != null) {
@@ -162,6 +192,9 @@ export class CompteRenduComponent implements OnInit {
     })
   }
 
+  /**
+   * Récupère les données du rapport mensuel pour un utilisateur lorsque le manger est connecté.
+   */
   getMonthreportDataUser() {
     this.managerService.getMonthReportUser(this.formId).subscribe((res) => {
       if (res != null) {
@@ -171,6 +204,11 @@ export class CompteRenduComponent implements OnInit {
     })
   }
 
+  /**
+   * Enregistre le compte rendu.
+   * Si la personne connectée est un manager, crée le rapport mensuel pour un utilisateur spécifié.
+   * Sinon, crée le rapport mensuel pour l'utilisateur connecté.
+   */
   enregistrerCompteRendu() {
     if(this.isManager) {
       this.managerService.createMonthReportUser(this.formId).subscribe((res) => {
@@ -195,6 +233,9 @@ export class CompteRenduComponent implements OnInit {
     this.fermer();
   }
 
+  /**
+   * Redirige l'utilisateur vers la page précédente après la fermeture du composant.
+   */
   fermer() {
     if (this.isManager) {
       this.router.navigate(['/compte-rendu-manager']);
@@ -204,11 +245,14 @@ export class CompteRenduComponent implements OnInit {
     }
   }
 
+  /**
+   * Convertit une durée au format "PT1H30MIN" en un nombre décimal d'heures.
+   * @param durationString Chaîne de caractères représentant la durée
+   * @returns Nombre décimal d'heures
+   */
   convertDurationToDecimal(durationString: string): number {
-    // imputation renvoie comme format : "PT1H30MIN"
-
     if (durationString === 'PT0S') {
-      return 0; // Retourne 0 si la durée est nulle
+      return 0;
     }
 
     // Si la durée est uniquement des minutes (format "PT30M")
@@ -231,6 +275,11 @@ export class CompteRenduComponent implements OnInit {
     return Math.round(totalHours * 100) / 100
   }
 
+  /**
+   * Vérifie si une imputation est éditable.
+   * @param projet Imputation à vérifier
+   * @returns Vrai si l'imputation est éditable, sinon faux
+   */
   isImputationEditable(projet: ImputationCompteRendu) {
     return !projet.isEditing && this.isNotEditable && !this.isManager
   }

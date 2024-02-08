@@ -4,9 +4,8 @@ import {ManagerService} from "../services/manager.service";
 import {Router} from "@angular/router";
 
 /**
- * Créer ou afficher un utilisateur en tant que manager
+ * Composant Angular pour créer ou afficher un utilisateur en tant que manager.
  */
-
 @Component({
   selector: 'app-utilisateur',
   templateUrl: './utilisateur.component.html',
@@ -36,6 +35,12 @@ export class UtilisateurComponent implements OnInit {
   }[] = []
   manager: string;
 
+  /**
+   * Constructeur du composant.
+   * @param fb Constructeur de formulaire
+   * @param managerService Service de gestion des managers
+   * @param router Service de routage
+   */
   constructor(private fb: FormBuilder, private managerService: ManagerService, private router: Router) {
     let managerFromLocalStorage = localStorage.getItem('user');
     if (managerFromLocalStorage !== null) {
@@ -47,6 +52,7 @@ export class UtilisateurComponent implements OnInit {
     this.getProjects();
   }
 
+  /** Méthode d'initialisation du composant */
   ngOnInit(): void {
     // Initialisation du formulaire
     this.form = this.fb.group({
@@ -57,32 +63,38 @@ export class UtilisateurComponent implements OnInit {
     });
   }
 
+  /** Méthode de filtrage des utilisateurs */
   get filteredUsers(): any[] {
     return this.users.filter(user =>
       user.nom.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
+  /** Affiche la liste des utilisateurs */
   showUsers() {
     this.isUserListVisible = true;
     this.isUserVisible = false;
   }
 
+  /** Masque la liste des utilisateurs */
   hideUsers() {
     this.isUserListVisible = false;
     this.isUserVisible = false;
   }
 
+  /** Affiche le formulaire de création d'utilisateur */
   showCreation() {
     this.isCreationFormVisible = true;
     this.isUserVisible = false;
   }
 
+  /** Masque le formulaire de création d'utilisateur */
   hideCreation() {
     this.isUserVisible = false;
     this.isCreationFormVisible = false;
   }
 
+  /** Récupère la liste des projets existants */
   getProjects() {
     this.managerService.getProjects().subscribe((res) => {
       console.log('Récupérer tous les projets du manager connectés :', res);
@@ -99,6 +111,7 @@ export class UtilisateurComponent implements OnInit {
     });
   }
 
+  /** Récupère la liste des utilisateurs attachés */
   getAttachedUsers() {
     this.managerService.getAttachedUsers().subscribe((res) => {
       console.log('Get all users attached to the connected manager:', res);
@@ -120,6 +133,7 @@ export class UtilisateurComponent implements OnInit {
     });
   }
 
+  /** Soumet le formulaire de création d'utilisateur */
   onSubmit(): void {
     const { nom, prenom, email, motDePasse } = this.form.value;
     const projetIds = this.projetsExistants.map(projet => projet.id);
@@ -144,10 +158,12 @@ export class UtilisateurComponent implements OnInit {
     this.fermer();
   }
 
+  /** Redirige vers la page de gestion d'un utilisateur */
   fermer() {
     this.router.navigate(['/utilisateur']);
   }
 
+  /** Retourne l'utilisateur sélectionné */
   findSelectedUser(): any {
     if (this.selectedUser != null) {
       return this.users.find(user => user.nom == this.selectedUser?.toString());
@@ -155,6 +171,7 @@ export class UtilisateurComponent implements OnInit {
     return null;
   }
 
+  /** Affiche les détails de l'utilisateur sélectionné */
   afficherUtilisateur() {
     this.isUserListVisible = false
     this.isUserVisible = true;
