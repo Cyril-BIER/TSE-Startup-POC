@@ -6,6 +6,9 @@ import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { ManagerService } from '../services/manager.service';
 
+/**
+ * Composant Angular pour la gestion des projets.
+ */
 @Component({
   selector: 'app-projet',
   templateUrl: './projet.component.html',
@@ -15,6 +18,13 @@ export class ProjetComponent implements OnInit {
   projets: MatTableDataSource<Projet> = new MatTableDataSource<Projet>();
   displayedColumns: string[] = ['nom', 'responsable', 'utilisateur'];
 
+  /**
+   * Constructeur du composant.
+   * @param authService Service d'authentification
+   * @param router Service de routage
+   * @param userService Service utilisateur
+   * @param managerService Service manager
+   */
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -22,6 +32,7 @@ export class ProjetComponent implements OnInit {
     private managerService: ManagerService
   ) {}
 
+  /** Méthode d'initialisation du composant */
   ngOnInit(): void {
     switch (this.authService.whatRole()) {
       case 'ROLE_USER':
@@ -39,6 +50,7 @@ export class ProjetComponent implements OnInit {
     }
   }
 
+  /** Redirige vers la page de création de projet */
   addProjet() {
     this.router.navigate(['/projetForm']);
   }

@@ -4,6 +4,9 @@ import { Projet } from '../models/projet';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 
+/**
+ * Composant Angular pour la gestion du formulaire de saisie du temps.
+ */
 @Component({
   selector: 'app-temps-formulaire',
   templateUrl: './temps-formulaire.component.html',
@@ -15,12 +18,19 @@ export class TempsFormulaireComponent implements OnInit {
 
   projets: Projet[] = [];
 
+  /**
+   * Constructeur du composant.
+   * @param fb Constructeur de formulaire
+   * @param router Service de routage
+   * @param userService Service utilisateur
+   */
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private userService: UserService
   ) {}
 
+  /** Méthode d'initialisation du composant */
   ngOnInit(): void {
     this.userService.getProjets().subscribe((projects) => {
       console.log(projects);
@@ -29,6 +39,7 @@ export class TempsFormulaireComponent implements OnInit {
     this.initializeForm();
   }
 
+  /** Initialise le formulaire de saisie du temps */
   private initializeForm(): void {
     this.tempsForm = this.fb.group({
       projet: ['', Validators.required],
@@ -40,6 +51,7 @@ export class TempsFormulaireComponent implements OnInit {
     });
   }
 
+  /** Soumet le formulaire d'ajout d'une imputation*/
   onSubmit() {
     if (this.tempsForm.valid) {
       const selectedDate = this.tempsForm.get('date')?.value;
@@ -64,6 +76,7 @@ export class TempsFormulaireComponent implements OnInit {
     }
   }
 
+  /** Redirige vers la page principale de gestion du temps */
   fermer() {
     this.router.navigate(['/temps']);
   }

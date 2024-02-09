@@ -14,6 +14,9 @@ import { ProjetFormulaireComponent } from './projet-formulaire/projet-formulaire
 import {CompteRenduManagerComponent} from "./compte-rendu-manager/compte-rendu-manager.component";
 import {TempsListeUsersComponent} from "./temps-liste-users/temps-liste-users.component";
 
+/**
+ * Définit les routes de l'application Angular.
+ */
 const routes: Routes = [
   { path: '', component: ConnexionComponent },
   { path: 'projet', component: ProjetComponent, canActivate: [canActivate] },

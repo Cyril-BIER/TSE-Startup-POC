@@ -1,3 +1,6 @@
+/**
+ * Interface représentant une imputation dans un compte rendu.
+ */
 export interface ImputationCompteRendu {
   id: number;
   nom: string;

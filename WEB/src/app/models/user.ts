@@ -1,3 +1,6 @@
+/**
+ * Interface représentant un utilisateur.
+ */
 export interface User {
   id: number;
   lastName: string;
